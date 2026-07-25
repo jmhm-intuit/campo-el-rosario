@@ -1,0 +1,4 @@
+periodo,lote,categoria,cantidad,nombre_grupo,anio_nacimiento,rango_edad,estado_sanitario,estado_reproductivo,raza,notas
+2026-07,ER-01,Vacas de cría,80,Rodeo principal,2021,Adultas,Bueno,Preñadas,Angus,
+2026-07,ER-01,Terneros,40,Terneros otoño,2026,0-6 meses,Bueno,,,Ejemplo: elimine estas filas antes de cargar sus datos
+2026-07,ER-01,Toros reproductores,2,Toros de servicio,2022,Adultos,Bueno,En servicio,Angus,
