@@ -1,30 +1,52 @@
-# Actualizar Campo a v5.01 desde GitHub Codespaces
+# Desplegar Campo v5.02 desde GitHub Codespaces
 
-1. Subí `campo-el-rosario-v5-01-deploy.zip` a la raíz del repositorio.
-2. Abrí Codespaces y ejecutá:
+## Antes de actualizar
+
+1. Abre la versión actual de Campo.
+2. Descarga un respaldo JSON desde **Exportar y respaldo**.
+3. Sube `campo-el-rosario-v5-02-deploy.zip` a la raíz del repositorio `campo-el-rosario` y confirma el archivo en `main`.
+
+## Descomprimir, reemplazar, confirmar y hacer push
+
+En la terminal de Codespaces, desde la raíz del repositorio, pega:
 
 ```bash
-rm -rf /tmp/campo-v501
-mkdir -p /tmp/campo-v501
+git pull --rebase origin main
 
-unzip -q campo-el-rosario-v5-01-deploy.zip -d /tmp/campo-v501
+rm -rf /tmp/campo-v5-02
+mkdir -p /tmp/campo-v5-02
+
+unzip -q campo-el-rosario-v5-02-deploy.zip -d /tmp/campo-v5-02
 
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v5-01-deploy.zip' \
+  ! -name 'campo-el-rosario-v5-02-deploy.zip' \
   -exec rm -rf {} +
 
-cp -a /tmp/campo-v501/. .
+cp -a /tmp/campo-v5-02/. .
 
-rm -rf /tmp/campo-v501
-rm campo-el-rosario-v5-01-deploy.zip
+rm -rf /tmp/campo-v5-02
+rm -f campo-el-rosario-v5-02-deploy.zip
 
 git add -A
-git commit -m "Deploy Campo v5.01"
+git commit -m "Deploy Campo v5.02"
 git push origin main
 ```
 
-3. Abrí **Actions** y esperá el check verde de `Deploy Campo v5.01 to GitHub Pages`.
-4. Abrí la misma URL de la aplicación.
+Si Git responde `nothing to commit`, ejecuta solamente:
 
-Antes de actualizar, exportá un respaldo JSON desde la versión online. No borres los datos del sitio: la aplicación conserva la misma clave local para migrar los relevamientos existentes.
+```bash
+git push origin main
+```
+
+## Verificación
+
+1. Abre **GitHub → Actions**.
+2. Espera que `Deploy Campo v5.02 to GitHub Pages` tenga un check verde.
+3. Abre:
+
+```text
+https://jmhm-intuit.github.io/campo-el-rosario/
+```
+
+Confirma que la interfaz muestre `Campo v5.02`. No borres los datos del sitio: allí se guardan los relevamientos locales.

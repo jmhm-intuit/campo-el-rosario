@@ -1,4 +1,4 @@
-const CACHE = 'campo-v501-assets-1'
+const CACHE = 'campo-v502-assets-2'
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,9 @@ const ASSETS = [
   './assets/map/el-rosario-map.png',
   './assets/geometry/polygons-reviewed-final.json',
   './assets/asset-manifest.json',
+  './assets/icons/icon-home-house.png',
+  './assets/icons/icon-register-animals.png',
+  './assets/ui/register-animals.png',
   './assets/kpi/kpi-cow-red-angus.png',
   './assets/kpi/kpi-cow-calf-red-angus.png',
   './assets/kpi/kpi-pasture.png',
@@ -35,7 +38,7 @@ const ASSETS = [
   './assets/conditions/condition-indicator-flooded.png',
   './assets/conditions/condition-indicator-unobserved.png',
   './assets/buildings/building-house-main-er08-09.png',
-  './assets/buildings/building-house-secondary-er13.png'
+  './assets/buildings/building-house-secondary-er13.png',
 ]
 
 self.addEventListener('install', event => {

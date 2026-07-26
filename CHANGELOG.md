@@ -1,29 +1,44 @@
 # Changelog
 
-## 5.01 — 2026-07-26
+## Campo v5.02 — 26 de julio de 2026
 
 ### Relevamientos
-- Se agregó edición de registros existentes.
-- Se agregó selector por fecha agrupado por mes.
-- Las fechas se muestran de la más reciente a la más antigua.
-- Las ediciones guardan `editedAt` y conservan el identificador original.
-- Cambiar una fecha histórica solicita confirmación y reordena el historial.
 
-### Mapa
-- Nuevas superficies de condición en alta resolución.
-- La condición ocupa el fondo del polígono y puede cubrir visualmente la fotografía aérea.
-- La carga animal se muestra con borde y halo independiente.
-- Etiquetas de lote rediseñadas para mejorar la lectura de cabezas y EV/ha.
-- Escala visual actualizada a un sprite cada 30 animales, máximo ocho.
-- Los lotes con varias categorías usan el tipo animal dominante.
-- Se removió la leyenda permanente de condiciones.
+- Se pueden editar relevamientos existentes sin duplicarlos.
+- Los relevamientos se ordenan desde el más reciente y se agrupan por mes en el historial.
+- El selector principal muestra una fecha concreta, con navegación anterior/siguiente.
+- La edición de fechas históricas advierte cuando cambia el orden cronológico.
+- Se muestra fecha de creación y última edición cuando corresponde.
 
-### Assets
-- Vaca Aberdeen Angus colorada para existencias.
-- Vaca con cría para nacimientos.
-- Toro, vaca y ternero laterales transparentes para el mapa.
-- Nuevas texturas para Muy bueno, Bueno, Regular, Malo, Muy malo y Anegado.
+### Lotes y condición
 
-### Datos y PWA
-- Se mantiene la clave de almacenamiento de V5.
-- Nueva caché `campo-v501-assets-1` para forzar la actualización visual.
+- Edición directa desde la ficha del lote en el mapa.
+- Registro de lotes observados con cero animales.
+- Distinción entre lote no observado y lote observado vacío.
+- Condición opcional con tres orígenes: observada, estimada y sin información.
+- Regla de estimación: condición reciente del lote dentro de 60 días; historial del mismo mes; condición general observada; condición general previa.
+- Texturas más intensas dentro del polígono y paisaje exterior sin oscurecimiento.
+- Indicador `≈` y tratamiento visual suavizado para condiciones estimadas.
+
+### Mapa y lectura
+
+- Bordes y halos de carga reducidos para no competir con la condición del lote.
+- Condición y carga permanecen visualmente independientes.
+- Etiquetas compactas y adaptativas, especialmente para ER-04 y ER-05.
+- Menor escala y densidad de animales en la vista general.
+- Un sprite representativo por cada 30 animales, con máximo de ocho por lote.
+
+### Lluvia
+
+- Registro diario opcional con fecha, milímetros y nota.
+- Total mensual calculado automáticamente.
+- Diferenciación entre `0 mm` y falta de información.
+- El relevamiento puede guardarse sin datos de lluvia.
+
+### Interfaz y estabilidad
+
+- Nuevos iconos para Inicio, Existencias, Nacimientos y Registrar animales.
+- `Campo v5.02` y fecha de datos visibles en la interfaz.
+- Guardado automático de borradores.
+- Nueva versión de caché PWA para evitar recursos antiguos.
+- Se mantiene la clave local `campo-el-rosario-v2` para preservar los datos de V5.
