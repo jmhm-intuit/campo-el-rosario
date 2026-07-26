@@ -1,5 +1,0 @@
-﻿fecha,periodo,tipo_evento,lote_origen,lote_destino,categoria,categoria_destino,cantidad,motivo,notas,origen_registro,estado
-2026-07-04,2026-07,movimiento,ER-02,ER-06,Vacas de cría,,40,Ajuste de carga,,manual,confirmado
-2026-07-09,2026-07,venta,ER-01,,Vacas de último ternero (CUT),,20,Venta programada de vacas CUT,,manual,confirmado
-2026-07-12,2026-07,nacimiento,,ER-19,Terneras,,15,Parición,,manual,confirmado
-2026-07-18,2026-07,muerte,ER-12,,Terneros,,3,Mortandad registrada,,manual,confirmado

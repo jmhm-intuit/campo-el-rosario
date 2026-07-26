@@ -1,4 +1,0 @@
-fecha,tipo_evento,lote_origen,lote_destino,categoria,cantidad,motivo,notas
-2026-07-04,movimiento,ER-02,ER-06,Vacas de cría,40,Ajuste de carga,
-2026-07-09,venta,ER-01,,Vacas de último ternero (CUT),20,Venta programada,Ejemplo: elimine estas filas antes de cargar sus datos
-2026-07-12,nacimiento,,ER-19,Terneras,15,Parición,
