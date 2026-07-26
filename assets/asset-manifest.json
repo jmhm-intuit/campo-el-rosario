@@ -241,5 +241,29 @@
       "type": "building",
       "path": "assets/buildings/building-house-secondary-er13.png"
     }
-  ]
+  ],
+  "v501": {
+    "animals": {
+      "map-bull-red-angus": "assets/animals/map-bull-red-angus.png",
+      "map-cow-red-angus": "assets/animals/map-cow-red-angus.png",
+      "map-calf-red-angus": "assets/animals/map-calf-red-angus.png",
+      "map-cow-calf-red-angus": "assets/animals/map-cow-calf-red-angus.png"
+    },
+    "kpi": {
+      "animals": "assets/kpi/kpi-cow-red-angus.png",
+      "births": "assets/kpi/kpi-cow-calf-red-angus.png"
+    },
+    "pastureTiles": {
+      "muy-bueno": "assets/conditions/v501/pasture-excellent.png",
+      "bueno": "assets/conditions/v501/pasture-good.png",
+      "regular": "assets/conditions/v501/pasture-regular.png",
+      "malo": "assets/conditions/v501/pasture-poor.png",
+      "muy-malo": "assets/conditions/v501/pasture-very-poor.png",
+      "anegado": "assets/conditions/v501/pasture-waterlogged.png"
+    },
+    "sourceSheets": {
+      "animals": "a_collection_of_five_pixel_art_animal_sprites_feat.png",
+      "pasture": "a_set_of_four_square_seamless_top_down_view_terr.png"
+    }
+  }
 }

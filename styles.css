@@ -351,3 +351,39 @@ button:disabled{cursor:not-allowed;opacity:.45}
   .survey-mode .empty-add img{width:108px}
   .survey-mode .empty-add p{margin:4px 0 10px}
 }
+
+
+/* Campo v5.01 — historical editing, stronger pasture surfaces and independent load halo */
+.welcome-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.survey-switcher{display:grid;gap:3px;min-width:178px}
+.survey-switcher span{font-size:8px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--muted)}
+.survey-switcher select{width:100%;border:1px solid var(--line);border-radius:9px;background:#fff;padding:7px 28px 7px 9px;font:700 11px/1.1 inherit;color:var(--green-900)}
+.kpi-icon img,.data-icon img{image-rendering:auto}
+.aerial-base{opacity:.34;filter:saturate(.72) contrast(.92) brightness(.82)}
+.lot-condition{opacity:.97;mix-blend-mode:normal;stroke:rgba(255,255,255,.14);stroke-width:.8}
+.lot-condition.state-no-observado{opacity:.78}
+.load-halo-layer,.load-border-layer{pointer-events:none}
+.lot-load-halo{fill:none;stroke-linejoin:round;stroke-linecap:round;opacity:.48;filter:blur(5px)}
+.lot-load-halo.empty{stroke:transparent}.lot-load-halo.low{stroke:#91c94e;stroke-width:10}.lot-load-halo.ok{stroke:#35c88a;stroke-width:12}.lot-load-halo.high{stroke:#f0c32f;stroke-width:14}.lot-load-halo.over{stroke:#f18424;stroke-width:17}.lot-load-halo.critical{stroke:#ea382c;stroke-width:21;opacity:.60;filter:blur(7px)}
+.lot-load-border{filter:none;stroke-width:3.5}
+.lot-load-border.low{stroke:#78ad3d}.lot-load-border.ok{stroke:#1fae78;stroke-width:4}.lot-load-border.high{stroke:#e6b817;stroke-width:4.5}.lot-load-border.over{stroke:#ee731c;stroke-width:5}.lot-load-border.critical{stroke:#e32822;stroke-width:6}
+.animal-sprite{image-rendering:auto;filter:drop-shadow(0 1.7px 1.2px rgba(20,24,15,.45));opacity:.98}
+.map-label .label-card{fill:rgba(14,31,23,.91);stroke:rgba(255,255,255,.58);stroke-width:1.2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.28));height:64px;y:-32px}
+.map-label .lot-name{font-size:14px;font-weight:900;letter-spacing:.02em}
+.map-label .lot-heads{font-size:16px;font-weight:900;fill:#fff7dd}
+.map-label .lot-load{font-size:8.5px;font-weight:700;fill:#f6f4e9}
+.map-label .load-dot{font-size:9px}.map-label .load-dot.low{fill:#91c94e}.map-label .load-dot.ok{fill:#35c88a}.map-label .load-dot.high{fill:#f0c32f}.map-label .load-dot.over{fill:#f18424}.map-label .load-dot.critical{fill:#ff453a}.map-label .load-dot.empty{fill:#aaa}
+.map-condition-legend{display:none!important}
+.load-status-card{margin-top:14px;border:1px solid #e3dfd5;border-radius:12px;padding:11px;display:flex;gap:10px;align-items:center;background:#f7f6f0}
+.load-status-card .load-status-dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 6px rgba(0,0,0,.04);flex:none}
+.load-status-card small{display:block;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-size:8px}.load-status-card strong{font-size:15px}.load-status-card p{margin:2px 0 0!important;font-size:10px!important;color:var(--muted)}
+.load-status-card.low .load-status-dot{background:#91c94e}.load-status-card.ok .load-status-dot{background:#35c88a}.load-status-card.high .load-status-dot{background:#f0c32f}.load-status-card.over .load-status-dot{background:#f18424}.load-status-card.critical .load-status-dot{background:#e32822}.load-status-card.empty .load-status-dot{background:#aaa}
+.edited-note{margin:-6px 0 14px;color:var(--muted);font-size:11px}
+.group-list img{image-rendering:auto}
+
+@media(max-width:760px){
+  .survey-switcher{min-width:116px;max-width:132px}.survey-switcher span{display:none}.survey-switcher select{font-size:9px;padding:6px 20px 6px 7px}
+  .release-status{display:none}.welcome-actions{width:100%}.welcome-actions .btn{flex:1}
+  .map-label .label-card{width:100px;x:-50px}.map-label .lot-name{font-size:13px}.map-label .lot-heads{font-size:15px}.map-label .lot-load{font-size:8px}
+  .map-legend{background:rgba(12,28,20,.86);color:#fff;border-color:rgba(255,255,255,.18)}
+}
