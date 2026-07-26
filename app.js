@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 502
-const APP_VERSION_LABEL = '5.02'
+const APP_VERSION = 503
+const APP_VERSION_LABEL = '5.03'
 const RELEASE_DATE = '2026-07-26'
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
@@ -45,12 +45,11 @@ const SPRITE_VARIANTS = {
 }
 
 const FIELD_STATES = [
-  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v501/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
-  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v501/pasture-good.png', indicator: 'condition-indicator-good.png' },
-  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v501/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
-  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v501/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
-  { id: 'muy-malo', label: 'Muy malo', short: 'Muy m.', tone: 'very-poor', pattern: 'v501/pasture-very-poor.png', indicator: 'condition-indicator-very-poor.png' },
-  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v501/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
+  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v503/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
+  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v503/pasture-good.png', indicator: 'condition-indicator-good.png' },
+  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v503/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
+  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v503/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
+  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v503/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
   { id: 'no-observado', label: 'Sin información', short: 'Sin info.', tone: 'unknown', pattern: null, indicator: 'condition-indicator-unobserved.png' },
 ]
 
@@ -90,6 +89,7 @@ const fieldStateLookup = Object.fromEntries(FIELD_STATES.map((item) => [item.id,
 
 function normalizeFieldState(value) {
   if (value === 'wet') return 'anegado'
+  if (value === 'muy-malo') return 'malo'
   return fieldStateLookup[value] ? value : 'no-observado'
 }
 
@@ -707,9 +707,15 @@ function renderHerdSprites(lotEntry, lot, compact, metric) {
   const drawWidth = spriteWidth * scale
   const drawHeight = drawWidth * .60
   return positions.map((position, index) => {
-    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v502`) * variants.length) % variants.length]
-    const angle = (seededNumber(`${lot.id}-${index}-angle-v502`) - .5) * 8
-    return `<image class="animal-sprite ${kind}" href="./assets/${asset}" x="${(position.x - drawWidth/2).toFixed(1)}" y="${(position.y - drawHeight/2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" transform="rotate(${angle.toFixed(1)} ${position.x.toFixed(1)} ${position.y.toFixed(1)})" />`
+    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v503`) * variants.length) % variants.length]
+    const angle = (seededNumber(`${lot.id}-${index}-angle-v503`) - .5) * 8
+    const shadowRx = (drawWidth * .39).toFixed(1)
+    const shadowRy = Math.max(1.2, drawHeight * .16).toFixed(1)
+    const shadowCy = (position.y + drawHeight * .31).toFixed(1)
+    return `<g class="animal-marker ${kind}">
+      <ellipse class="animal-ground-shadow" cx="${position.x.toFixed(1)}" cy="${shadowCy}" rx="${shadowRx}" ry="${shadowRy}" />
+      <image class="animal-sprite ${kind}" href="./assets/${asset}" x="${(position.x - drawWidth/2).toFixed(1)}" y="${(position.y - drawHeight/2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" transform="rotate(${angle.toFixed(1)} ${position.x.toFixed(1)} ${position.y.toFixed(1)})" />
+    </g>`
   }).join('')
 }
 
@@ -718,24 +724,27 @@ function renderMap(survey, compact = false) {
   const selected = ui.selectedLotId
   const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
   const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
-  const patternDefs = FIELD_STATES.filter((item) => item.pattern).map((item) => `
-    <pattern id="condition-${item.id}" patternUnits="userSpaceOnUse" width="300" height="300">
-      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="300" height="300" preserveAspectRatio="xMidYMid slice" />
-    </pattern>`).join('') + `
+  const patternSize = 480
+  const patternVariants = [0, 90, 180, 270]
+  const patternDefs = FIELD_STATES.filter((item) => item.pattern).flatMap((item) => patternVariants.map((angle, variant) => `
+    <pattern id="condition-${item.id}-${variant}" patternUnits="userSpaceOnUse" width="${patternSize}" height="${patternSize}">
+      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${patternSize}" height="${patternSize}" preserveAspectRatio="xMidYMid slice" transform="rotate(${angle} ${patternSize / 2} ${patternSize / 2})" />
+    </pattern>`)).join('') + `
     <pattern id="condition-assumed-hatch" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(32)">
       <rect width="18" height="18" fill="transparent" />
-      <rect width="2" height="18" fill="rgba(255,255,255,.30)" />
+      <rect width="1.4" height="18" fill="rgba(255,255,255,.24)" />
     </pattern>
     <pattern id="condition-no-info" patternUnits="userSpaceOnUse" width="22" height="22" patternTransform="rotate(35)">
-      <rect width="22" height="22" fill="rgba(232,232,222,.10)" />
-      <rect width="2" height="22" fill="rgba(255,255,255,.28)" />
+      <rect width="22" height="22" fill="rgba(232,232,222,.06)" />
+      <rect width="1.5" height="22" fill="rgba(255,255,255,.18)" />
     </pattern>`
 
   const conditionLayer = LOTS.map((lot) => {
     const condition = conditions[lot.id]
     if (condition.source === 'none') return `<polygon class="lot-condition source-none state-no-observado" points="${lot.points}" fill="url(#condition-no-info)" />`
     const assumed = conditionIsAssumed(condition.source)
-    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId})" />${assumed ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
+    const variant = Math.floor(seededNumber(`${lot.id}-${condition.stateId}-texture-v503`) * patternVariants.length) % patternVariants.length
+    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${variant})" />${assumed ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
   }).join('')
 
   const loadHalos = LOTS.map((lot) => {

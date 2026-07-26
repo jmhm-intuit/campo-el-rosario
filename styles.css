@@ -613,3 +613,73 @@ button:disabled{cursor:not-allowed;opacity:.45}
 .rain-entry-form>.btn{grid-column:auto!important}
 .rain-form-grid{width:100%;grid-template-columns:minmax(0,1fr) 150px!important}
 @media(max-width:760px){.rain-form-grid{grid-template-columns:1fr!important}}
+
+/* Campo v5.03 — refined pasture assets and cattle contrast */
+.lot-condition{
+  opacity:.88!important;
+  filter:saturate(.96) contrast(.94)!important;
+}
+.lot-condition.source-observed{opacity:.88!important}
+.lot-condition.source-recent,
+.lot-condition.source-seasonal,
+.lot-condition.source-general{
+  opacity:.67!important;
+  filter:saturate(.82) contrast(.91)!important;
+}
+.lot-condition.state-anegado{opacity:.82!important;filter:saturate(.78) contrast(.88) brightness(1.04)!important}
+.lot-condition.source-none{opacity:.10!important}
+.condition-assumption-hatch{opacity:.22!important}
+
+.animal-marker{pointer-events:none}
+.animal-ground-shadow{
+  fill:rgba(16,24,18,.34);
+  filter:blur(.65px);
+  transform-box:fill-box;
+  transform-origin:center;
+}
+.animal-sprite{
+  opacity:1!important;
+  filter:
+    drop-shadow(0 0 .75px rgba(255,248,218,.98))
+    drop-shadow(0 1.25px 1px rgba(13,20,15,.58))!important;
+}
+.animal-sprite.calf{
+  filter:
+    drop-shadow(0 0 .7px rgba(255,248,218,.98))
+    drop-shadow(0 1px .8px rgba(13,20,15,.56))!important;
+}
+
+/* One compact registration mark in every context. */
+.nav-asset,
+.adoption-visual.single img,
+.survey-intro-art.single img,
+.empty-add img,
+.empty-groups img{
+  object-fit:contain!important;
+  object-position:center!important;
+}
+.nav-asset[src*="icon-register-animals"]{padding:1px}
+.adoption-visual.single img[src*="icon-register-animals"]{
+  width:148px!important;
+  height:148px!important;
+}
+.survey-intro-art.single img[src*="icon-register-animals"]{
+  width:190px!important;
+  height:190px!important;
+}
+.empty-add img[src*="icon-register-animals"]{width:94px!important;height:94px!important}
+.empty-groups img[src*="icon-register-animals"]{width:64px!important;height:64px!important}
+
+/* Five visible conditions plus the explicit no-information state. */
+.field-state-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+.condition-strip.state-muy-bueno{fill:#346a31}
+.condition-strip.state-bueno{fill:#6e963a}
+.condition-strip.state-regular{fill:#a78b39}
+.condition-strip.state-malo{fill:#9b7049}
+.condition-strip.state-anegado{fill:#617d82}
+
+@media(max-width:760px){
+  .field-state-options{grid-template-columns:1fr 1fr}
+  .adoption-visual.single img[src*="icon-register-animals"]{width:104px!important;height:104px!important}
+  .survey-intro-art.single img[src*="icon-register-animals"]{width:150px!important;height:150px!important}
+}

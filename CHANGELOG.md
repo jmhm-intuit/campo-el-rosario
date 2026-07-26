@@ -1,44 +1,32 @@
 # Changelog
 
-## Campo v5.02 — 26 de julio de 2026
+## Campo v5.03 — 26 de julio de 2026
 
-### Relevamientos
+### Condición del lote
 
-- Se pueden editar relevamientos existentes sin duplicarlos.
-- Los relevamientos se ordenan desde el más reciente y se agrupan por mes en el historial.
-- El selector principal muestra una fecha concreta, con navegación anterior/siguiente.
-- La edición de fechas históricas advierte cuando cambia el orden cronológico.
-- Se muestra fecha de creación y última edición cuando corresponde.
+- La visualización se simplifica a cinco estados: Muy bueno, Bueno, Regular, Malo y Anegado.
+- Los registros históricos con `Muy malo` se convierten automáticamente a `Malo` al cargarse.
+- Se incorporan cinco texturas nuevas de 768 × 768 px.
+- Las texturas evitan lagunas, rocas grandes y centros visuales que hagan evidente el mosaico.
+- El patrón usa una escala mayor y una orientación determinística distinta por lote.
+- Las condiciones estimadas mantienen menor intensidad y el indicador `≈`.
+- `Sin información` sigue siendo un estado de origen de datos, no una sexta condición del terreno.
 
-### Lotes y condición
+### Animales y contraste
 
-- Edición directa desde la ficha del lote en el mapa.
-- Registro de lotes observados con cero animales.
-- Distinción entre lote no observado y lote observado vacío.
-- Condición opcional con tres orígenes: observada, estimada y sin información.
-- Regla de estimación: condición reciente del lote dentro de 60 días; historial del mismo mes; condición general observada; condición general previa.
-- Texturas más intensas dentro del polígono y paisaje exterior sin oscurecimiento.
-- Indicador `≈` y tratamiento visual suavizado para condiciones estimadas.
+- Cada animal incorpora una sombra elíptica suave debajo del sprite.
+- Se aplica un contorno crema fino y una sombra oscura para conservar lectura sobre verde, tierra y barro.
+- La intensidad de las texturas se ajusta para que el ganado siga siendo el elemento principal de ocupación.
 
-### Mapa y lectura
+### Iconografía
 
-- Bordes y halos de carga reducidos para no competir con la condición del lote.
-- Condición y carga permanecen visualmente independientes.
-- Etiquetas compactas y adaptativas, especialmente para ER-04 y ER-05.
-- Menor escala y densidad de animales en la vista general.
-- Un sprite representativo por cada 30 animales, con máximo de ocho por lote.
+- Se reemplaza el icono anterior de Registrar animales por una marca compacta de vaca + símbolo `+`.
+- La misma composición se utiliza en navegación, bienvenida, estados vacíos y formularios.
+- Se incluyen exportaciones de 24, 32, 48 y 256 px con fondo transparente.
 
-### Lluvia
+### Compatibilidad
 
-- Registro diario opcional con fecha, milímetros y nota.
-- Total mensual calculado automáticamente.
-- Diferenciación entre `0 mm` y falta de información.
-- El relevamiento puede guardarse sin datos de lluvia.
-
-### Interfaz y estabilidad
-
-- Nuevos iconos para Inicio, Existencias, Nacimientos y Registrar animales.
-- `Campo v5.02` y fecha de datos visibles en la interfaz.
-- Guardado automático de borradores.
-- Nueva versión de caché PWA para evitar recursos antiguos.
-- Se mantiene la clave local `campo-el-rosario-v2` para preservar los datos de V5.
+- Se mantiene la clave local `campo-el-rosario-v2`.
+- Se mantiene la geometría revisada de los 18 lotes y las 1.735 hectáreas.
+- Se conserva toda la funcionalidad de edición directa, relevamientos históricos, lotes sin animales y lluvia diaria.
+- Nueva caché PWA `campo-v503-assets-1`.

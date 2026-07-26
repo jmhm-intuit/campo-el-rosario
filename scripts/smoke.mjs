@@ -42,14 +42,14 @@ const source = rawSource + `\n;globalThis.__campoTest = {
   renderSurveyWizard, renderLotFormModal, renderRainModal, renderSurveyHistoryModal,
   startSurvey, editSurvey, draftAsSurvey, spriteCountForLot, dominantAnimalKind,
   sortedSurveys, resolveLotCondition, monthlyRainSummary, rainAnalysis,
-  surveyMetrics, state, ui, LOTS
+  surveyMetrics, normalizeFieldState, state, ui, LOTS
 };`
 vm.runInContext(source, context, { filename: 'app.js' })
 const api = context.__campoTest
 const checks = []
 const check = (condition, message) => { if (!condition) throw new Error(message); checks.push(message) }
 
-check(appElement.innerHTML.includes('Campo v5.02'), 'La versión Campo v5.02 aparece en la interfaz')
+check(appElement.innerHTML.includes('Campo v5.03'), 'La versión Campo v5.03 aparece en la interfaz')
 check(appElement.innerHTML.includes('survey-navigator'), 'El selector visible de relevamientos está en la pantalla principal')
 check(appElement.innerHTML.includes('Último disponible'), 'La fecha más reciente está identificada')
 check(appElement.innerHTML.includes('condition-assumption-hatch'), 'El mapa distingue condiciones estimadas')
@@ -61,6 +61,12 @@ check(appElement.innerHTML.includes('kpi-cow-red-angus.png'), 'Existencias usa u
 check(appElement.innerHTML.includes('kpi-cow-calf-red-angus.png'), 'Nacimientos usa vaca con cría')
 check(appElement.innerHTML.includes('viewBox="0 0 1154 1363"'), 'El mapa mantiene el sistema maestro')
 check(appElement.innerHTML.includes('Registro de lluvia'), 'El KPI de lluvia está visible')
+
+check(!appElement.innerHTML.includes('Muy malo'), 'Muy malo ya no aparece como estado seleccionable')
+check(appElement.innerHTML.includes('v503/pasture-excellent.png'), 'El mapa utiliza las nuevas texturas v5.03')
+check(appElement.innerHTML.includes('animal-ground-shadow'), 'Cada animal incluye una sombra de contraste')
+check(api.normalizeFieldState('muy-malo') === 'malo', 'Los registros Muy malo migran automáticamente a Malo')
+
 
 const first = api.state.surveys[0]
 api.editSurvey(first.id)
@@ -109,4 +115,4 @@ for (const view of ['resumen', 'mapa', 'historico', 'datos']) {
   check(appElement.innerHTML.length > 1000, `La vista ${view} se renderiza`)
 }
 
-console.log(`Smoke test Campo v5.02 aprobado (${checks.length} comprobaciones).`)
+console.log(`Smoke test Campo v5.03 aprobado (${checks.length} comprobaciones).`)
