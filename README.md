@@ -1,28 +1,39 @@
-# Campo — El Rosario V4
+# Campo — El Rosario V5
 
-Aplicación web local para registrar relevamientos de ganado, carga animal, lluvia y estado general de El Rosario.
+Aplicación web local-first para registrar relevamientos de ganado por lote y visualizar carga animal, condición del campo y lluvia sobre el mapa de El Rosario.
 
-## Cambios principales de V4
+## Mejoras principales de V5
 
-- Incorpora la biblioteca definitiva de sprites transparentes de Angus colorado.
-- Distribuye varios animales dentro de cada lote para representar visualmente su ocupación y carga, sin dibujar una vaca por cada cabeza real.
-- Mantiene los animales dentro de los polígonos y evita el área de las etiquetas.
-- Reemplaza la casa de ER-08/09 por un asset transparente inspirado en la fotografía real compartida: galería de cuatro arcos, paredes envejecidas, tanque lateral y techo plano.
-- Mantiene una segunda casa rural permanente en el extremo inferior derecho de ER-13.
-- Usa la imagen aérea aprobada y todas las capas dentro del mismo `viewBox` de `1154 × 1363`, evitando escalas independientes.
-- Conserva el flujo **Registrar animales por lote**, el estado del campo opcional y la posibilidad de dejar lotes sin cargar.
-- Muestra al final cualquier diferencia de uno o más animales respecto del relevamiento anterior, sin bloquear el guardado.
-- Conserva automáticamente los relevamientos de V2 y V3 porque mantiene la misma clave de almacenamiento local.
+- Sustituye la geometría anterior por los polígonos revisados sobre el fondo maestro de `1154 × 1363 px`.
+- Usa la condición del campo como textura semitransparente dentro de cada lote.
+- Usa el borde del lote para mostrar la carga animal en EV/ha.
+- Representa el rodeo con sprites Red Angus vistos desde arriba, distribuidos según la cantidad y las categorías realmente cargadas.
+- Mantiene visibles la casa principal de ER-08/09 y la casa secundaria de ER-13.
+- Incorpora la nueva familia de iconos KPI.
+- Muestra `Campo v5.0.0` y la fecha del último relevamiento en la interfaz.
+- Mantiene el proceso de relevamiento simple: fecha, lluvia, lotes que se quieran cargar, revisión final y guardado.
+- Los lotes pueden quedar sin cargar y el estado del campo sigue siendo opcional.
+- Cualquier diferencia de uno o más animales se informa al final, sin bloquear el guardado.
+- Conserva los datos locales de V2–V4 porque mantiene la clave `campo-el-rosario-v2`.
 
-## Capas del mapa
+## Orden de capas del mapa
 
-1. Imagen aérea aprobada.
-2. Color de carga por lote.
-3. Sprites individuales de animales.
-4. Casas permanentes.
-5. Polígonos interactivos, nombres, cantidades y carga.
+1. Fondo aéreo maestro.
+2. Textura de condición del campo.
+3. Borde de carga animal.
+4. Animales.
+5. Casas permanentes.
+6. Áreas interactivas, nombres y valores.
 
-Las casas se ven siempre, pero permanecen como una capa fija sobre el mapa. Esto permite ajustar su escala y posición sin modificar la imagen aérea original.
+Todas las capas usan el mismo `viewBox="0 0 1154 1363"`.
+
+## Validación
+
+```bash
+node --check app.js
+node scripts/preflight.mjs
+node scripts/smoke.mjs
+```
 
 ## Uso local
 
@@ -32,10 +43,8 @@ No requiere compilación:
 python3 -m http.server 8080
 ```
 
-Abrí `http://localhost:8080`.
+Luego abrí `http://localhost:8080`.
 
-## Datos y compatibilidad
+## Persistencia
 
-Campo V4 sigue usando la clave local `campo-el-rosario-v2`. Al actualizar la aplicación en la misma URL, los relevamientos existentes se migran a la versión 4 sin cambiar su ubicación.
-
-La URL comparte la aplicación, pero los datos continúan siendo locales a cada dispositivo hasta incorporar sincronización remota.
+Los datos se guardan en el navegador. Publicar V5 en la misma URL no elimina los relevamientos existentes. Antes de actualizar, es recomendable exportar un respaldo JSON desde **Exportar y respaldo**.

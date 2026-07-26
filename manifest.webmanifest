@@ -1,10 +1,23 @@
 {
-  "name": "Campo V4 — El Rosario",
+  "name": "Campo V5 — El Rosario",
   "short_name": "Campo",
-  "description": "Relevamientos simples de ganado, carga animal, lluvia y estado del campo.",
+  "description": "Relevamientos simples de ganado, carga animal, lluvia y condición del campo.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f4efe4",
   "theme_color": "#173d2b",
-  "icons": []
+  "icons": [
+    {
+      "src": "./assets/kpi/kpi-animals-red-angus.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/kpi/kpi-animals-red-angus.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }

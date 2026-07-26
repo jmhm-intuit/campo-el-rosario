@@ -1,0 +1,245 @@
+{
+  "version": "5.0.0",
+  "assets": [
+    {
+      "id": "kpi-animals-red-angus",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-animals-red-angus.png"
+    },
+    {
+      "id": "kpi-growth",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-growth.png"
+    },
+    {
+      "id": "kpi-health",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-health.png"
+    },
+    {
+      "id": "kpi-hectares",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-hectares.png"
+    },
+    {
+      "id": "kpi-pasture",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-pasture.png"
+    },
+    {
+      "id": "kpi-water",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-water.png"
+    },
+    {
+      "id": "kpi-weather-rain",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-weather-rain.png"
+    },
+    {
+      "id": "pasture-excellent",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-excellent-tile.png"
+    },
+    {
+      "id": "pasture-good",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-good-tile.png"
+    },
+    {
+      "id": "pasture-regular",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-regular-tile.png"
+    },
+    {
+      "id": "pasture-poor",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-poor-tile.png"
+    },
+    {
+      "id": "pasture-very-poor",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-very-poor-tile.png"
+    },
+    {
+      "id": "condition-waterlogged",
+      "type": "condition-texture",
+      "path": "assets/conditions/condition-waterlogged-tile.png"
+    },
+    {
+      "id": "condition-indicator-excellent",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-excellent.png"
+    },
+    {
+      "id": "condition-indicator-good",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-good.png"
+    },
+    {
+      "id": "condition-indicator-poor",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-poor.png"
+    },
+    {
+      "id": "condition-indicator-regular",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-regular.png"
+    },
+    {
+      "id": "condition-indicator-unobserved",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-unobserved.png"
+    },
+    {
+      "id": "condition-indicator-very-poor",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-very-poor.png"
+    },
+    {
+      "id": "grass-dense-01",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-dense-01.png"
+    },
+    {
+      "id": "grass-dense-02",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-dense-02.png"
+    },
+    {
+      "id": "grass-flowers",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-flowers.png"
+    },
+    {
+      "id": "grass-dry-01",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-dry-01.png"
+    },
+    {
+      "id": "grass-dry-02",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-dry-02.png"
+    },
+    {
+      "id": "grass-dry-03",
+      "type": "condition-detail",
+      "path": "assets/conditions/grass-dry-03.png"
+    },
+    {
+      "id": "decor-water-hole",
+      "type": "condition-detail",
+      "path": "assets/conditions/decor-water-hole.png"
+    },
+    {
+      "id": "bull-diagonal-grazing-14",
+      "type": "animal",
+      "path": "assets/animals/bull-diagonal-grazing-14.png"
+    },
+    {
+      "id": "bull-diagonal-grazing-15",
+      "type": "animal",
+      "path": "assets/animals/bull-diagonal-grazing-15.png"
+    },
+    {
+      "id": "bull-vertical-front-grazing-13",
+      "type": "animal",
+      "path": "assets/animals/bull-vertical-front-grazing-13.png"
+    },
+    {
+      "id": "bull-vertical-rear-standing-11",
+      "type": "animal",
+      "path": "assets/animals/bull-vertical-rear-standing-11.png"
+    },
+    {
+      "id": "bull-vertical-rear-standing-12",
+      "type": "animal",
+      "path": "assets/animals/bull-vertical-rear-standing-12.png"
+    },
+    {
+      "id": "calf-diagonal-grazing-33",
+      "type": "animal",
+      "path": "assets/animals/calf-diagonal-grazing-33.png"
+    },
+    {
+      "id": "calf-diagonal-grazing-34",
+      "type": "animal",
+      "path": "assets/animals/calf-diagonal-grazing-34.png"
+    },
+    {
+      "id": "calf-diagonal-lying-lying-43",
+      "type": "animal",
+      "path": "assets/animals/calf-diagonal-lying-lying-43.png"
+    },
+    {
+      "id": "calf-horizontal-lying-lying-35",
+      "type": "animal",
+      "path": "assets/animals/calf-horizontal-lying-lying-35.png"
+    },
+    {
+      "id": "calf-horizontal-lying-lying-44",
+      "type": "animal",
+      "path": "assets/animals/calf-horizontal-lying-lying-44.png"
+    },
+    {
+      "id": "calf-horizontal-lying-lying-45",
+      "type": "animal",
+      "path": "assets/animals/calf-horizontal-lying-lying-45.png"
+    },
+    {
+      "id": "calf-vertical-rear-standing-31",
+      "type": "animal",
+      "path": "assets/animals/calf-vertical-rear-standing-31.png"
+    },
+    {
+      "id": "calf-vertical-rear-standing-32",
+      "type": "animal",
+      "path": "assets/animals/calf-vertical-rear-standing-32.png"
+    },
+    {
+      "id": "calf-vertical-rear-standing-41",
+      "type": "animal",
+      "path": "assets/animals/calf-vertical-rear-standing-41.png"
+    },
+    {
+      "id": "calf-vertical-rear-standing-42",
+      "type": "animal",
+      "path": "assets/animals/calf-vertical-rear-standing-42.png"
+    },
+    {
+      "id": "cow-diagonal-grazing-23",
+      "type": "animal",
+      "path": "assets/animals/cow-diagonal-grazing-23.png"
+    },
+    {
+      "id": "cow-diagonal-grazing-24",
+      "type": "animal",
+      "path": "assets/animals/cow-diagonal-grazing-24.png"
+    },
+    {
+      "id": "cow-horizontal-grazing-25",
+      "type": "animal",
+      "path": "assets/animals/cow-horizontal-grazing-25.png"
+    },
+    {
+      "id": "cow-vertical-rear-standing-21",
+      "type": "animal",
+      "path": "assets/animals/cow-vertical-rear-standing-21.png"
+    },
+    {
+      "id": "cow-vertical-rear-standing-22",
+      "type": "animal",
+      "path": "assets/animals/cow-vertical-rear-standing-22.png"
+    },
+    {
+      "id": "building-house-main-er08-09",
+      "type": "building",
+      "path": "assets/buildings/building-house-main-er08-09.png"
+    },
+    {
+      "id": "building-house-secondary-er13",
+      "type": "building",
+      "path": "assets/buildings/building-house-secondary-er13.png"
+    }
+  ]
+}

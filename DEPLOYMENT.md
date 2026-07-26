@@ -1,31 +1,50 @@
-# Publicar Campo V4 en la URL actual
+# Publicar Campo V5 en la URL actual
 
-## Desde GitHub Codespaces
+## Antes de actualizar
 
-1. Descargá `campo-el-rosario-v4-deploy.zip`.
-2. Subilo a la raíz del repositorio `jmhm-intuit/campo-el-rosario`.
-3. Abrí un Codespace sobre la rama `main`.
-4. En la terminal, desde la raíz del repositorio, ejecutá:
+1. Abrí la versión actual de Campo.
+2. Entrá en **Exportar y respaldo**.
+3. Descargá un respaldo JSON.
+
+V5 mantiene la misma clave local, por lo que los datos deberían conservarse al publicar en la misma URL. El respaldo es una medida adicional de seguridad.
+
+## Desde un teléfono con GitHub Codespaces
+
+1. Descargá `campo-el-rosario-v5-deploy.zip`.
+2. Subilo a la raíz de `jmhm-intuit/campo-el-rosario` y confirmá el upload en `main`.
+3. Abrí **Code → Codespaces**.
+4. Desde la raíz del repositorio, ejecutá:
 
 ```bash
-mkdir -p /tmp/campo-v4
-unzip -q campo-el-rosario-v4-deploy.zip -d /tmp/campo-v4
+mkdir -p /tmp/campo-v5
+unzip -q campo-el-rosario-v5-deploy.zip -d /tmp/campo-v5
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v4-deploy.zip' \
+  ! -name 'campo-el-rosario-v5-deploy.zip' \
   -exec rm -rf {} +
-cp -a /tmp/campo-v4/. .
-rm -rf /tmp/campo-v4 campo-el-rosario-v4-deploy.zip
+cp -a /tmp/campo-v5/. .
+rm -rf /tmp/campo-v5
+rm campo-el-rosario-v5-deploy.zip
+
 git add -A
-git commit -m "Upgrade Campo to V4"
+git commit -m "Upgrade Campo to V5"
 git push origin main
 ```
 
-5. Abrí **Actions** y esperá que finalice **Deploy Campo V4 to GitHub Pages**.
-6. Abrí la misma URL de GitHub Pages.
+5. Abrí **Actions** y esperá el check verde de **Deploy Campo V5 to GitHub Pages**.
+6. Abrí la URL habitual:
 
-## Conservación de datos
+```text
+https://jmhm-intuit.github.io/campo-el-rosario/
+```
 
-V4 mantiene la misma clave local de V2 y V3. Reemplazar los archivos en la misma URL no elimina los relevamientos guardados.
+## Cómo confirmar que se publicó V5
 
-Antes de publicar, descargá igualmente un respaldo JSON desde **Exportar y respaldo**. No borres los datos del sitio después de la actualización.
+En la UI deben aparecer:
+
+```text
+Campo v5.0.0
+Datos: <fecha del último relevamiento>
+```
+
+Si todavía aparece la versión anterior, cerrá la pestaña y abrí nuevamente la URL. No borres los datos del sitio.

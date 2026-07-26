@@ -1,54 +1,85 @@
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 4
+const APP_VERSION = 5
+const APP_VERSION_LABEL = '5.0.0'
+const RELEASE_DATE = '2026-07-26'
 const TARGET_LOAD = 0.8
 
 const LOTS = [
-  { id: 'ER-01', name: 'ER-01', hectares: 150, points: '50,42 214,42 214,273 50,273', label: [132,145], sprite: [133,190] },
-  { id: 'ER-02', name: 'ER-02', hectares: 150, points: '214,42 395,42 395,273 214,273', label: [304,145], sprite: [305,190] },
-  { id: 'ER-03', name: 'ER-03', hectares: 150, points: '395,42 556,42 556,273 395,273', label: [475,145], sprite: [475,190] },
-  { id: 'ER-04', name: 'ER-04', hectares: 50, points: '556,42 633,42 633,178 556,145', label: [594,92], sprite: [594,130] },
-  { id: 'ER-05', name: 'ER-05', hectares: 60, points: '633,42 739,42 739,207 633,178', label: [685,98], sprite: [685,145] },
-  { id: 'ER-06', name: 'ER-06', hectares: 50, points: '556,145 633,178 633,324 556,312', label: [594,238], sprite: [594,275] },
-  { id: 'ER-07', name: 'ER-07', hectares: 65, points: '633,178 739,207 739,353 633,324', label: [685,264], sprite: [685,306] },
-  { id: 'ER-08-09', name: 'ER-08/09', hectares: 150, points: '214,273 395,273 395,526 214,526', label: [305,345], sprite: [310,455] },
-  { id: 'ER-10', name: 'ER-10', hectares: 150, points: '395,273 556,273 556,526 395,526', label: [475,350], sprite: [475,445] },
-  { id: 'ER-11', name: 'ER-11', hectares: 65, points: '556,312 633,324 633,526 556,526', label: [594,410], sprite: [594,468] },
-  { id: 'ER-12', name: 'ER-12', hectares: 55, points: '633,324 739,353 739,526 633,526', label: [685,425], sprite: [685,480] },
-  { id: 'ER-13', name: 'ER-13', hectares: 50, points: '556,526 633,526 633,784 556,784', label: [594,620], sprite: [594,690] },
-  { id: 'ER-14', name: 'ER-14', hectares: 60, points: '633,526 739,526 739,784 633,784', label: [685,620], sprite: [685,690] },
-  { id: 'ER-15-16', name: 'ER-15/16', hectares: 70, points: '556,784 633,784 633,1016 556,1016', label: [594,850], sprite: [594,940] },
-  { id: 'ER-17', name: 'ER-17', hectares: 70, points: '633,784 739,784 739,1016 633,1016', label: [685,850], sprite: [685,940] },
-  { id: 'ER-18', name: 'ER-18', hectares: 60, points: '724,827 844,827 844,1050 724,955', label: [785,892], sprite: [785,960] },
-  { id: 'ER-19', name: 'ER-19', hectares: 150, points: '844,827 969,827 969,1205 844,1050', label: [906,905], sprite: [906,1030] },
-  { id: 'ER-20-21', name: 'ER-20/21', hectares: 180, points: '969,827 1074,827 1074,1278 969,1278', label: [1021,930], sprite: [1021,1080] },
+  { id: 'ER-01', name: 'ER-01', hectares: 150, points: '51,45 219,45 219,278 51,278', label: [135,145], sprite: [135,190] },
+  { id: 'ER-02', name: 'ER-02', hectares: 150, points: '219,45 400,45 400,278 219,278', label: [309,145], sprite: [310,190] },
+  { id: 'ER-03', name: 'ER-03', hectares: 150, points: '400,45 563,45 563,278 400,278', label: [481,145], sprite: [482,190] },
+  { id: 'ER-04', name: 'ER-04', hectares: 50, points: '563,45 643,45 643,191 563,173', label: [602,106], sprite: [603,151] },
+  { id: 'ER-05', name: 'ER-05', hectares: 60, points: '643,45 748,45 748,214 643,191', label: [696,108], sprite: [696,153] },
+  { id: 'ER-06', name: 'ER-06', hectares: 50, points: '563,173 643,191 643,337 563,318', label: [602,248], sprite: [603,293] },
+  { id: 'ER-07', name: 'ER-07', hectares: 65, points: '643,191 748,214 748,359 643,337', label: [696,269], sprite: [696,314] },
+  { id: 'ER-08-09', name: 'ER-08/09', hectares: 150, points: '219,278 400,278 400,538 219,538', label: [309,345], sprite: [310,408] },
+  { id: 'ER-10', name: 'ER-10', hectares: 150, points: '400,278 563,278 563,538 400,538', label: [481,348], sprite: [482,408] },
+  { id: 'ER-11', name: 'ER-11', hectares: 65, points: '563,318 660,340 660,538 563,538', label: [610,409], sprite: [612,454] },
+  { id: 'ER-12', name: 'ER-12', hectares: 55, points: '660,340 748,359 748,538 660,538', label: [704,423], sprite: [704,468] },
+  { id: 'ER-13', name: 'ER-13', hectares: 50, points: '563,538 641,538 641,795 563,795', label: [601,615], sprite: [602,666] },
+  { id: 'ER-14', name: 'ER-14', hectares: 60, points: '641,538 748,538 748,795 641,795', label: [694,615], sprite: [694,666] },
+  { id: 'ER-15-16', name: 'ER-15/16', hectares: 70, points: '563,795 641,795 641,1030 563,1030', label: [602,850], sprite: [602,912] },
+  { id: 'ER-17', name: 'ER-17', hectares: 70, points: '641,795 734,795 734,1030 641,1030', label: [687,850], sprite: [688,912] },
+  { id: 'ER-18', name: 'ER-18', hectares: 60, points: '734,840 857,840 857,1024 734,960', label: [792,884], sprite: [796,929] },
+  { id: 'ER-19', name: 'ER-19', hectares: 150, points: '857,840 980,840 980,1218 857,1092', label: [918,898], sprite: [918,998] },
+  { id: 'ER-20-21', name: 'ER-20/21', hectares: 180, points: '980,840 1089,840 1089,1301 980,1301', label: [1034,927], sprite: [1034,1070] },
 ]
 
 const CATEGORIES = [
-  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'bull-red-standing-right.png' },
-  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'cow-red-standing-right.png' },
-  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'cow-red-standing-left.png' },
-  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'calf-red-standing-right.png' },
-  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'calf-red-standing-left.png' },
-  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'cow-red-grazing-right.png' },
-  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'cow-red-grazing-left.png' },
-  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'cow-red-resting-right.png' },
-  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'cow-red-standing-right.png' },
+  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/bull-vertical-front-grazing-13.png' },
+  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/cow-diagonal-grazing-23.png' },
+  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/cow-vertical-rear-standing-21.png' },
+  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/calf-diagonal-grazing-33.png' },
+  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/calf-vertical-rear-standing-31.png' },
+  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/cow-horizontal-grazing-25.png' },
+  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/cow-diagonal-grazing-24.png' },
+  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/cow-vertical-rear-standing-22.png' },
+  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/cow-diagonal-grazing-23.png' },
 ]
 
 const SPRITE_VARIANTS = {
-  cow: ['cow-red-standing-right.png', 'cow-red-standing-left.png', 'cow-red-grazing-right.png', 'cow-red-grazing-left.png', 'cow-red-resting-right.png'],
-  bull: ['bull-red-standing-right.png', 'bull-red-standing-left.png'],
-  calf: ['calf-red-standing-right.png', 'calf-red-standing-left.png'],
+  cow: [
+    'animals/cow-diagonal-grazing-23.png',
+    'animals/cow-diagonal-grazing-24.png',
+    'animals/cow-horizontal-grazing-25.png',
+    'animals/cow-vertical-rear-standing-21.png',
+    'animals/cow-vertical-rear-standing-22.png',
+  ],
+  bull: [
+    'animals/bull-diagonal-grazing-14.png',
+    'animals/bull-diagonal-grazing-15.png',
+    'animals/bull-vertical-front-grazing-13.png',
+    'animals/bull-vertical-rear-standing-11.png',
+    'animals/bull-vertical-rear-standing-12.png',
+  ],
+  calf: [
+    'animals/calf-diagonal-grazing-33.png',
+    'animals/calf-diagonal-grazing-34.png',
+    'animals/calf-horizontal-lying-lying-35.png',
+    'animals/calf-vertical-rear-standing-31.png',
+    'animals/calf-vertical-rear-standing-32.png',
+    'animals/calf-diagonal-lying-lying-43.png',
+  ],
 }
 
 const FIELD_STATES = [
-  { id: 'muy-bueno', label: 'Muy bueno', icon: '🌿', tone: 'excellent' },
-  { id: 'bueno', label: 'Bueno', icon: '🌱', tone: 'good' },
-  { id: 'regular', label: 'Regular', icon: '🟡', tone: 'regular' },
-  { id: 'malo', label: 'Malo', icon: '🟤', tone: 'poor' },
-  { id: 'anegado', label: 'Anegado', icon: '💧', tone: 'wet' },
-  { id: 'no-observado', label: 'No observado', icon: '○', tone: 'unknown' },
+  { id: 'muy-bueno', label: 'Muy bueno', tone: 'excellent', pattern: 'condition-excellent-tile.png', indicator: 'condition-indicator-excellent.png' },
+  { id: 'bueno', label: 'Bueno', tone: 'good', pattern: 'condition-good-tile.png', indicator: 'condition-indicator-good.png' },
+  { id: 'regular', label: 'Regular', tone: 'regular', pattern: 'condition-regular-tile.png', indicator: 'condition-indicator-regular.png' },
+  { id: 'malo', label: 'Malo', tone: 'poor', pattern: 'condition-poor-tile.png', indicator: 'condition-indicator-poor.png' },
+  { id: 'muy-malo', label: 'Muy malo', tone: 'very-poor', pattern: 'condition-very-poor-tile.png', indicator: 'condition-indicator-very-poor.png' },
+  { id: 'anegado', label: 'Anegado', tone: 'flooded', pattern: 'condition-waterlogged-tile.png', indicator: 'condition-indicator-flooded.png' },
+  { id: 'no-observado', label: 'No observado', tone: 'unknown', pattern: null, indicator: 'condition-indicator-unobserved.png' },
 ]
+
+const KPI_ASSETS = {
+  animals: 'kpi/kpi-animals-red-angus.png',
+  load: 'kpi/kpi-pasture.png',
+  births: 'animals/calf-vertical-rear-standing-31.png',
+  deaths: 'kpi/kpi-health.png',
+  trade: 'kpi/kpi-growth.png',
+  rain: 'kpi/kpi-weather-rain.png',
+}
 
 const INITIAL_GROUPS = {
   'ER-01': { fieldState: 'bueno', groups: [['vacas', 80], ['toros', 2], ['vacas-descarte', 96]] },
@@ -69,6 +100,23 @@ const INITIAL_GROUPS = {
 const lotLookup = Object.fromEntries(LOTS.map((lot) => [lot.id, lot]))
 const categoryLookup = Object.fromEntries(CATEGORIES.map((category) => [category.id, category]))
 const fieldStateLookup = Object.fromEntries(FIELD_STATES.map((item) => [item.id, item]))
+
+function normalizeFieldState(value) {
+  if (value === 'wet') return 'anegado'
+  return fieldStateLookup[value] ? value : 'no-observado'
+}
+
+function fieldStateIcon(item, className = '') {
+  const stateItem = item || fieldStateLookup['no-observado']
+  return `<img class="field-state-icon ${className}" src="./assets/conditions/${stateItem.indicator}" alt="">`
+}
+
+function compactDateLabel(date) {
+  if (!date) return 'Sin datos'
+  return new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(`${date}T12:00:00`))
+}
+
+
 
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`)
 const esc = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char])
@@ -121,7 +169,7 @@ function migrateState(parsed) {
       ...survey,
       lots: Array.isArray(survey.lots) ? survey.lots.map((lot) => ({
         ...lot,
-        fieldState: lot.fieldState || 'no-observado',
+        fieldState: normalizeFieldState(lot.fieldState),
         groups: Array.isArray(lot.groups) ? lot.groups : [],
       })) : [],
       events: survey.events || { births: 0, deaths: 0, purchases: 0, sales: 0 },
@@ -133,7 +181,7 @@ function migrateState(parsed) {
   if (migrated.draft?.lots) {
     migrated.draft.lots = migrated.draft.lots.map((lot) => ({
       ...lot,
-      fieldState: lot.fieldState || 'no-observado',
+      fieldState: normalizeFieldState(lot.fieldState),
       groups: Array.isArray(lot.groups) ? lot.groups : [],
     }))
   }
@@ -313,10 +361,11 @@ function navItem(view, label, iconName) {
 
 function renderShell(content, title, subtitle, action = '') {
   const survey = selectedSurvey()
+  const dataDate = survey ? compactDateLabel(survey.date) : 'Sin datos'
   return `
-    <div class="app-shell">
+    <div class="app-shell ${ui.view === 'relevamiento' ? 'survey-mode' : ''}">
       <aside class="sidebar">
-        <div class="brand"><img src="./assets/cow-logo.svg" alt="Ganado"><div><strong>CAMPO</strong><span>El Rosario</span></div></div>
+        <div class="brand"><img src="./assets/${KPI_ASSETS.animals}" alt="Aberdeen Angus colorada"><div><strong>CAMPO</strong><span>El Rosario</span></div></div>
         <nav>
           ${navItem('resumen', 'Resumen', 'home')}
           ${navItem('relevamiento', 'Nuevo relevamiento', 'clipboard')}
@@ -325,17 +374,17 @@ function renderShell(content, title, subtitle, action = '') {
           ${navItem('datos', 'Exportar y respaldo', 'download')}
         </nav>
         <div class="sidebar-card">
-          <small>Último relevamiento</small>
+          <small>Datos actualizados</small>
           <strong>${survey ? dateLabel(survey.date) : 'Sin datos'}</strong>
           <span>Los datos se guardan en este dispositivo.</span>
         </div>
-        <div class="sidebar-footer">Campo V4 · local</div>
+        <div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Datos: ${dataDate}</span></div>
       </aside>
       <div class="content-shell">
         <header class="topbar">
           <button class="mobile-menu" data-toggle-nav aria-label="Menú">${icon('menu', 24)}</button>
           <div><h1>${title}</h1><p>${subtitle}</p></div>
-          <div class="topbar-actions">${action}</div>
+          <div class="topbar-actions"><span class="release-status"><b>v${APP_VERSION_LABEL}</b><small>Datos ${dataDate}</small></span>${action}</div>
         </header>
         <main class="page">${content}</main>
       </div>
@@ -362,12 +411,12 @@ function renderDashboard() {
   const deltaAnimals = prevMetrics ? metrics.animals - prevMetrics.animals : null
   const cards = `
     <section class="kpi-grid v2">
-      ${kpiCard('Ganado total', fmt(metrics.animals), deltaAnimals == null ? 'Primer relevamiento' : `${deltaAnimals >= 0 ? '+' : ''}${fmt(deltaAnimals)} vs. anterior`, 'cowAsset', 'brown')}
-      ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, 'map', capacityClass(metrics.load))}
-      ${kpiCard('Nacimientos', fmt(events.births), 'Desde el relevamiento anterior', 'plus', 'gold')}
-      ${kpiCard('Mortandad', fmt(events.deaths), 'Registro opcional del período', 'alert', events.deaths ? 'red' : 'neutral')}
-      ${kpiCard('Compras y ventas', `${fmt(events.purchases)} / ${fmt(events.sales)}`, 'Compras / ventas', 'clipboard', 'blue')}
-      ${kpiCard('Lluvia', rain.current == null ? 'Sin dato' : `${fmt(rain.current)} mm`, `${rain.status} · ${rain.detail}`, 'rain', rain.status.toLowerCase().replace('é','e'))}
+      ${kpiCard('Ganado total', fmt(metrics.animals), deltaAnimals == null ? 'Primer relevamiento' : `${deltaAnimals >= 0 ? '+' : ''}${fmt(deltaAnimals)} vs. anterior`, KPI_ASSETS.animals, 'brown')}
+      ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, KPI_ASSETS.load, capacityClass(metrics.load))}
+      ${kpiCard('Nacimientos', fmt(events.births), 'Desde el relevamiento anterior', KPI_ASSETS.births, 'gold')}
+      ${kpiCard('Mortandad', fmt(events.deaths), 'Registro opcional del período', KPI_ASSETS.deaths, events.deaths ? 'red' : 'neutral')}
+      ${kpiCard('Compras y ventas', `${fmt(events.purchases)} / ${fmt(events.sales)}`, 'Compras / ventas', KPI_ASSETS.trade, 'blue')}
+      ${kpiCard('Lluvia', rain.current == null ? 'Sin dato' : `${fmt(rain.current)} mm`, `${rain.status} · ${rain.detail}`, KPI_ASSETS.rain, rain.status.toLowerCase().replace('é','e'))}
     </section>`
 
   const content = `
@@ -399,7 +448,7 @@ function renderDashboard() {
     </section>
     <section class="bottom-grid">
       <article class="panel adoption-card">
-        <div class="adoption-visual"><img src="./assets/cow-red-standing-right.png" alt="Vaca Angus colorada"><img src="./assets/calf-red-standing-left.png" alt="Ternero Angus colorado"></div>
+        <div class="adoption-visual"><img src="./assets/animals/cow-diagonal-grazing-23.png" alt="Vaca Aberdeen Angus colorada"><img src="./assets/animals/calf-vertical-rear-standing-31.png" alt="Ternero Aberdeen Angus colorado"></div>
         <div><span class="eyebrow">Carga simple, datos útiles</span><h3>Registrá animales por lote</h3><p>La carga principal es el ganado presente. También podés anotar el estado del campo y la lluvia. Los lotes que no revises pueden quedar sin cargar.</p><button class="btn primary" data-start-survey>Comenzar relevamiento</button></div>
       </article>
       <article class="panel recent-panel"><div class="panel-head"><h3>Últimos relevamientos</h3><button class="text-link" data-nav="historico">Ver todos</button></div>${renderRecentSurveys()}</article>
@@ -407,11 +456,8 @@ function renderDashboard() {
   return renderShell(content, 'Resumen del campo', 'Animales, carga y estado general del último relevamiento')
 }
 
-function kpiCard(label, value, note, iconName, tone) {
-  const graphic = iconName === 'cowAsset'
-    ? '<img class="kpi-cow-asset" src="./assets/cow-logo.svg" alt="">'
-    : icon(iconName, 24)
-  return `<article class="kpi-card tone-${tone}"><span class="kpi-icon">${graphic}</span><div><small>${label}</small><strong>${value}</strong><p>${note}</p></div></article>`
+function kpiCard(label, value, note, assetPath, tone) {
+  return `<article class="kpi-card tone-${tone}"><span class="kpi-icon"><img src="./assets/${assetPath}" alt=""></span><div><small>${label}</small><strong>${value}</strong><p>${note}</p></div></article>`
 }
 
 function renderAlert(alert) {
@@ -460,11 +506,12 @@ function seededNumber(seed) {
 }
 
 function spriteCountForLot(lot, metric, compact) {
-  if (!metric.animals) return 0
-  const ratio = metric.load / TARGET_LOAD
-  const desired = ratio <= 0.4 ? 2 : ratio <= 0.75 ? 4 : ratio <= 1 ? 6 : ratio <= 1.25 ? 8 : ratio <= 1.5 ? 10 : 14
-  const areaCapacity = Math.max(2, Math.floor(polygonArea(parseLotPoints(lot)) / (compact ? 6500 : 3300)))
-  return Math.max(2, Math.min(desired, areaCapacity, compact ? 7 : 14))
+  const heads = Number(metric.animals) || 0
+  if (!heads) return 0
+  let desired = heads <= 20 ? 2 : heads <= 50 ? 4 : heads <= 100 ? 7 : heads <= 150 ? 10 : 14
+  if (compact) desired = Math.min(desired, 8)
+  const areaCapacity = Math.max(2, Math.floor(polygonArea(parseLotPoints(lot)) / (compact ? 5200 : 2800)))
+  return Math.max(2, Math.min(desired, areaCapacity, compact ? 8 : 14))
 }
 
 function representativeGroups(lotEntry, count) {
@@ -482,8 +529,8 @@ function representativeGroups(lotEntry, count) {
 }
 
 function isHouseZone(lotId, x, y) {
-  if (lotId === 'ER-08-09') return x > 270 && x < 385 && y > 365 && y < 470
-  if (lotId === 'ER-13') return x > 565 && x < 640 && y > 690 && y < 790
+  if (lotId === 'ER-08-09') return x > 270 && x < 380 && y > 350 && y < 455
+  if (lotId === 'ER-13') return x > 575 && x < 642 && y > 705 && y < 795
   return false
 }
 
@@ -497,13 +544,13 @@ function spritePositions(lot, count, spriteWidth) {
   const maxY = Math.max(...ys)
   const width = maxX - minX
   const height = maxY - minY
-  const spriteHeight = spriteWidth * 0.72
+  const spriteHeight = spriteWidth
   const marginX = Math.max(spriteWidth * 0.52, Math.min(28, width * 0.15))
   const marginY = Math.max(spriteHeight * 0.52, Math.min(30, height * 0.12))
   const positions = []
   const fitsInside = (x, y) => {
-    const halfW = spriteWidth * 0.43
-    const halfH = spriteHeight * 0.42
+    const halfW = spriteWidth * 0.36
+    const halfH = spriteHeight * 0.36
     return [[x, y], [x-halfW, y-halfH], [x+halfW, y-halfH], [x-halfW, y+halfH], [x+halfW, y+halfH]]
       .every((point) => pointInPolygon(point, polygon))
   }
@@ -524,53 +571,65 @@ function renderHerdSprites(lotEntry, lot, compact, metric) {
   const count = spriteCountForLot(lot, metric, compact)
   const polygon = parseLotPoints(lot)
   const width = Math.max(...polygon.map((point) => point[0])) - Math.min(...polygon.map((point) => point[0]))
-  const spriteWidth = Math.max(compact ? 34 : 38, Math.min(compact ? 46 : 56, width / (compact ? 2.4 : 2.1)))
+  const spriteWidth = Math.max(compact ? 28 : 32, Math.min(compact ? 42 : 50, width / (compact ? 2.8 : 2.35)))
   const positions = spritePositions(lot, count, spriteWidth)
   const groups = representativeGroups(lotEntry, positions.length)
   return positions.map((position, index) => {
     const category = categoryLookup[groups[index]?.categoryId] || CATEGORIES[1]
     const variants = SPRITE_VARIANTS[category.kind] || SPRITE_VARIANTS.cow
     const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset`) * variants.length) % variants.length]
-    const aspect = category.kind === 'calf' ? 0.72 : 0.71
-    const drawWidth = category.kind === 'calf' ? spriteWidth * 0.82 : spriteWidth
-    const drawHeight = drawWidth * aspect
-    return `<image class="animal-sprite" href="./assets/${asset}" x="${(position.x - drawWidth / 2).toFixed(1)}" y="${(position.y - drawHeight / 2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" />`
+    const scale = category.kind === 'calf' ? 0.70 : category.kind === 'bull' ? 1.08 : 1
+    const drawSize = spriteWidth * scale
+    return `<image class="animal-sprite ${category.kind}" href="./assets/${asset}" x="${(position.x - drawSize / 2).toFixed(1)}" y="${(position.y - drawSize / 2).toFixed(1)}" width="${drawSize.toFixed(1)}" height="${drawSize.toFixed(1)}" preserveAspectRatio="xMidYMid meet" />`
   }).join('')
 }
 
 function renderMap(survey, compact = false) {
   const metrics = surveyMetrics(survey)
   const selected = ui.selectedLotId
-  const occupancy = LOTS.map((lot) => {
+  const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
+  const patternDefs = FIELD_STATES.filter((item) => item.pattern).map((item) => `
+    <pattern id="condition-${item.id}" patternUnits="userSpaceOnUse" width="150" height="150">
+      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="150" height="150" preserveAspectRatio="xMidYMid slice" />
+    </pattern>`).join('') + `
+    <pattern id="condition-no-observado" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(35)">
+      <rect width="18" height="18" fill="rgba(255,255,255,.025)" />
+      <rect width="2" height="18" fill="rgba(111,119,111,.35)" />
+    </pattern>`
+  const conditionLayer = LOTS.map((lot) => {
+    const stateId = normalizeFieldState(lotEntries[lot.id]?.fieldState)
+    const fillId = stateId === 'no-observado' ? 'condition-no-observado' : `condition-${stateId}`
+    return `<polygon class="lot-condition state-${stateId}" points="${lot.points}" fill="url(#${fillId})" />`
+  }).join('')
+  const loadBorders = LOTS.map((lot) => {
     const metric = metrics.byLot[lot.id]
-    const status = capacityClass(metric.load)
-    return `<polygon class="lot-load ${status}" points="${lot.points}" />`
+    return `<polygon class="lot-load-border ${capacityClass(metric.load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`
   }).join('')
   const animals = survey.lots
     .filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0)
     .map((lotEntry) => renderHerdSprites(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId]))
     .join('')
   const houses = `
-    <image class="map-house" href="./assets/house-8-9.png" x="267" y="370" width="122" height="80" preserveAspectRatio="xMidYMid meet" />
-    <image class="map-house" href="./assets/house-13.png" x="573" y="724" width="56" height="42" preserveAspectRatio="xMidYMid meet" />`
-  const hitAreas = LOTS.map((lot) => {
-    const metric = metrics.byLot[lot.id]
-    const status = capacityClass(metric.load)
-    return `<polygon class="lot-hit ${status} ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`
-  }).join('')
+    <image class="map-house main-house" href="./assets/buildings/building-house-main-er08-09.png" x="285" y="355" width="104" height="96" preserveAspectRatio="xMidYMid meet" />
+    <image class="map-house secondary-house" href="./assets/buildings/building-house-secondary-er13.png" x="578" y="716" width="64" height="64" preserveAspectRatio="xMidYMid meet" />`
+  const hitAreas = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
   const labels = LOTS.map((lot) => {
     const metric = metrics.byLot[lot.id]
     return `<g class="map-label" transform="translate(${lot.label[0]} ${lot.label[1]})" data-map-lot="${lot.id}"><rect x="-43" y="-22" width="86" height="44" rx="10"/><text class="lot-name" text-anchor="middle" y="-4">${lot.name}</text><text class="lot-value" text-anchor="middle" y="13">${metric.animals ? `${fmt(metric.animals)} · ${decimal(metric.load)} EV/ha` : 'Sin cargar'}</text></g>`
   }).join('')
+  const conditionLegend = FIELD_STATES.map((item) => `<span><img src="./assets/conditions/${item.indicator}" alt=""><b>${item.label}</b></span>`).join('')
   return `<div class="ranch-map ${compact ? 'compact' : ''}">
     <svg class="map-canvas" viewBox="0 0 1154 1363" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa aéreo interactivo de El Rosario">
-      <image href="./assets/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none" />
-      <g class="load-layer">${occupancy}</g>
+      <defs>${patternDefs}</defs>
+      <image href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none" />
+      <g class="condition-layer">${conditionLayer}</g>
+      <g class="load-border-layer">${loadBorders}</g>
       <g class="animal-layer">${animals}</g>
       <g class="house-layer">${houses}</g>
       <g class="interaction-layer">${hitAreas}${labels}</g>
     </svg>
     <div class="map-load-badge"><span>Carga total</span><strong>${decimal(metrics.load)} EV/ha</strong></div>
+    <details class="map-condition-legend"><summary>Condición del campo</summary><div>${conditionLegend}</div></details>
     <div class="map-legend"><span><i class="low"></i>Baja</span><span><i class="ok"></i>Adecuada</span><span><i class="high"></i>Alta</span><span><i class="critical"></i>Crítica</span></div>
   </div>`
 }
@@ -588,9 +647,9 @@ function renderMapPage() {
     <div class="load-meter"><i class="${capacityClass(metric.load)}" style="width:${Math.min(100, metric.capacityUse * 100)}%"></i></div>
     <p class="capacity-caption">${Math.round(metric.capacityUse * 100)}% del objetivo de carga</p>
     <h3>Composición</h3>
-    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'cow-red-standing-right.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : '<p class="empty-inline">Sin animales en este relevamiento.</p>'}</div>
-    <h3>Estado del campo</h3><div class="field-state-badge ${lotEntry?.fieldState || 'no-observado'}">${fieldStateLookup[lotEntry?.fieldState || 'no-observado']?.icon} ${fieldStateLookup[lotEntry?.fieldState || 'no-observado']?.label}</div>
-  </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/cow-red-standing-right.png"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver su ganado, carga y estado del campo.</p></aside>`
+    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/cow-diagonal-grazing-23.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : '<p class="empty-inline">Sin animales en este relevamiento.</p>'}</div>
+    <h3>Estado del campo</h3><div class="field-state-badge ${normalizeFieldState(lotEntry?.fieldState)}">${fieldStateIcon(fieldStateLookup[normalizeFieldState(lotEntry?.fieldState)])}<span>${fieldStateLookup[normalizeFieldState(lotEntry?.fieldState)]?.label}</span></div>
+  </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/${KPI_ASSETS.animals}"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver su ganado, carga y estado del campo.</p></aside>`
   return renderShell(`<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey, false)}</article>${side}</div>`, 'Mapa del campo', `Relevamiento del ${dateLabel(survey.date)}`)
 }
 
@@ -613,7 +672,7 @@ function startSurvey() {
 function renderSurveyWizard() {
   const draft = state.draft
   if (!draft) {
-    const content = `<section class="survey-intro"><div class="survey-intro-copy"><span class="eyebrow">Una fotografía del campo</span><h2>Nuevo relevamiento</h2><p>Registrá principalmente los animales presentes por lote. También podés completar lluvia y estado del campo, sin necesidad de cargar todos los lotes.</p><ul><li>${icon('check',18)} Empezá de cero</li><li>${icon('check',18)} Agregá solamente los lotes que quieras registrar</li><li>${icon('check',18)} Revisá cualquier diferencia al final</li></ul><button class="btn primary large" data-start-survey>${icon('plus',19)} Comenzar</button></div><div class="survey-intro-art"><img src="./assets/cow-red-standing-right.png"><img src="./assets/calf-red-standing-left.png"><img src="./assets/house-8-9.png"></div></section>`
+    const content = `<section class="survey-intro"><div class="survey-intro-copy"><span class="eyebrow">Una fotografía del campo</span><h2>Nuevo relevamiento</h2><p>Registrá principalmente los animales presentes por lote. También podés completar lluvia y estado del campo, sin necesidad de cargar todos los lotes.</p><ul><li>${icon('check',18)} Empezá de cero</li><li>${icon('check',18)} Agregá solamente los lotes que quieras registrar</li><li>${icon('check',18)} Revisá cualquier diferencia al final</li></ul><button class="btn primary large" data-start-survey>${icon('plus',19)} Comenzar</button></div><div class="survey-intro-art"><img src="./assets/animals/cow-diagonal-grazing-23.png"><img src="./assets/animals/calf-vertical-rear-standing-31.png"><img src="./assets/buildings/building-house-main-er08-09.png"></div></section>`
     return renderShell(content, 'Nuevo relevamiento', 'Registrar animales por lote')
   }
   const step = draft.step || ui.wizardStep || 1
@@ -642,8 +701,8 @@ function renderSurveyStepTwo(draft) {
     const lot = lotLookup[lotEntry.lotId]
     const quantity = lotEntry.groups.reduce((sum, group) => sum + Number(group.quantity || 0), 0)
     const stateInfo = fieldStateLookup[lotEntry.fieldState] || fieldStateLookup['no-observado']
-    return `<article class="loaded-lot-card"><div class="lot-card-number">${lot.shortName || lot.name.replace('ER-','')}</div><div class="loaded-lot-content"><div><h3>${lot.name}</h3><p>${fmt(quantity)} animales · ${lotEntry.groups.length} ${lotEntry.groups.length===1?'grupo':'grupos'}</p></div><span class="field-mini ${stateInfo.tone}">${stateInfo.icon} ${stateInfo.label}</span></div><div class="lot-card-actions"><button data-edit-draft-lot="${lot.id}" aria-label="Editar">${icon('edit',18)}</button><button data-remove-draft-lot="${lot.id}" aria-label="Eliminar">${icon('trash',18)}</button></div></article>`
-  }).join('') : `<div class="empty-add"><img src="./assets/cow-red-standing-right.png"><h3>Todavía no registraste animales</h3><p>Agregá un lote para cargar sus animales. También podés continuar y dejar todos los lotes sin cargar.</p><button class="btn primary" data-add-draft-lot>${icon('plus',18)} Registrar animales en un lote</button></div>`
+    return `<article class="loaded-lot-card"><div class="lot-card-number">${lot.shortName || lot.name.replace('ER-','')}</div><div class="loaded-lot-content"><div><h3>${lot.name}</h3><p>${fmt(quantity)} animales · ${lotEntry.groups.length} ${lotEntry.groups.length===1?'grupo':'grupos'}</p></div><span class="field-mini ${stateInfo.tone}">${fieldStateIcon(stateInfo)}<b>${stateInfo.label}</b></span></div><div class="lot-card-actions"><button data-edit-draft-lot="${lot.id}" aria-label="Editar">${icon('edit',18)}</button><button data-remove-draft-lot="${lot.id}" aria-label="Eliminar">${icon('trash',18)}</button></div></article>`
+  }).join('') : `<div class="empty-add"><img src="./assets/${KPI_ASSETS.animals}"><h3>Todavía no registraste animales</h3><p>Agregá un lote para cargar sus animales. También podés continuar y dejar todos los lotes sin cargar.</p><button class="btn primary" data-add-draft-lot>${icon('plus',18)} Registrar animales en un lote</button></div>`
   return `<section class="wizard-card wide"><div class="wizard-title"><span class="step-number">2</span><div><h2>Registrar animales por lote</h2><p>Agregá los lotes que quieras registrar. Los demás pueden quedar sin cargar.</p></div></div>
     <div class="loaded-summary"><div><small>Lotes registrados</small><strong>${draft.lots.length}</strong></div><div><small>Animales ingresados</small><strong>${fmt(total)}</strong></div><button class="btn secondary" data-add-draft-lot>${icon('plus',18)} Agregar lote</button></div>
     <div class="loaded-lots">${cards}</div>
@@ -677,10 +736,10 @@ function renderSurveyStepThree(draft) {
 
 function renderFieldStateSummary(draft) {
   const counts = Object.fromEntries(FIELD_STATES.map((item) => [item.id, 0]))
-  draft.lots.forEach((lot) => counts[lot.fieldState || 'no-observado']++)
+  draft.lots.forEach((lot) => counts[normalizeFieldState(lot.fieldState)]++)
   const rows = FIELD_STATES.filter((item) => counts[item.id])
   if (!rows.length) return '<div class="empty-inline">No se registró el estado del campo.</div>'
-  return `<div class="field-summary">${rows.map((item) => `<div><span>${item.icon} ${item.label}</span><strong>${counts[item.id]}</strong></div>`).join('')}</div>`
+  return `<div class="field-summary">${rows.map((item) => `<div><span>${fieldStateIcon(item)} ${item.label}</span><strong>${counts[item.id]}</strong></div>`).join('')}</div>`
 }
 
 function renderModal() {
@@ -695,7 +754,7 @@ function renderLotFormModal() {
   const draft = modal.lot
   const available = LOTS.filter((lot) => lot.id === draft.lotId || !state.draft.lots.some((item) => item.lotId === lot.id))
   const groups = draft.groups.map((group, index) => `<div class="animal-group-row" data-group-index="${index}"><div class="group-main"><label><span>Categoría</span><select data-group-category="${index}"><option value="">Elegir categoría</option>${CATEGORIES.map((category) => `<option value="${category.id}" ${group.categoryId===category.id?'selected':''}>${category.name}</option>`).join('')}</select></label><label class="quantity-field"><span>Cantidad</span><input type="number" inputmode="numeric" min="0" data-group-quantity="${index}" value="${esc(group.quantity)}" placeholder="0"></label><button class="icon-button remove-group" data-remove-group="${index}" aria-label="Eliminar grupo">${icon('trash',18)}</button></div><details ${group.birthYear || group.notes ? 'open' : ''}><summary>Agregar detalle opcional</summary><div class="group-details"><label><span>Año de nacimiento</span><input type="number" min="1990" max="2030" data-group-year="${index}" value="${esc(group.birthYear || '')}" placeholder="Ej. 2025"></label><label><span>Nota</span><input type="text" data-group-notes="${index}" value="${esc(group.notes || '')}" placeholder="Ej. Listas para servicio"></label></div></details></div>`).join('')
-  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit ? 'Editar animales' : 'Registrar animales'}</h2><label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit?'disabled':''}><option value="">Elegir lote</option>${available.map((lot) => `<option value="${lot.id}" ${draft.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Grupos de animales</h3><p>Podés repetir una categoría con distintos años de nacimiento.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar otro grupo</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Estado del campo <small>(opcional)</small></h3><p>Podés dejarlo como “No observado”.</p></div></div><div class="field-state-options">${FIELD_STATES.map((item) => `<button class="field-state-option ${draft.fieldState===item.id?'selected':''}" data-field-state="${item.id}"><span>${item.icon}</span><strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-draft-lot>Guardar lote</button></div></div></div>`
+  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit ? 'Editar animales' : 'Registrar animales'}</h2><label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit?'disabled':''}><option value="">Elegir lote</option>${available.map((lot) => `<option value="${lot.id}" ${draft.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Grupos de animales</h3><p>Podés repetir una categoría con distintos años de nacimiento.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar otro grupo</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Estado del campo <small>(opcional)</small></h3><p>Podés dejarlo como “No observado”.</p></div></div><div class="field-state-options">${FIELD_STATES.map((item) => `<button class="field-state-option ${normalizeFieldState(draft.fieldState)===item.id?'selected':''}" data-field-state="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-draft-lot>Guardar lote</button></div></div></div>`
 }
 
 function renderHistory() {
@@ -715,7 +774,8 @@ function renderSurveyDetailModal() {
 }
 
 function renderDataPage() {
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá el último relevamiento o el historial completo en formato CSV.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Último relevamiento CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El respaldo JSON conserva relevamientos, lluvia y configuración local.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos locales</h2><p>La URL comparte la aplicación, pero cada dispositivo conserva su propia información hasta implementar Supabase.</p><button class="btn danger-outline" data-reset-demo>Restablecer demo</button></article></section>`
+  const survey = selectedSurvey()
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá el último relevamiento o el historial completo en formato CSV.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Último relevamiento CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El respaldo JSON conserva relevamientos, lluvia y configuración local.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${KPI_ASSETS.animals}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Último dato: ${survey ? dateLabel(survey.date) : 'Sin datos'}</p><small>Los datos siguen almacenados localmente hasta incorporar Supabase.</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos locales</h2><p>La URL comparte la aplicación, pero cada dispositivo conserva su propia información hasta implementar Supabase.</p><button class="btn danger-outline" data-reset-demo>Restablecer demo</button></article></section>`
   return renderShell(content, 'Exportar y respaldo', 'Protegé los datos guardados en este dispositivo')
 }
 
@@ -788,8 +848,10 @@ function bindEvents() {
   document.querySelectorAll('[data-wizard-back]').forEach((button) => button.addEventListener('click', () => { state.draft.step=Math.max(1,(state.draft.step||1)-1); saveState(); render() }))
   document.querySelectorAll('[data-step-two-next]').forEach((button) => button.addEventListener('click', () => { state.draft.step=3; saveState(); render() }))
   document.querySelectorAll('[data-add-draft-lot]').forEach((button) => button.addEventListener('click', () => { ui.modal={type:'lot-form',isEdit:false,lot:{lotId:'',fieldState:'no-observado',groups:[{id:uid(),categoryId:'',quantity:'',birthYear:'',notes:''}]}}; render() }))
-  document.querySelectorAll('[data-edit-draft-lot]').forEach((button) => button.addEventListener('click', () => { const existing=state.draft.lots.find((item)=>item.lotId===button.dataset.editDraftLot); ui.modal={type:'lot-form',isEdit:true,lot:JSON.parse(JSON.stringify(existing))}; render() }))
+  document.querySelectorAll('[data-edit-draft-lot]').forEach((button) => button.addEventListener('click', () => { const existing=state.draft.lots.find((item)=>item.lotId===button.dataset.editDraftLot); ui.modal={type:'lot-form',isEdit:true,originalLotId:existing.lotId,lot:JSON.parse(JSON.stringify(existing))}; render() }))
   document.querySelectorAll('[data-remove-draft-lot]').forEach((button) => button.addEventListener('click', () => { if(confirm(`¿Eliminar ${lotLookup[button.dataset.removeDraftLot].name} del relevamiento?`)){state.draft.lots=state.draft.lots.filter((item)=>item.lotId!==button.dataset.removeDraftLot);saveState();render()} }))
+  const modalLotSelect = document.getElementById('modal-lot-select')
+  if (modalLotSelect) modalLotSelect.addEventListener('change', (event) => { ui.modal.lot.lotId = event.target.value })
   document.querySelectorAll('[data-add-group]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.groups.push({id:uid(),categoryId:'',quantity:'',birthYear:'',notes:''}); render() }))
   document.querySelectorAll('[data-remove-group]').forEach((button) => button.addEventListener('click', () => { if(ui.modal.lot.groups.length===1) return; ui.modal.lot.groups.splice(Number(button.dataset.removeGroup),1); render() }))
   document.querySelectorAll('[data-field-state]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.fieldState=button.dataset.fieldState; render() }))
@@ -800,7 +862,7 @@ function bindEvents() {
     if(!ui.modal.lot.lotId) return alert('Elegí un lote.')
     if(!validGroups.length) return alert('Agregá al menos una categoría con cantidad.')
     const saved={...ui.modal.lot,groups:validGroups}
-    state.draft.lots=ui.modal.isEdit ? state.draft.lots.map((item)=>item.lotId===saved.lotId?saved:item) : [...state.draft.lots,saved]
+    state.draft.lots=ui.modal.isEdit ? state.draft.lots.map((item)=>item.lotId===(ui.modal.originalLotId||saved.lotId)?saved:item) : [...state.draft.lots,saved]
     ui.modal=null; saveState(); render()
   }))
   document.querySelectorAll('[data-event-field]').forEach((input) => input.addEventListener('input', (event) => { state.draft.events[event.target.dataset.eventField]=Math.max(0,Number(event.target.value)||0); saveState() }))
