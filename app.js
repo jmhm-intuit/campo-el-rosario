@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 503
-const APP_VERSION_LABEL = '5.03'
-const RELEASE_DATE = '2026-07-26'
+const APP_VERSION = 504
+const APP_VERSION_LABEL = '5.04'
+const RELEASE_DATE = '2026-07-27'
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
 
@@ -27,29 +27,33 @@ const LOTS = [
 ]
 
 const CATEGORIES = [
-  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/map-bull-red-angus.png' },
-  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
-  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
-  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/map-calf-red-angus.png' },
-  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/map-calf-red-angus.png' },
-  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
-  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
-  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
-  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/map-cow-red-angus.png' },
+  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/v504/bull-red-angus.png' },
+  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'terneros-as', name: 'Terneros/as', short: 'Terneros/as', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
+  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
+  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
+  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
 ]
 
+const DEFAULT_CATEGORY_IDS = ['vacas', 'terneros-as', 'toros', 'vaquillonas']
+
 const SPRITE_VARIANTS = {
-  cow: ['animals/map-cow-red-angus.png', 'animals/map-cow-red-angus-left.png'],
-  bull: ['animals/map-bull-red-angus.png', 'animals/map-bull-red-angus-left.png'],
-  calf: ['animals/map-calf-red-angus.png', 'animals/map-calf-red-angus-left.png'],
+  cow: ['animals/v504/cow-red-angus.png', 'animals/v504/cow-red-angus-left.png'],
+  bull: ['animals/v504/bull-red-angus.png', 'animals/v504/bull-red-angus-left.png'],
+  calf: ['animals/v504/calf-red-angus.png', 'animals/v504/calf-red-angus-left.png'],
+  cowCalf: ['animals/v504/cow-calf-red-angus.png', 'animals/v504/cow-calf-red-angus-left.png'],
 }
 
 const FIELD_STATES = [
-  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v503/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
-  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v503/pasture-good.png', indicator: 'condition-indicator-good.png' },
-  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v503/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
-  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v503/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
-  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v503/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
+  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v504/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
+  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v504/pasture-good.png', indicator: 'condition-indicator-good.png' },
+  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v504/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
+  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v504/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
+  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v504/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
   { id: 'no-observado', label: 'Sin información', short: 'Sin info.', tone: 'unknown', pattern: null, indicator: 'condition-indicator-unobserved.png' },
 ]
 
@@ -447,6 +451,65 @@ function capacityLabel(load) {
   return ({ empty: 'Sin carga', low: 'Baja', ok: 'Adecuada', high: 'Alta', over: 'Sobrecarga', critical: 'Crítica' })[status]
 }
 
+
+function categoryUsageStats() {
+  const stats = Object.fromEntries(CATEGORIES.map((category) => [category.id, { occurrences: 0, quantity: 0 }]))
+  for (const survey of state.surveys || []) {
+    for (const lotEntry of survey.lots || []) {
+      const seen = new Set()
+      for (const group of lotEntry.groups || []) {
+        if (!stats[group.categoryId]) continue
+        const quantity = Math.max(0, Number(group.quantity) || 0)
+        stats[group.categoryId].quantity += quantity
+        if (quantity > 0 && !seen.has(group.categoryId)) {
+          stats[group.categoryId].occurrences += 1
+          seen.add(group.categoryId)
+        }
+      }
+    }
+  }
+  return stats
+}
+
+function suggestedCategoryIds() {
+  const stats = categoryUsageStats()
+  const ranked = CATEGORIES
+    .filter((category) => stats[category.id].occurrences > 0)
+    .sort((a, b) => stats[b.id].occurrences - stats[a.id].occurrences || stats[b.id].quantity - stats[a.id].quantity || a.name.localeCompare(b.name))
+    .map((category) => category.id)
+  for (const categoryId of DEFAULT_CATEGORY_IDS) if (!ranked.includes(categoryId)) ranked.push(categoryId)
+  return ranked.slice(0, 4)
+}
+
+function suggestedCategoryGroups() {
+  return suggestedCategoryIds().map((categoryId) => ({ id: uid(), categoryId, quantity: 0, birthYear: '', notes: '', suggested: true }))
+}
+
+function lotFormModel(lot, suggestWhenEmpty = false) {
+  const model = JSON.parse(JSON.stringify(lot))
+  if (suggestWhenEmpty && !(model.groups || []).length) model.groups = suggestedCategoryGroups()
+  return model
+}
+
+function lotCategoryRollup(groups = []) {
+  const totals = { cows: 0, calves: 0, bulls: 0 }
+  for (const group of groups) {
+    const quantity = Math.max(0, Number(group.quantity) || 0)
+    if (['vacas', 'vacas-descarte'].includes(group.categoryId)) totals.cows += quantity
+    if (['terneros', 'terneras', 'terneros-as'].includes(group.categoryId)) totals.calves += quantity
+    if (group.categoryId === 'toros') totals.bulls += quantity
+  }
+  return totals
+}
+
+function conditionAbbreviation(stateId) {
+  return ({ 'muy-bueno': 'Muy b.', bueno: 'Bueno', regular: 'Regular', malo: 'Malo', anegado: 'Aneg.', 'no-observado': 'Sin info.' })[stateId] || 'Sin info.'
+}
+
+function loadAbbreviation(load) {
+  return ({ empty: 'Sin carga', low: 'Baja', ok: 'Adecuada', high: 'Alta', over: 'Sobre.', critical: 'Crítica' })[capacityClass(load)]
+}
+
 function icon(name, size = 20) {
   const paths = {
     home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
@@ -586,6 +649,7 @@ function renderDashboard() {
         </article>
       </aside>
     </section>
+    ${renderLotsSummaryTable(survey)}
     <section class="bottom-grid">
       <article class="panel adoption-card">
         <div class="adoption-visual single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div>
@@ -607,6 +671,21 @@ function renderAlert(alert) {
 function renderCategoryBars(categories, total) {
   const rows = CATEGORIES.map((category) => ({ ...category, quantity: categories[category.id] || 0 })).filter((item) => item.quantity > 0).sort((a, b) => b.quantity - a.quantity).slice(0, 6)
   return `<div class="category-bars">${rows.map((item) => `<div class="category-row"><div><span>${esc(item.short)}</span><strong>${fmt(item.quantity)}</strong></div><div class="bar"><i style="width:${Math.max(3, item.quantity / Math.max(1, total) * 100)}%"></i></div></div>`).join('')}</div>`
+}
+
+
+function renderLotsSummaryTable(survey) {
+  const metrics = surveyMetrics(survey)
+  const observed = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
+  const rows = LOTS.map((lot) => {
+    const entry = observed[lot.id]
+    const metric = metrics.byLot[lot.id]
+    const condition = resolveLotCondition(survey, lot.id)
+    const rollup = lotCategoryRollup(entry?.groups || [])
+    const conditionLabel = `${conditionIsAssumed(condition.source) ? '≈ ' : ''}${condition.label}`
+    return `<tr data-lot="${lot.id}"><th><button class="lot-table-link" data-lot="${lot.id}">${lot.name}</button></th><td><span class="table-condition state-${condition.stateId} source-${condition.source}">${esc(conditionLabel)}</span></td><td><span class="table-load ${capacityClass(metric.load)}">${entry ? `${capacityLabel(metric.load)} · ${decimal(metric.load)}` : 'Sin carga'}</span></td><td class="numeric"><strong>${entry ? fmt(metric.animals) : '—'}</strong></td><td class="numeric">${entry ? fmt(rollup.cows) : '—'}</td><td class="numeric">${entry ? fmt(rollup.calves) : '—'}</td><td class="numeric">${entry ? fmt(rollup.bulls) : '—'}</td></tr>`
+  }).join('')
+  return `<section class="panel lots-summary-panel"><div class="panel-head"><div><span class="eyebrow">Vista simplificada</span><h3>Todos los lotes</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div><div class="lots-table-wrap"><table class="lots-summary-table"><thead><tr><th>Lote</th><th>Condición</th><th>Carga</th><th>Total</th><th>Vacas</th><th>Terneros/as</th><th>Toros</th></tr></thead><tbody>${rows}</tbody></table></div><p class="table-note">≈ condición estimada automáticamente. Los totales de vacas incluyen vacas de cría y descarte.</p></section>`
 }
 
 function renderRecentSurveys() {
@@ -662,6 +741,42 @@ function dominantAnimalKind(lotEntry) {
   return best
 }
 
+function allocateVisualKinds(lotEntry, slotCount) {
+  const totals = { motherCow: 0, otherCow: 0, bull: 0, calf: 0 }
+  for (const group of lotEntry.groups || []) {
+    const quantity = Math.max(0, Number(group.quantity) || 0)
+    if (group.categoryId === 'vacas') totals.motherCow += quantity
+    else {
+      const kind = categoryLookup[group.categoryId]?.kind || 'cow'
+      if (kind === 'cow') totals.otherCow += quantity
+      else totals[kind] += quantity
+    }
+  }
+  const paired = Math.min(totals.motherCow, totals.calf)
+  const weights = {
+    cowCalf: paired * 2,
+    cow: Math.max(0, totals.motherCow - paired) + totals.otherCow,
+    calf: Math.max(0, totals.calf - paired),
+    bull: totals.bull,
+  }
+  const positive = Object.entries(weights).filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1])
+  if (!positive.length || !slotCount) return []
+  const selected = positive.slice(0, slotCount)
+  const allocations = Object.fromEntries(selected.map(([kind]) => [kind, 1]))
+  let remaining = slotCount - selected.length
+  while (remaining > 0) {
+    const kind = selected
+      .map(([name, weight]) => ({ name, score: weight / (allocations[name] + 1) }))
+      .sort((a, b) => b.score - a.score)[0].name
+    allocations[kind] += 1
+    remaining -= 1
+  }
+  const order = ['cowCalf', 'cow', 'calf', 'bull']
+  const result = []
+  for (const kind of order) for (let index = 0; index < (allocations[kind] || 0); index++) result.push(kind)
+  return result
+}
+
 function isHouseZone(lotId, x, y) {
   if (lotId === 'ER-08-09') return x > 270 && x < 390 && y > 345 && y < 460
   if (lotId === 'ER-13') return x > 570 && x < 646 && y > 700 && y < 800
@@ -683,8 +798,8 @@ function spritePositions(lot, count, spriteWidth) {
     return [[x,y],[x-halfW,y-halfH],[x+halfW,y-halfH],[x-halfW,y+halfH],[x+halfW,y+halfH]].every((point) => pointInPolygon(point, polygon))
   }
   for (let attempt = 0; attempt < 900 && positions.length < count; attempt++) {
-    const x = minX + marginX + seededNumber(`${lot.id}-v501-x-${attempt}`) * Math.max(1, width - marginX * 2)
-    const y = minY + marginY + seededNumber(`${lot.id}-v501-y-${attempt}`) * Math.max(1, height - marginY * 2)
+    const x = minX + marginX + seededNumber(`${lot.id}-v504-x-${attempt}`) * Math.max(1, width - marginX * 2)
+    const y = minY + marginY + seededNumber(`${lot.id}-v504-y-${attempt}`) * Math.max(1, height - marginY * 2)
     const labelDistance = Math.hypot(x - lot.label[0], y - lot.label[1])
     const minDistance = Math.max(spriteWidth * .82, Math.min(38, width / Math.max(2.2, Math.sqrt(count))))
     if (!fitsInside(x, y) || labelDistance < 59 || isHouseZone(lot.id, x, y)) continue
@@ -695,26 +810,26 @@ function spritePositions(lot, count, spriteWidth) {
   return positions
 }
 
-function renderHerdSprites(lotEntry, lot, compact, metric) {
+function renderHerdSprites(lotEntry, lot, compact, metric, condition) {
   const count = spriteCountForLot(lot, metric, compact)
   const polygon = parseLotPoints(lot)
   const width = Math.max(...polygon.map((point) => point[0])) - Math.min(...polygon.map((point) => point[0]))
   const spriteWidth = Math.max(compact ? 13 : 15, Math.min(compact ? 20 : 23, width / (compact ? 6.6 : 5.9)))
   const positions = spritePositions(lot, count, spriteWidth)
-  const kind = dominantAnimalKind(lotEntry)
-  const variants = SPRITE_VARIANTS[kind] || SPRITE_VARIANTS.cow
-  const scale = kind === 'calf' ? .76 : kind === 'bull' ? 1.04 : 1
-  const drawWidth = spriteWidth * scale
-  const drawHeight = drawWidth * .60
+  const kinds = allocateVisualKinds(lotEntry, positions.length)
   return positions.map((position, index) => {
-    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v503`) * variants.length) % variants.length]
-    const angle = (seededNumber(`${lot.id}-${index}-angle-v503`) - .5) * 8
-    const shadowRx = (drawWidth * .39).toFixed(1)
-    const shadowRy = Math.max(1.2, drawHeight * .16).toFixed(1)
-    const shadowCy = (position.y + drawHeight * .31).toFixed(1)
-    return `<g class="animal-marker ${kind}">
-      <ellipse class="animal-ground-shadow" cx="${position.x.toFixed(1)}" cy="${shadowCy}" rx="${shadowRx}" ry="${shadowRy}" />
-      <image class="animal-sprite ${kind}" href="./assets/${asset}" x="${(position.x - drawWidth/2).toFixed(1)}" y="${(position.y - drawHeight/2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" transform="rotate(${angle.toFixed(1)} ${position.x.toFixed(1)} ${position.y.toFixed(1)})" />
+    const kind = kinds[index] || 'cow'
+    const variants = SPRITE_VARIANTS[kind] || SPRITE_VARIANTS.cow
+    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v504`) * variants.length) % variants.length]
+    const scale = kind === 'calf' ? .74 : kind === 'bull' ? 1.08 : kind === 'cowCalf' ? 1.12 : 1
+    const drawWidth = spriteWidth * scale
+    const drawHeight = drawWidth * .60
+    const angle = (seededNumber(`${lot.id}-${index}-angle-v504`) - .5) * 7
+    const shadowWidth = drawWidth * .88
+    const shadowHeight = Math.max(2.2, drawHeight * .18)
+    return `<g class="animal-unit ${kind} state-${condition?.stateId || 'no-observado'}" transform="rotate(${angle.toFixed(1)} ${position.x.toFixed(1)} ${position.y.toFixed(1)})">
+      <ellipse class="animal-ground-shadow" cx="${position.x.toFixed(1)}" cy="${(position.y + drawHeight * .29).toFixed(1)}" rx="${(shadowWidth/2).toFixed(1)}" ry="${(shadowHeight/2).toFixed(1)}" />
+      <image class="animal-sprite ${kind}" href="./assets/${asset}" x="${(position.x - drawWidth/2).toFixed(1)}" y="${(position.y - drawHeight/2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" filter="url(#animal-contrast-filter)" />
     </g>`
   }).join('')
 }
@@ -724,27 +839,42 @@ function renderMap(survey, compact = false) {
   const selected = ui.selectedLotId
   const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
   const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
-  const patternSize = 480
-  const patternVariants = [0, 90, 180, 270]
-  const patternDefs = FIELD_STATES.filter((item) => item.pattern).flatMap((item) => patternVariants.map((angle, variant) => `
-    <pattern id="condition-${item.id}-${variant}" patternUnits="userSpaceOnUse" width="${patternSize}" height="${patternSize}">
-      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${patternSize}" height="${patternSize}" preserveAspectRatio="xMidYMid slice" transform="rotate(${angle} ${patternSize / 2} ${patternSize / 2})" />
-    </pattern>`)).join('') + `
+  const patternDefs = LOTS.flatMap((lot) => FIELD_STATES.filter((item) => item.pattern).map((item) => {
+    const tileSize = 250 + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v504`) * 56)
+    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v504`) * tileSize)
+    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v504`) * tileSize)
+    return `
+    <pattern id="condition-${item.id}-${lot.id}" patternUnits="userSpaceOnUse" x="${offsetX}" y="${offsetY}" width="${tileSize}" height="${tileSize}">
+      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${tileSize}" height="${tileSize}" preserveAspectRatio="xMidYMid slice" />
+    </pattern>`
+  })).join('') + `
+    <filter id="animal-contrast-filter" x="-40%" y="-50%" width="180%" height="205%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.18" result="animal-outer-shape" />
+      <feFlood flood-color="#fff1cf" flood-opacity="0.84" result="animal-outer-color" />
+      <feComposite in="animal-outer-color" in2="animal-outer-shape" operator="in" result="animal-outer-outline" />
+      <feMorphology in="SourceAlpha" operator="dilate" radius="0.58" result="animal-inner-shape" />
+      <feFlood flood-color="#32170f" flood-opacity="0.86" result="animal-inner-color" />
+      <feComposite in="animal-inner-color" in2="animal-inner-shape" operator="in" result="animal-inner-outline" />
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.18" result="animal-shadow-blur" />
+      <feOffset in="animal-shadow-blur" dx="0.6" dy="1.35" result="animal-shadow-offset" />
+      <feFlood flood-color="#17100c" flood-opacity="0.34" result="animal-shadow-color" />
+      <feComposite in="animal-shadow-color" in2="animal-shadow-offset" operator="in" result="animal-shadow" />
+      <feMerge><feMergeNode in="animal-shadow"/><feMergeNode in="animal-outer-outline"/><feMergeNode in="animal-inner-outline"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
     <pattern id="condition-assumed-hatch" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(32)">
       <rect width="18" height="18" fill="transparent" />
-      <rect width="1.4" height="18" fill="rgba(255,255,255,.24)" />
+      <rect width="2" height="18" fill="rgba(255,255,255,.30)" />
     </pattern>
     <pattern id="condition-no-info" patternUnits="userSpaceOnUse" width="22" height="22" patternTransform="rotate(35)">
-      <rect width="22" height="22" fill="rgba(232,232,222,.06)" />
-      <rect width="1.5" height="22" fill="rgba(255,255,255,.18)" />
+      <rect width="22" height="22" fill="rgba(232,232,222,.10)" />
+      <rect width="2" height="22" fill="rgba(255,255,255,.28)" />
     </pattern>`
 
   const conditionLayer = LOTS.map((lot) => {
     const condition = conditions[lot.id]
     if (condition.source === 'none') return `<polygon class="lot-condition source-none state-no-observado" points="${lot.points}" fill="url(#condition-no-info)" />`
     const assumed = conditionIsAssumed(condition.source)
-    const variant = Math.floor(seededNumber(`${lot.id}-${condition.stateId}-texture-v503`) * patternVariants.length) % patternVariants.length
-    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${variant})" />${assumed ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
+    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${lot.id})" />${assumed ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
   }).join('')
 
   const loadHalos = LOTS.map((lot) => {
@@ -755,7 +885,7 @@ function renderMap(survey, compact = false) {
     const metric = metrics.byLot[lot.id]
     return `<polygon class="lot-load-border ${capacityClass(metric.load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`
   }).join('')
-  const animals = survey.lots.filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0).map((lotEntry) => renderHerdSprites(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId])).join('')
+  const animals = survey.lots.filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0).map((lotEntry) => renderHerdSprites(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId], conditions[lotEntry.lotId])).join('')
   const houses = `
     <image class="map-house main-house" href="./assets/buildings/building-house-main-er08-09.png" x="285" y="355" width="104" height="96" preserveAspectRatio="xMidYMid meet" />
     <image class="map-house secondary-house" href="./assets/buildings/building-house-secondary-er13.png" x="578" y="716" width="64" height="64" preserveAspectRatio="xMidYMid meet" />`
@@ -772,30 +902,33 @@ function renderMap(survey, compact = false) {
     const longName = lot.name.length > 7
     const observed = Boolean(entry)
     const countText = observed ? fmt(metric.animals) : '—'
-    const sourceMark = conditionIsAssumed(condition.source) ? '≈ ' : ''
-    const conditionText = `${sourceMark}${fieldStateLookup[condition.stateId]?.short || 'Sin info.'}`
+    const assumedMark = conditionIsAssumed(condition.source) ? '≈' : ''
+    const conditionText = `${assumedMark}${conditionAbbreviation(condition.stateId)}`
+    const loadText = observed ? loadAbbreviation(metric.load) : 'Sin carga'
     const conditionClass = `condition-${condition.stateId} source-${condition.source}`
     if (narrow) {
       const code = lot.name.replace('ER-', '')
-      const cardWidth = longName ? 64 : 54
+      const cardWidth = longName ? 70 : 60
       return `<g class="map-label narrow ${conditionClass}" transform="translate(${lot.label[0]} ${lot.label[1]})" data-map-lot="${lot.id}">
-        <rect class="label-card" x="-${cardWidth/2}" y="-35" width="${cardWidth}" height="70" rx="9"/>
-        <text class="lot-prefix" text-anchor="middle" y="-20">ER</text>
-        <text class="lot-code" text-anchor="middle" y="-5">${esc(code)}</text>
-        <text class="lot-heads" text-anchor="middle" y="16">${countText}</text>
-        <circle class="load-dot ${status}" cx="-${cardWidth/2-8}" cy="27" r="3"/>
-        <text class="lot-condition-text" text-anchor="middle" y="30">${esc(conditionText)}</text>
-        <rect class="condition-strip state-${condition.stateId}" x="-${cardWidth/2-5}" y="32" width="${cardWidth-10}" height="3" rx="1.5"/>
+        <rect class="label-card" x="-${cardWidth/2}" y="-38" width="${cardWidth}" height="76" rx="10"/>
+        <text class="lot-prefix" text-anchor="middle" y="-23">ER</text>
+        <text class="lot-code" text-anchor="middle" y="-7">${esc(code)}</text>
+        <text class="lot-heads" text-anchor="middle" y="14">${countText}</text>
+        <rect class="status-pill condition-pill state-${condition.stateId}" x="-${cardWidth/2-5}" y="20" width="${(cardWidth-12)/2}" height="13" rx="5"/>
+        <text class="status-pill-text" text-anchor="middle" x="-${(cardWidth-12)/4+2}" y="29">${esc(conditionText.replace('Muy b.','MB').replace('Bueno','B').replace('Regular','R').replace('Malo','M').replace('Aneg.','A').replace('Sin info.','—'))}</text>
+        <rect class="status-pill load-pill ${status}" x="2" y="20" width="${(cardWidth-12)/2}" height="13" rx="5"/>
+        <text class="status-pill-text" text-anchor="middle" x="${2+(cardWidth-12)/4}" y="29">${esc(loadText.replace('Sin carga','0').replace('Adecuada','OK').replace('Sobrecarga','S').replace('Crítica','C').replace('Baja','B').replace('Alta','A'))}</text>
       </g>`
     }
-    const cardWidth = longName ? 108 : 92
+    const cardWidth = longName ? 122 : 112
     return `<g class="map-label standard ${conditionClass}" transform="translate(${lot.label[0]} ${lot.label[1]})" data-map-lot="${lot.id}">
-      <rect class="label-card" x="-${cardWidth/2}" y="-28" width="${cardWidth}" height="56" rx="10"/>
-      <text class="lot-name" text-anchor="middle" y="-10">${lot.name}</text>
-      <text class="lot-heads" text-anchor="middle" y="10">${countText}</text>
-      <circle class="load-dot ${status}" cx="-${cardWidth/2-10}" cy="21" r="3.2"/>
-      <text class="lot-condition-text" text-anchor="middle" y="24">${esc(conditionText)}</text>
-      <rect class="condition-strip state-${condition.stateId}" x="-${cardWidth/2-6}" y="25" width="${cardWidth-12}" height="3" rx="1.5"/>
+      <rect class="label-card" x="-${cardWidth/2}" y="-31" width="${cardWidth}" height="62" rx="11"/>
+      <text class="lot-name" text-anchor="middle" y="-12">${lot.name}</text>
+      <text class="lot-heads" text-anchor="middle" y="9">${countText}</text>
+      <rect class="status-pill condition-pill state-${condition.stateId}" x="-${cardWidth/2-6}" y="16" width="${(cardWidth-16)/2}" height="13" rx="5"/>
+      <text class="status-pill-text" text-anchor="middle" x="-${(cardWidth-16)/4+4}" y="25">${esc(conditionText)}</text>
+      <rect class="status-pill load-pill ${status}" x="4" y="16" width="${(cardWidth-16)/2}" height="13" rx="5"/>
+      <text class="status-pill-text" text-anchor="middle" x="${4+(cardWidth-16)/4}" y="25">${esc(loadText)}</text>
     </g>`
   }).join('')
 
@@ -826,15 +959,17 @@ function renderMapPage() {
   const side = lot ? `<aside class="lot-inspector">
     <button class="inspector-close" data-close-lot>${icon('close',20)}</button>
     <span class="eyebrow">Lote seleccionado</span><h2>${lot.name}</h2><p>${lot.hectares} hectáreas · ${lotEntry ? 'Observado' : 'No observado en esta fecha'}</p>
-    <div class="lot-stat-grid"><div><small>Animales</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>Carga</small><strong>${lotEntry ? `${decimal(metric.load)} EV/ha` : 'Sin dato'}</strong></div></div>
-    <div class="load-status-card ${loadClass}"><span class="load-status-dot"></span><div><small>Estado de carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga registrada'}</strong><p>${lotEntry ? `${Math.round(metric.capacityUse * 100)}% del objetivo de ${decimal(TARGET_LOAD)} EV/ha` : 'Registrá el lote para calcular su carga.'}</p></div></div>
+    <div class="lot-stat-grid"><div><small>Animales</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>EV/ha</small><strong>${lotEntry ? decimal(metric.load) : '—'}</strong></div></div>
+    <div class="lot-concept-grid">
+      <div class="concept-card condition state-${condition.stateId} source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${sourceLabel}</span></div></div>
+      <div class="concept-card load ${loadClass}"><span class="concept-dot"></span><div><small>Carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${lotEntry ? `${Math.round(metric.capacityUse * 100)}% del objetivo` : 'No registrada'}</span></div></div>
+    </div>
+    <div class="concept-explanation"><strong>${conditionIsAssumed(condition.source) ? 'Condición estimada' : condition.source === 'observed' ? 'Condición observada' : 'Condición sin información'}</strong><p>${esc(condition.explanation)}</p></div>
     <div class="load-meter"><i class="${loadClass}" style="width:${lotEntry ? Math.min(100, metric.capacityUse * 100) : 0}%"></i></div>
     <h3>Composición</h3>
-    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/map-cow-red-angus.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : `<p class="empty-inline">${lotEntry ? 'Lote registrado sin animales.' : 'No se registró este lote.'}</p>`}</div>
-    <h3>Condición del lote</h3>
-    <div class="condition-detail-card source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${sourceLabel}</span><p>${esc(condition.explanation)}</p></div></div>
+    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/v504/cow-red-angus.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : `<p class="empty-inline">${lotEntry ? 'Lote registrado sin animales.' : 'No se registró este lote.'}</p>`}</div>
     <div class="lot-inspector-actions"><button class="btn primary" data-edit-map-lot="${lot.id}">${icon('edit',16)} ${lotEntry ? 'Editar lote' : 'Registrar lote'}</button><button class="btn secondary" data-open-survey-history>${icon('history',16)} Cambiar fecha</button></div>
-  </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver animales, carga, condición y editarlo directamente.</p></aside>`
+  </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver animales, carga y condición juntos, y editarlo directamente.</p></aside>`
   const content = `${renderSurveyNavigator()}<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey, false)}</article>${side}</div>`
   return renderShell(content, 'Mapa del campo', `Relevamiento del ${dateLabel(survey.date)}`, `<button class="btn primary" data-start-survey>${icon('plus',17)} Nuevo</button>`)
 }
@@ -972,11 +1107,11 @@ function renderLotFormModal() {
   const directSurvey = modal.context === 'direct' ? state.surveys.find((survey) => survey.id === modal.surveyId) : null
   const collection = modal.context === 'direct' ? (directSurvey?.lots || []) : (state.draft?.lots || [])
   const available = LOTS.filter((lot) => lot.id === model.lotId || !collection.some((item) => item.lotId === lot.id))
-  const groups = model.groups.length ? model.groups.map((group, index) => `<div class="animal-group-row" data-group-index="${index}"><div class="group-main"><label><span>Categoría</span><select data-group-category="${index}"><option value="">Elegir categoría</option>${CATEGORIES.map((category) => `<option value="${category.id}" ${group.categoryId===category.id?'selected':''}>${category.name}</option>`).join('')}</select></label><label class="quantity-field"><span>Cantidad</span><input type="number" inputmode="numeric" min="0" data-group-quantity="${index}" value="${esc(group.quantity)}" placeholder="0"></label><button class="icon-button remove-group" data-remove-group="${index}" aria-label="Eliminar grupo">${icon('trash',18)}</button></div><details ${group.birthYear || group.notes ? 'open' : ''}><summary>Agregar detalle opcional</summary><div class="group-details"><label><span>Año de nacimiento</span><input type="number" min="1990" max="2035" data-group-year="${index}" value="${esc(group.birthYear || '')}" placeholder="Ej. 2025"></label><label><span>Nota</span><input type="text" data-group-notes="${index}" value="${esc(group.notes || '')}" placeholder="Ej. Listas para servicio"></label></div></details></div>`).join('') : `<div class="empty-groups"><img src="./assets/${UI_ASSETS.register}" alt=""><div><strong>Sin animales cargados</strong><p>Podés agregar un grupo o guardar el lote vacío si elegís una condición.</p></div></div>`
+  const groups = model.groups.length ? model.groups.map((group, index) => `<div class="animal-group-row ${group.suggested ? 'suggested' : ''}" data-group-index="${index}"><div class="group-main"><label><span>Categoría${group.suggested ? '<small>Sugerida por uso</small>' : ''}</span><select data-group-category="${index}"><option value="">Elegir categoría</option>${CATEGORIES.map((category) => `<option value="${category.id}" ${group.categoryId===category.id?'selected':''}>${category.name}</option>`).join('')}</select></label><label class="quantity-field"><span>Cantidad</span><input type="number" inputmode="numeric" min="0" data-group-quantity="${index}" value="${esc(group.quantity)}" placeholder="0"></label><button class="icon-button remove-group" data-remove-group="${index}" aria-label="Eliminar categoría">${icon('trash',18)}</button></div><details ${group.birthYear || group.notes ? 'open' : ''}><summary>Agregar detalle opcional</summary><div class="group-details"><label><span>Año de nacimiento</span><input type="number" min="1990" max="2035" data-group-year="${index}" value="${esc(group.birthYear || '')}" placeholder="Ej. 2025"></label><label><span>Nota</span><input type="text" data-group-notes="${index}" value="${esc(group.notes || '')}" placeholder="Ej. Listas para servicio"></label></div></details></div>`).join('') : `<div class="empty-groups"><img src="./assets/${UI_ASSETS.register}" alt=""><div><strong>Sin categorías disponibles</strong><p>Agregá una categoría o guardá el lote vacío si elegís una condición.</p></div></div>`
   const contextSurvey = directSurvey || (state.draft ? draftAsSurvey(state.draft) : selectedSurvey())
   const suggestion = model.lotId ? resolveLotCondition(contextSurvey, model.lotId) : null
   const isHistorical = directSurvey && directSurvey.id !== latestSurvey()?.id
-  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit ? 'Editar lote' : 'Registrar lote'}</h2>${isHistorical ? `<div class="historical-edit-warning">${icon('alert',17)} Estás editando el relevamiento histórico del ${compactDateLabel(directSurvey.date)}. Esto puede cambiar comparaciones posteriores.</div>` : ''}<label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit || modal.context === 'direct' ? 'disabled' : ''}><option value="">Elegir lote</option>${available.map((lot) => `<option value="${lot.id}" ${model.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Grupos de animales <small>(opcional)</small></h3><p>Podés repetir una categoría con distintos años de nacimiento.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar grupo</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Condición del lote</h3><p>Elegí una condición para registrarla como observada. También podés dejarla sin información.</p></div></div>${suggestion && suggestion.source !== 'observed' && suggestion.source !== 'none' ? `<div class="condition-suggestion"><span>≈ Sugerencia automática</span><strong>${suggestion.label}</strong><p>${esc(suggestion.explanation)}</p></div>` : ''}<div class="field-state-options">${FIELD_STATES.map((item) => `<button class="field-state-option ${normalizeFieldState(model.fieldState)===item.id?'selected':''}" data-field-state="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions">${modal.context === 'direct' && modal.isEdit ? `<button class="btn danger-outline push-left" data-remove-direct-lot="${model.lotId}">Quitar del relevamiento</button>` : ''}<button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-lot>Guardar lote</button></div></div></div>`
+  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit ? 'Editar lote' : 'Registrar lote'}</h2>${isHistorical ? `<div class="historical-edit-warning">${icon('alert',17)} Estás editando el relevamiento histórico del ${compactDateLabel(directSurvey.date)}. Esto puede cambiar comparaciones posteriores.</div>` : ''}<label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit || modal.context === 'direct' ? 'disabled' : ''}><option value="">Elegir lote</option>${available.map((lot) => `<option value="${lot.id}" ${model.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Categorías de animales <small>(opcional)</small></h3><p>Las cuatro más frecuentes aparecen primero. Podés dejarlas en 0, cambiarlas o agregar otras.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar categoría</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Condición del lote</h3><p>Elegí una condición para registrarla como observada. También podés dejarla sin información.</p></div></div>${suggestion && suggestion.source !== 'observed' && suggestion.source !== 'none' ? `<div class="condition-suggestion"><span>≈ Sugerencia automática</span><strong>${suggestion.label}</strong><p>${esc(suggestion.explanation)}</p></div>` : ''}<div class="field-state-options">${FIELD_STATES.map((item) => `<button class="field-state-option ${normalizeFieldState(model.fieldState)===item.id?'selected':''}" data-field-state="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions">${modal.context === 'direct' && modal.isEdit ? `<button class="btn danger-outline push-left" data-remove-direct-lot="${model.lotId}">Quitar del relevamiento</button>` : ''}<button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-lot>Guardar lote</button></div></div></div>`
 }
 
 function renderSurveyHistoryModal() {
@@ -1093,7 +1228,7 @@ function bindEvents() {
     const survey = selectedSurvey()
     const lotId = button.dataset.editMapLot
     const existing = (survey.lots || []).find((item) => item.lotId === lotId)
-    ui.modal = { type:'lot-form', context:'direct', surveyId:survey.id, isEdit:Boolean(existing), originalLotId:lotId, lot:existing ? JSON.parse(JSON.stringify(existing)) : { lotId, fieldState:'no-observado', conditionSource:'unobserved', groups:[] } }
+    ui.modal = { type:'lot-form', context:'direct', surveyId:survey.id, isEdit:Boolean(existing), originalLotId:lotId, lot:existing ? lotFormModel(existing, true) : lotFormModel({ lotId, fieldState:'no-observado', conditionSource:'unobserved', groups:[] }, true) }
     render()
   }))
   document.querySelectorAll('[data-select-survey]').forEach((button) => button.addEventListener('click', () => { state.selectedSurveyId=button.dataset.selectSurvey; ui.selectedLotId=null; saveState(); if (button.dataset.closeAfter !== undefined) ui.modal=null; render() }))
@@ -1106,21 +1241,21 @@ function bindEvents() {
   document.querySelectorAll('[data-step-one-next]').forEach((button) => button.addEventListener('click', () => { if(!state.draft.date) return alert('Elegí una fecha.'); state.draft.step=2; saveState(); render() }))
   document.querySelectorAll('[data-wizard-back]').forEach((button) => button.addEventListener('click', () => { state.draft.step=Math.max(1,(state.draft.step||1)-1); saveState(); render() }))
   document.querySelectorAll('[data-step-two-next]').forEach((button) => button.addEventListener('click', () => { state.draft.step=3; saveState(); render() }))
-  document.querySelectorAll('[data-add-draft-lot]').forEach((button) => button.addEventListener('click', () => { ui.modal={type:'lot-form',context:'draft',isEdit:false,lot:{lotId:'',fieldState:'no-observado',conditionSource:'unobserved',groups:[]}}; render() }))
-  document.querySelectorAll('[data-edit-draft-lot]').forEach((button) => button.addEventListener('click', () => { const existing=state.draft.lots.find((item)=>item.lotId===button.dataset.editDraftLot); ui.modal={type:'lot-form',context:'draft',isEdit:true,originalLotId:existing.lotId,lot:JSON.parse(JSON.stringify(existing))}; render() }))
+  document.querySelectorAll('[data-add-draft-lot]').forEach((button) => button.addEventListener('click', () => { ui.modal={type:'lot-form',context:'draft',isEdit:false,lot:lotFormModel({lotId:'',fieldState:'no-observado',conditionSource:'unobserved',groups:[]}, true)}; render() }))
+  document.querySelectorAll('[data-edit-draft-lot]').forEach((button) => button.addEventListener('click', () => { const existing=state.draft.lots.find((item)=>item.lotId===button.dataset.editDraftLot); ui.modal={type:'lot-form',context:'draft',isEdit:true,originalLotId:existing.lotId,lot:lotFormModel(existing, true)}; render() }))
   document.querySelectorAll('[data-remove-draft-lot]').forEach((button) => button.addEventListener('click', () => { if(confirm(`¿Eliminar ${lotLookup[button.dataset.removeDraftLot].name} del relevamiento?`)){state.draft.lots=state.draft.lots.filter((item)=>item.lotId!==button.dataset.removeDraftLot);saveState();render()} }))
   const modalLotSelect = document.getElementById('modal-lot-select')
   if (modalLotSelect) modalLotSelect.addEventListener('change', (event) => { ui.modal.lot.lotId = event.target.value; render() })
-  document.querySelectorAll('[data-add-group]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.groups.push({id:uid(),categoryId:'',quantity:'',birthYear:'',notes:''}); render() }))
+  document.querySelectorAll('[data-add-group]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.groups.push({id:uid(),categoryId:'',quantity:0,birthYear:'',notes:'',suggested:false}); render() }))
   document.querySelectorAll('[data-remove-group]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.groups.splice(Number(button.dataset.removeGroup),1); render() }))
   document.querySelectorAll('[data-field-state]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.fieldState=button.dataset.fieldState; ui.modal.lot.conditionSource=button.dataset.fieldState==='no-observado'?'unobserved':'observed'; render() }))
   document.querySelectorAll('[data-group-category],[data-group-quantity],[data-group-year],[data-group-notes]').forEach((input) => input.addEventListener('input', (event) => renderLotFormModalEventUpdate(event.target)))
   document.querySelectorAll('[data-save-lot]').forEach((button) => button.addEventListener('click', () => {
     const select=document.getElementById('modal-lot-select'); if(select) ui.modal.lot.lotId=select.value
     if(!ui.modal.lot.lotId) return alert('Elegí un lote.')
-    const partial = ui.modal.lot.groups.some((group) => (group.categoryId || group.quantity !== '' || group.birthYear || group.notes) && !(group.categoryId && Number(group.quantity) > 0))
-    if (partial) return alert('Completá categoría y cantidad en cada grupo, o eliminá la fila incompleta.')
-    const validGroups=ui.modal.lot.groups.filter((group)=>group.categoryId && Number(group.quantity)>0).map((group)=>({...group,quantity:Math.round(Number(group.quantity)),birthYear:group.birthYear?Number(group.birthYear):'',notes:String(group.notes||'').trim()}))
+    const invalid = ui.modal.lot.groups.some((group) => Number(group.quantity) > 0 && !group.categoryId)
+    if (invalid) return alert('Elegí una categoría para cada cantidad mayor que cero.')
+    const validGroups=ui.modal.lot.groups.filter((group)=>group.categoryId && Number(group.quantity)>0).map((group)=>({id:group.id||uid(),categoryId:group.categoryId,quantity:Math.round(Number(group.quantity)),birthYear:group.birthYear?Number(group.birthYear):'',notes:String(group.notes||'').trim()}))
     const stateId=normalizeFieldState(ui.modal.lot.fieldState)
     if(!validGroups.length && stateId==='no-observado') return alert('Para registrar un lote sin animales, elegí una condición del lote.')
     const saved={...ui.modal.lot,fieldState:stateId,conditionSource:stateId==='no-observado'?'unobserved':'observed',groups:validGroups}

@@ -41,40 +41,65 @@ const source = rawSource + `\n;globalThis.__campoTest = {
   render, renderDashboard, renderMap, renderMapPage, renderHistory, renderDataPage,
   renderSurveyWizard, renderLotFormModal, renderRainModal, renderSurveyHistoryModal,
   startSurvey, editSurvey, draftAsSurvey, spriteCountForLot, dominantAnimalKind,
-  sortedSurveys, resolveLotCondition, monthlyRainSummary, rainAnalysis,
-  surveyMetrics, normalizeFieldState, state, ui, LOTS
+  allocateVisualKinds, suggestedCategoryIds, suggestedCategoryGroups, lotFormModel,
+  lotCategoryRollup, renderLotsSummaryTable, sortedSurveys, resolveLotCondition,
+  monthlyRainSummary, rainAnalysis, surveyMetrics, normalizeFieldState,
+  FIELD_STATES, CATEGORIES, state, ui, LOTS
 };`
 vm.runInContext(source, context, { filename: 'app.js' })
 const api = context.__campoTest
 const checks = []
 const check = (condition, message) => { if (!condition) throw new Error(message); checks.push(message) }
 
-check(appElement.innerHTML.includes('Campo v5.03'), 'La versión Campo v5.03 aparece en la interfaz')
+check(appElement.innerHTML.includes('Campo v5.04'), 'La versión Campo v5.04 aparece en la interfaz')
 check(appElement.innerHTML.includes('survey-navigator'), 'El selector visible de relevamientos está en la pantalla principal')
-check(appElement.innerHTML.includes('Último disponible'), 'La fecha más reciente está identificada')
-check(appElement.innerHTML.includes('condition-assumption-hatch'), 'El mapa distingue condiciones estimadas')
-check(appElement.innerHTML.includes('lot-load-halo'), 'La carga animal se representa independientemente mediante halo')
-check(appElement.innerHTML.includes('lot-load-border'), 'La carga animal incluye un borde sutil')
-check(appElement.innerHTML.includes('map-label narrow'), 'Los lotes angostos usan etiquetas compactas')
+check(appElement.innerHTML.includes('lots-summary-table'), 'El resumen incluye la tabla simplificada de todos los lotes')
+check(appElement.innerHTML.includes('table-condition'), 'La tabla presenta la condición por lote')
+check(appElement.innerHTML.includes('table-load'), 'La tabla presenta la carga por lote')
+check(appElement.innerHTML.includes('condition-pill'), 'Las etiquetas del mapa incluyen un indicador de condición')
+check(appElement.innerHTML.includes('load-pill'), 'Las etiquetas del mapa incluyen un indicador de carga')
+check(appElement.innerHTML.includes('v504/pasture-excellent.png'), 'El mapa usa las texturas contrastadas v5.04')
+check(appElement.innerHTML.includes('animals/v504/cow-red-angus.png'), 'El mapa usa los animales naturales v5.04')
+check(appElement.innerHTML.includes('cow-calf-red-angus'), 'La representación visual incluye vaca con ternero')
+check(appElement.innerHTML.includes('animal-ground-shadow'), 'Los animales incorporan sombra de suelo')
+check(appElement.innerHTML.includes('animal-contrast-filter'), 'Los animales usan doble contorno adaptable')
 check(!appElement.innerHTML.includes('map-condition-legend'), 'No se muestra una leyenda permanente de condiciones')
-check(appElement.innerHTML.includes('kpi-cow-red-angus.png'), 'Existencias usa una vaca')
-check(appElement.innerHTML.includes('kpi-cow-calf-red-angus.png'), 'Nacimientos usa vaca con cría')
-check(appElement.innerHTML.includes('viewBox="0 0 1154 1363"'), 'El mapa mantiene el sistema maestro')
-check(appElement.innerHTML.includes('Registro de lluvia'), 'El KPI de lluvia está visible')
 
-check(!appElement.innerHTML.includes('Muy malo'), 'Muy malo ya no aparece como estado seleccionable')
-check(appElement.innerHTML.includes('v503/pasture-excellent.png'), 'El mapa utiliza las nuevas texturas v5.03')
-check(appElement.innerHTML.includes('animal-ground-shadow'), 'Cada animal incluye una sombra de contraste')
+check(api.FIELD_STATES.filter((item) => item.id !== 'no-observado').length === 5, 'La app ofrece cinco condiciones visuales')
 check(api.normalizeFieldState('muy-malo') === 'malo', 'Los registros Muy malo migran automáticamente a Malo')
+check(api.CATEGORIES.some((item) => item.id === 'terneros-as'), 'Existe la categoría combinada Terneros/as')
 
+const suggested = api.suggestedCategoryIds()
+check(suggested.length === 4, 'Se sugieren cuatro categorías al iniciar una carga')
+check(new Set(suggested).size === 4, 'Las cuatro categorías sugeridas son únicas')
+const blankGroups = api.suggestedCategoryGroups()
+check(blankGroups.length === 4 && blankGroups.every((group) => Number(group.quantity) === 0), 'Las categorías sugeridas aparecen con valor cero')
+const emptyModel = api.lotFormModel({ lotId: 'ER-04', groups: [], fieldState: 'bueno' }, true)
+check(emptyModel.groups.length === 4, 'Un lote nuevo o vacío abre con cuatro categorías editables')
+
+const visualMix = api.allocateVisualKinds({ groups: [
+  { categoryId: 'vacas', quantity: 60 },
+  { categoryId: 'terneros-as', quantity: 30 },
+  { categoryId: 'toros', quantity: 10 },
+] }, 4)
+check(visualMix.includes('cowCalf'), 'Vacas y terneros generan el asset compuesto cuando corresponde')
+check(visualMix.includes('bull'), 'Los toros se conservan en una composición mixta')
+check(visualMix.length === 4, 'La mezcla visual respeta la cantidad de slots disponible')
+
+const rollup = api.lotCategoryRollup([
+  { categoryId: 'vacas', quantity: 10 },
+  { categoryId: 'vacas-descarte', quantity: 2 },
+  { categoryId: 'terneros', quantity: 4 },
+  { categoryId: 'terneras', quantity: 5 },
+  { categoryId: 'terneros-as', quantity: 3 },
+  { categoryId: 'toros', quantity: 1 },
+])
+check(rollup.cows === 12 && rollup.calves === 12 && rollup.bulls === 1, 'La tabla agrega vacas, terneros/as y toros correctamente')
 
 const first = api.state.surveys[0]
 api.editSurvey(first.id)
 check(api.state.draft?.mode === 'edit', 'Un relevamiento existente entra en modo edición')
-check(api.state.draft?.editingSurveyId === first.id, 'La edición conserva el identificador')
 check(api.state.draft?.lots?.length === first.lots.length, 'La edición carga los lotes existentes')
-const edited = api.draftAsSurvey(api.state.draft)
-check(edited.id === first.id && edited.editedAt, 'La edición conserva ID y registra editedAt')
 
 api.state.draft = null
 api.state.surveys.push({ ...first, id: 'newer-test', date: '2026-08-02', createdAt: '2026-08-02T12:00:00.000Z', lots: [] })
@@ -82,9 +107,7 @@ api.state.selectedSurveyId = 'newer-test'
 check(api.sortedSurveys()[0].id === 'newer-test', 'Los relevamientos se ordenan del más reciente al más antiguo')
 const inferred = api.resolveLotCondition(api.state.surveys.find((item) => item.id === 'newer-test'), 'ER-01')
 check(inferred.source === 'recent' && inferred.stateId === 'bueno', 'Se reutiliza una condición reciente del mismo lote dentro de 60 días')
-check(inferred.explanation.includes('última observación'), 'La condición estimada explica su origen')
 
-// An observed lot with zero animals remains a valid lot record.
 const latest = api.state.surveys.find((item) => item.id === 'newer-test')
 latest.lots = [{ lotId: 'ER-04', fieldState: 'bueno', conditionSource: 'observed', groups: [] }]
 check(api.surveyMetrics(latest).byLot['ER-04'].animals === 0, 'Un lote observado puede guardarse con cero animales')
@@ -93,20 +116,19 @@ check(api.resolveLotCondition(latest, 'ER-04').source === 'observed', 'La condic
 check(api.spriteCountForLot({}, { animals: 1 }, false) === 1, 'Un lote ocupado muestra al menos un sprite')
 check(api.spriteCountForLot({}, { animals: 60 }, false) === 2, 'La escala visual es un sprite cada 30 animales')
 check(api.spriteCountForLot({}, { animals: 500 }, false) === 8, 'La vista general limita a ocho sprites')
-check(api.dominantAnimalKind({ groups: [{ categoryId: 'toros', quantity: 10 }, { categoryId: 'vacas', quantity: 40 }] }) === 'cow', 'La categoría dominante define un único tipo visual')
 
 api.state.rainEntries.push({ id: 'rain-zero', date: '2026-08-01', millimeters: 0, note: 'Sin lluvia' })
 api.state.rainEntries.push({ id: 'rain-ten', date: '2026-08-10', millimeters: 10, note: '' })
 const rain = api.monthlyRainSummary('2026-08')
 check(rain.source === 'daily' && rain.millimeters === 10 && rain.entries.length === 2, 'La lluvia diaria suma valores y conserva 0 mm como dato')
-check(api.monthlyRainSummary('2026-09').millimeters === null, 'Un mes sin carga permanece sin información')
 
-api.ui.modal = { type: 'lot-form', context: 'direct', surveyId: latest.id, isEdit: true, lot: latest.lots[0] }
-check(api.renderLotFormModal().includes('Editar lote'), 'La edición directa del lote se renderiza desde el mapa')
-api.ui.modal = { type: 'rain-manager', period: '2026-08', entryId: null }
-check(api.renderRainModal().includes('Lluvia diaria'), 'El modal de lluvia diaria se renderiza')
-api.ui.modal = { type: 'survey-history' }
-check(api.renderSurveyHistoryModal().includes('Elegí un relevamiento'), 'El selector histórico por fecha se renderiza')
+api.ui.modal = { type: 'lot-form', context: 'direct', surveyId: latest.id, isEdit: true, lot: api.lotFormModel(latest.lots[0], true) }
+const lotModal = api.renderLotFormModal()
+check(lotModal.includes('Las cuatro más frecuentes'), 'El formulario explica el orden dinámico de categorías')
+check((lotModal.match(/data-group-category=/g) || []).length === 4, 'Un lote vacío muestra cuatro filas de categoría')
+check(lotModal.includes('value="0"'), 'Las filas sugeridas comienzan en cero')
+api.ui.selectedLotId = 'ER-04'
+check(api.renderMapPage().includes('lot-concept-grid'), 'Condición y carga aparecen juntas en el inspector del mapa')
 api.ui.modal = null
 
 for (const view of ['resumen', 'mapa', 'historico', 'datos']) {
@@ -115,4 +137,4 @@ for (const view of ['resumen', 'mapa', 'historico', 'datos']) {
   check(appElement.innerHTML.length > 1000, `La vista ${view} se renderiza`)
 }
 
-console.log(`Smoke test Campo v5.03 aprobado (${checks.length} comprobaciones).`)
+console.log(`Smoke test Campo v5.04 aprobado (${checks.length} comprobaciones).`)

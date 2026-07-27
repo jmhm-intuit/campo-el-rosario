@@ -1,37 +1,34 @@
-# Campo El Rosario v5.03
+# Campo El Rosario v5.04
 
-Aplicación web local-first para registrar relevamientos de ganado, condición de los lotes y lluvia de **El Rosario**.
+Aplicación web/PWA local para relevamientos de ganado, condición de lotes, carga animal y lluvia en El Rosario.
 
-## Novedades de v5.03
+## Principales funciones
 
-- Cinco condiciones visuales: **Muy bueno, Bueno, Regular, Malo y Anegado**.
-- Migración automática de registros anteriores `Muy malo` a `Malo`.
-- Cinco nuevas texturas orgánicas, sin lagunas ni objetos grandes que delaten la repetición.
-- Variación determinística de orientación por lote para evitar que dos polígonos se vean idénticos.
-- Intensidad y contraste ajustados para mantener visibles las vacas Aberdeen Angus coloradas.
-- Sombra de suelo y contorno claro sutil en cada animal del mapa.
-- Nuevo icono compacto de **Registrar animales**: una vaca con un único símbolo `+`.
-- La fotografía aérea permanece intacta fuera de los polígonos.
-- Se conservan edición directa, condiciones estimadas, lotes vacíos, lluvia diaria e historial por fecha de v5.02.
+- Relevamientos por fecha exacta, editables y ordenados cronológicamente.
+- Edición directa de cada lote desde el mapa.
+- Registro de lotes con animales o con cero animales para informar su condición.
+- Condiciones observadas, estimadas y sin información.
+- Carga animal independiente de la condición del terreno.
+- Lluvia diaria opcional, conservando la diferencia entre `0 mm` y sin información.
+- Cinco texturas de condición de alto contraste.
+- Cuatro tipos visuales de animales: toro, vaca, vaca con ternero y ternero/a.
+- Cuatro categorías sugeridas por frecuencia al iniciar la carga de un lote.
+- Tabla simplificada de todos los lotes en el resumen.
+- Exportación CSV y respaldo JSON.
 
-## Datos locales
+## Persistencia
 
-La actualización conserva la clave histórica:
+Los datos continúan guardándose localmente con la clave:
 
 ```text
 campo-el-rosario-v2
 ```
 
-Los relevamientos existentes permanecen en el mismo navegador y URL. Antes de publicar una actualización conviene descargar un respaldo JSON desde la aplicación.
+Publicar v5.04 en la misma URL y navegador conserva los relevamientos existentes. Se recomienda descargar un respaldo JSON antes de actualizar.
 
-## Validación local
+## Validación
 
 ```bash
-node --check app.js
 node scripts/preflight.mjs
 node scripts/smoke.mjs
 ```
-
-## Publicación
-
-Consulta [DEPLOYMENT.md](DEPLOYMENT.md) o ejecuta `deploy-v5-03.sh` después de subir el ZIP de despliegue a la raíz del repositorio.

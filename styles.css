@@ -614,72 +614,116 @@ button:disabled{cursor:not-allowed;opacity:.45}
 .rain-form-grid{width:100%;grid-template-columns:minmax(0,1fr) 150px!important}
 @media(max-width:760px){.rain-form-grid{grid-template-columns:1fr!important}}
 
-/* Campo v5.03 — refined pasture assets and cattle contrast */
-.lot-condition{
-  opacity:.88!important;
-  filter:saturate(.96) contrast(.94)!important;
-}
-.lot-condition.source-observed{opacity:.88!important}
-.lot-condition.source-recent,
-.lot-condition.source-seasonal,
-.lot-condition.source-general{
-  opacity:.67!important;
-  filter:saturate(.82) contrast(.91)!important;
-}
-.lot-condition.state-anegado{opacity:.82!important;filter:saturate(.78) contrast(.88) brightness(1.04)!important}
-.lot-condition.source-none{opacity:.10!important}
-.condition-assumption-hatch{opacity:.22!important}
 
-.animal-marker{pointer-events:none}
-.animal-ground-shadow{
-  fill:rgba(16,24,18,.34);
-  filter:blur(.65px);
-  transform-box:fill-box;
-  transform-origin:center;
-}
-.animal-sprite{
-  opacity:1!important;
-  filter:
-    drop-shadow(0 0 .75px rgba(255,248,218,.98))
-    drop-shadow(0 1.25px 1px rgba(13,20,15,.58))!important;
-}
-.animal-sprite.calf{
-  filter:
-    drop-shadow(0 0 .7px rgba(255,248,218,.98))
-    drop-shadow(0 1px .8px rgba(13,20,15,.56))!important;
-}
+/* Legacy visual refinements retained from the prior release */
+.lot-condition{opacity:.88!important;filter:saturate(.96) contrast(.96) brightness(.99)!important;mix-blend-mode:normal!important}
+.lot-condition.source-observed{opacity:.90!important}
+.lot-condition.source-recent,.lot-condition.source-seasonal,.lot-condition.source-general{opacity:.67!important;filter:saturate(.82) contrast(.92) brightness(1.02)!important}
+.lot-condition.source-none,.lot-condition.state-no-observado{opacity:.11!important;filter:none!important}
+.condition-assumption-hatch{opacity:.26!important}
+.animal-sprite{opacity:1!important;filter:none!important}
+.adoption-visual.single img{object-fit:contain;filter:drop-shadow(0 7px 10px rgba(41,49,30,.14))}
+.nav-asset[src*="icon-register-animals"],.data-icon img[src*="icon-register-animals"]{object-fit:contain}
+.condition-strip.state-muy-bueno{fill:#2f6f35}.condition-strip.state-bueno{fill:#71983e}.condition-strip.state-regular{fill:#a88d35}.condition-strip.state-malo{fill:#9c6537}.condition-strip.state-anegado{fill:#4b7685}.condition-strip.state-no-observado{fill:#92978f}
+@media(max-width:760px){.adoption-visual.single img{width:98px!important;height:98px!important}}
 
-/* One compact registration mark in every context. */
-.nav-asset,
-.adoption-visual.single img,
-.survey-intro-art.single img,
-.empty-add img,
-.empty-groups img{
-  object-fit:contain!important;
-  object-position:center!important;
-}
-.nav-asset[src*="icon-register-animals"]{padding:1px}
-.adoption-visual.single img[src*="icon-register-animals"]{
-  width:148px!important;
-  height:148px!important;
-}
-.survey-intro-art.single img[src*="icon-register-animals"]{
-  width:190px!important;
-  height:190px!important;
-}
-.empty-add img[src*="icon-register-animals"]{width:94px!important;height:94px!important}
-.empty-groups img[src*="icon-register-animals"]{width:64px!important;height:64px!important}
+/* Campo v5.04 ------------------------------------------------------------ */
+/* Stronger, independent pasture-condition language. */
+.lot-condition{opacity:.95!important;filter:saturate(1.08) contrast(1.04)!important}
+.lot-condition.state-muy-bueno{filter:saturate(1.18) contrast(1.08) brightness(.94)!important}
+.lot-condition.state-bueno{filter:saturate(1.08) contrast(1.04) brightness(.99)!important}
+.lot-condition.state-regular{filter:saturate(1.12) contrast(1.08) brightness(1.01)!important}
+.lot-condition.state-malo{filter:saturate(1.10) contrast(1.10) brightness(.94)!important}
+.lot-condition.state-anegado{filter:saturate(.90) contrast(1.08) brightness(.92)!important}
+.lot-condition.source-recent,.lot-condition.source-seasonal,.lot-condition.source-general{opacity:.73!important}
 
-/* Five visible conditions plus the explicit no-information state. */
-.field-state-options{grid-template-columns:repeat(3,minmax(0,1fr))}
-.condition-strip.state-muy-bueno{fill:#346a31}
-.condition-strip.state-bueno{fill:#6e963a}
-.condition-strip.state-regular{fill:#a78b39}
-.condition-strip.state-malo{fill:#9b7049}
-.condition-strip.state-anegado{fill:#617d82}
+/* Two compact indicators inside every lot: condition + load. */
+.map-label .status-pill{stroke:rgba(255,255,255,.34);stroke-width:.45}
+.map-label .status-pill-text{fill:#fff;font-size:6.8px;font-weight:900;letter-spacing:.01em;paint-order:stroke;stroke:rgba(0,0,0,.14);stroke-width:.3px}
+.map-label.standard .status-pill-text{font-size:6.6px}
+.map-label.narrow .status-pill-text{font-size:6.2px}
+.map-label .condition-pill.state-muy-bueno{fill:#08752f}
+.map-label .condition-pill.state-bueno{fill:#6d9d25}
+.map-label .condition-pill.state-regular{fill:#d59a00}
+.map-label .condition-pill.state-malo{fill:#9d4f20}
+.map-label .condition-pill.state-anegado{fill:#315f76}
+.map-label .condition-pill.state-no-observado{fill:#687068}
+.map-label .load-pill.empty{fill:#737b74}
+.map-label .load-pill.low{fill:#668a50}
+.map-label .load-pill.ok{fill:#247c69}
+.map-label .load-pill.high{fill:#bd8d22}
+.map-label .load-pill.over{fill:#b56628}
+.map-label .load-pill.critical{fill:#ad3e32}
+.map-label .label-card{fill:rgba(13,31,22,.92)!important;stroke:rgba(255,255,255,.58)!important}
+.map-label .lot-heads{fill:#fff9df!important}
 
+/* Natural animals stay readable without changing color for each terrain. */
+.animal-ground-shadow{fill:rgba(28,18,12,.32);filter:blur(.45px);pointer-events:none}
+.animal-unit.state-anegado .animal-ground-shadow{fill:rgba(17,28,30,.24)}
+.animal-sprite{image-rendering:auto}
+
+/* Condition and load belong together in the lot inspector. */
+.lot-concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+.concept-card{min-width:0;border:1px solid #dfdbd0;border-radius:13px;padding:11px;display:flex;gap:9px;align-items:center;background:#f7f6f0}
+.concept-card .field-state-icon{width:28px;height:28px;object-fit:contain;flex:none}
+.concept-card small{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.concept-card strong{display:block;font-size:13px;line-height:1.15;margin:2px 0}
+.concept-card span{display:block;font-size:8.5px;color:var(--muted);line-height:1.25}
+.concept-card.condition.state-muy-bueno{background:#e4f2e5;border-color:#b7d7b8}
+.concept-card.condition.state-bueno{background:#edf3dc;border-color:#d0dda8}
+.concept-card.condition.state-regular{background:#fff3ce;border-color:#ead594}
+.concept-card.condition.state-malo{background:#f4e5d9;border-color:#d8b79f}
+.concept-card.condition.state-anegado{background:#e0eaee;border-color:#b7ccd5}
+.concept-card.condition.source-recent,.concept-card.condition.source-seasonal,.concept-card.condition.source-general{border-style:dashed}
+.concept-card.load .concept-dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 5px rgba(0,0,0,.035);flex:none}
+.concept-card.load.empty .concept-dot{background:#8c938c}
+.concept-card.load.low .concept-dot{background:#668a50}
+.concept-card.load.ok .concept-dot{background:#247c69}
+.concept-card.load.high .concept-dot{background:#bd8d22}
+.concept-card.load.over .concept-dot{background:#b56628}
+.concept-card.load.critical .concept-dot{background:#ad3e32}
+.concept-explanation{margin-top:9px;padding:10px 11px;background:#f4f2eb;border-radius:11px}
+.concept-explanation strong{font-size:10px}.concept-explanation p{margin:3px 0 0!important;font-size:9px!important;color:var(--muted)}
+
+/* The four most-used categories open ready at zero, but remain fully editable. */
+.animal-group-row.suggested{border-color:#cfdac7;background:#fbfcf8}
+.animal-group-row label>span{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.animal-group-row label>span small{font-size:8px;color:#65805c;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+
+/* Simplified table view across all lots. */
+.lots-summary-panel{margin-top:18px;overflow:hidden}
+.lots-table-wrap{overflow:auto;border-top:1px solid #ece7dc}
+.lots-summary-table{width:100%;border-collapse:collapse;min-width:820px;font-size:11px}
+.lots-summary-table th,.lots-summary-table td{padding:10px 12px;border-bottom:1px solid #ece8df;text-align:left;white-space:nowrap}
+.lots-summary-table thead th{position:sticky;top:0;background:#f6f5ef;color:#596159;text-transform:uppercase;letter-spacing:.055em;font-size:8px;z-index:1}
+.lots-summary-table tbody tr{cursor:pointer;transition:background .15s ease}
+.lots-summary-table tbody tr:hover{background:#f8faf4}
+.lots-summary-table tbody th{font-size:11px}
+.lots-summary-table .numeric{text-align:right;font-variant-numeric:tabular-nums}
+.lot-table-link{border:0;background:none;padding:0;color:var(--green-800);font-weight:900;cursor:pointer}
+.table-condition,.table-load{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:800}
+.table-condition.state-muy-bueno{background:#dbeedc;color:#0b652c}
+.table-condition.state-bueno{background:#e9f1d5;color:#557b20}
+.table-condition.state-regular{background:#fff0bf;color:#8d6200}
+.table-condition.state-malo{background:#f3dfd0;color:#85421b}
+.table-condition.state-anegado{background:#dce8ed;color:#2d5a70}
+.table-condition.state-no-observado{background:#e9ebe8;color:#687068}
+.table-condition.source-recent,.table-condition.source-seasonal,.table-condition.source-general{outline:1px dashed currentColor;outline-offset:-2px}
+.table-load.empty{background:#eceeeb;color:#717871}
+.table-load.low{background:#e4eedf;color:#567246}
+.table-load.ok{background:#dbece7;color:#236b5d}
+.table-load.high{background:#fff1c7;color:#896511}
+.table-load.over{background:#f7e1cf;color:#98501d}
+.table-load.critical{background:#f3d7d3;color:#962f28}
+.table-note{margin:10px 15px 14px;color:var(--muted);font-size:9px}
+
+@media(max-width:900px){
+  .lot-concept-grid{grid-template-columns:1fr}
+  .lots-summary-panel{border-radius:14px}
+}
 @media(max-width:760px){
-  .field-state-options{grid-template-columns:1fr 1fr}
-  .adoption-visual.single img[src*="icon-register-animals"]{width:104px!important;height:104px!important}
-  .survey-intro-art.single img[src*="icon-register-animals"]{width:150px!important;height:150px!important}
+  .map-label.standard .status-pill-text{font-size:5.7px}
+  .map-label.narrow .status-pill-text{font-size:5.2px}
+  .lots-summary-table th,.lots-summary-table td{padding:9px 10px}
+  .animal-group-row label>span small{display:none}
 }

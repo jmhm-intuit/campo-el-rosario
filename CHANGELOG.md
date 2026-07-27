@@ -1,32 +1,49 @@
 # Changelog
 
-## Campo v5.03 — 26 de julio de 2026
+## Campo v5.04 — 27 de julio de 2026
 
-### Condición del lote
+### Condición de los lotes
 
-- La visualización se simplifica a cinco estados: Muy bueno, Bueno, Regular, Malo y Anegado.
-- Los registros históricos con `Muy malo` se convierten automáticamente a `Malo` al cargarse.
-- Se incorporan cinco texturas nuevas de 768 × 768 px.
-- Las texturas evitan lagunas, rocas grandes y centros visuales que hagan evidente el mosaico.
-- El patrón usa una escala mayor y una orientación determinística distinta por lote.
-- Las condiciones estimadas mantienen menor intensidad y el indicador `≈`.
-- `Sin información` sigue siendo un estado de origen de datos, no una sexta condición del terreno.
+- Nueva paleta de alto contraste para **Muy bueno, Bueno, Regular, Malo y Anegado**.
+- Texturas verdes, amarillas, terrosas y húmedas claramente diferenciadas.
+- Se mantiene intacta la fotografía aérea fuera de los polígonos.
+- Las condiciones estimadas continúan diferenciadas mediante menor intensidad y el símbolo `≈`.
 
-### Animales y contraste
+### Indicadores del mapa
 
-- Cada animal incorpora una sombra elíptica suave debajo del sprite.
-- Se aplica un contorno crema fino y una sombra oscura para conservar lectura sobre verde, tierra y barro.
-- La intensidad de las texturas se ajusta para que el ganado siga siendo el elemento principal de ocupación.
+- Cada etiqueta de lote muestra ahora dos indicadores compactos y separados:
+  - condición del terreno;
+  - estado de carga animal.
+- Se conserva una composición vertical compacta para ER-04, ER-05 y otros lotes angostos.
+- Los bordes de carga continúan siendo secundarios respecto de la textura del lote.
 
-### Iconografía
+### Animales
 
-- Se reemplaza el icono anterior de Registrar animales por una marca compacta de vaca + símbolo `+`.
-- La misma composición se utiliza en navegación, bienvenida, estados vacíos y formularios.
-- Se incluyen exportaciones de 24, 32, 48 y 256 px con fondo transparente.
+- Cuatro assets maestros en color caoba natural:
+  - toro;
+  - vaca;
+  - vaca con ternero;
+  - ternero/a.
+- El mapa puede combinar distintas categorías visuales dentro de un mismo lote.
+- Vacas y terneros pueden representarse como una unidad de vaca con cría, sin modificar los totales registrados.
+- Doble contorno, sombra suave y sombra de suelo aplicados mediante SVG para conservar contraste sobre todos los fondos.
+
+### Carga por lote
+
+- Los lotes nuevos o vacíos abren con cuatro categorías sugeridas en valor `0`.
+- Las categorías sugeridas se ordenan según su frecuencia histórica de uso.
+- Cuando no existe suficiente historial se utilizan Vacas, Terneros/as, Toros y Vaquillonas.
+- Las categorías pueden dejarse en cero, cambiarse, eliminarse o ampliarse.
+- Solo se guardan las categorías con cantidad mayor que cero.
+
+### Resumen
+
+- Nueva tabla simplificada con los 18 lotes.
+- Columnas de condición, carga, total de animales, vacas, terneros/as y toros.
+- Acceso directo al lote desde cada fila.
 
 ### Compatibilidad
 
 - Se mantiene la clave local `campo-el-rosario-v2`.
-- Se mantiene la geometría revisada de los 18 lotes y las 1.735 hectáreas.
-- Se conserva toda la funcionalidad de edición directa, relevamientos históricos, lotes sin animales y lluvia diaria.
-- Nueva caché PWA `campo-v503-assets-1`.
+- Se mantiene la migración automática `Muy malo → Malo`.
+- Nueva caché PWA `campo-v504-assets-1`.
