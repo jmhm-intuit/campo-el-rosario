@@ -12,13 +12,13 @@ const required = [
   'assets/icons/icon-home-house.png', 'assets/icons/icon-register-animals.png',
   'assets/kpi/kpi-cow-red-angus.png', 'assets/kpi/kpi-cow-calf-red-angus.png',
   'assets/kpi/kpi-pasture.png', 'assets/kpi/kpi-weather-rain.png',
-  'assets/animals/v504/cow-red-angus.png', 'assets/animals/v504/cow-red-angus-left.png',
-  'assets/animals/v504/bull-red-angus.png', 'assets/animals/v504/bull-red-angus-left.png',
-  'assets/animals/v504/calf-red-angus.png', 'assets/animals/v504/calf-red-angus-left.png',
-  'assets/animals/v504/cow-calf-red-angus.png', 'assets/animals/v504/cow-calf-red-angus-left.png',
-  'assets/conditions/v504/pasture-excellent.png', 'assets/conditions/v504/pasture-good.png',
-  'assets/conditions/v504/pasture-regular.png', 'assets/conditions/v504/pasture-poor.png',
-  'assets/conditions/v504/pasture-waterlogged.png',
+  'assets/animals/v505/cow-red-angus.png', 'assets/animals/v505/cow-red-angus-left.png',
+  'assets/animals/v505/bull-red-angus.png', 'assets/animals/v505/bull-red-angus-left.png',
+  'assets/animals/v505/calf-red-angus.png', 'assets/animals/v505/calf-red-angus-left.png',
+  'assets/animals/v505/cow-calf-red-angus.png', 'assets/animals/v505/cow-calf-red-angus-left.png',
+  'assets/conditions/v505/pasture-excellent.png', 'assets/conditions/v505/pasture-good.png',
+  'assets/conditions/v505/pasture-regular.png', 'assets/conditions/v505/pasture-poor.png',
+  'assets/conditions/v505/pasture-waterlogged.png',
   'assets/buildings/building-house-main-er08-09.png',
   'assets/buildings/building-house-secondary-er13.png',
   '.github/workflows/deploy-pages.yml',
@@ -36,39 +36,41 @@ const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8')
 const version = JSON.parse(fs.readFileSync(path.join(root, 'VERSION.json'), 'utf8'))
 
 const jsTerms = [
-  'const APP_VERSION = 504',
-  "const APP_VERSION_LABEL = '5.04'",
+  'const APP_VERSION = 505',
+  "const APP_VERSION_LABEL = '5.05'",
   "const STORAGE_KEY = 'campo-el-rosario-v2'",
-  "pattern: 'v504/pasture-excellent.png'",
-  "pattern: 'v504/pasture-waterlogged.png'",
+  "pattern: 'v505/pasture-excellent.png'",
+  "pattern: 'v505/pasture-waterlogged.png'",
   "const DEFAULT_CATEGORY_IDS = ['vacas', 'terneros-as', 'toros', 'vaquillonas']",
   'function suggestedCategoryIds()',
   'function allocateVisualKinds(',
   'function renderLotsSummaryTable(',
-  'cowCalf:',
-  'animal-ground-shadow',
-  'condition-pill',
-  'load-pill',
-  'lot-concept-grid',
-  'Math.ceil(heads / 30)',
+  'function renderHerdSpritesHtml(',
+  'function renderMapLabelHtml(',
+  'function renderMapHousesHtml(',
+  'map-ui-overlay',
+  'map-animal-html',
+  'compact ? Math.min(3, raw) : Math.min(8, raw)',
   "if (value === 'muy-malo') return 'malo'",
-  'viewBox="0 0 1154 1363"',
 ]
 for (const term of jsTerms) if (!js.includes(term)) fail(`No se encontró en app.js: ${term}`)
-if (!failed) pass('Funciones y reglas de Campo v5.04 presentes')
+if (!failed) pass('Funciones y reglas de Campo v5.05 presentes')
 
 const cssTerms = [
-  '/* Campo v5.04', '.lots-summary-table', '.lot-concept-grid',
-  '.map-label .condition-pill.state-muy-bueno', '.map-label .load-pill.critical',
-  '.animal-ground-shadow', '.animal-group-row.suggested',
-  '.table-condition.state-regular', '.table-load.ok',
+  '/* Campo v5.05',
+  '.map-ui-overlay',
+  '.map-animal-html',
+  '.map-label-html',
+  '.lots-summary-table',
+  '.table-load.compact',
+  '.ranch-map.compact .map-animal-html',
+  'all seven columns fit on a phone',
 ]
 for (const term of cssTerms) if (!css.includes(term)) fail(`No se encontró estilo requerido: ${term}`)
-if (js.includes('<details class="map-condition-legend"')) fail('No debe existir una leyenda permanente de condiciones en el mapa.')
-if (!failed) pass('Jerarquía visual, tabla y flujo de carga presentes')
+if (!failed) pass('Escalado responsivo, animales y tabla compacta presentes')
 
-if (version.version !== '5.04' || version.storageKey !== 'campo-el-rosario-v2') fail('VERSION.json no corresponde a v5.04 o cambió la clave local.')
-if (!sw.includes("const CACHE = 'campo-v504-assets-1'")) fail('La caché PWA debe ser campo-v504-assets-1.')
+if (version.version !== '5.05' || version.storageKey !== 'campo-el-rosario-v2') fail('VERSION.json no corresponde a v5.05 o cambió la clave local.')
+if (!sw.includes("const CACHE = 'campo-v505-assets-2'")) fail('La caché PWA debe ser campo-v505-assets-2.')
 if (!failed) pass('Versión, persistencia local y caché correctas')
 
 const assetMatch = sw.match(/const ASSETS = \[([\s\S]*?)\]/)
@@ -105,19 +107,18 @@ for (const lot of geometry.lots || []) {
 if (hectares !== 1735) fail(`La superficie total es ${hectares}, no 1735 ha.`)
 if (!failed) pass('18 polígonos revisados y 1.735 ha validados')
 
-const alphaAssets = required.filter((file) => file.includes('assets/animals/v504/'))
-for (const asset of alphaAssets) {
+for (const asset of required.filter((file) => file.includes('assets/animals/v505/'))) {
   const png = fs.readFileSync(path.join(root, asset))
   if (png.toString('ascii', 1, 4) !== 'PNG') { fail(`PNG inválido: ${asset}`); continue }
   if (![4, 6].includes(png.readUInt8(25))) fail(`El asset no incluye canal alfa: ${asset}`)
 }
-if (!failed) pass('Ocho variantes animales con transparencia')
+if (!failed) pass('Ocho variantes animales v5.05 con transparencia')
 
-for (const texture of required.filter((file) => file.includes('conditions/v504/'))) {
+for (const texture of required.filter((file) => file.includes('conditions/v505/'))) {
   const png = fs.readFileSync(path.join(root, texture))
   if (png.readUInt32BE(16) !== 512 || png.readUInt32BE(20) !== 512) fail(`La textura no mide 512 × 512: ${texture}`)
 }
-if (!failed) pass('Cinco texturas contrastadas de 512 × 512')
+if (!failed) pass('Cinco texturas finas de 512 × 512')
 
 if (failed) process.exit(1)
-console.log('\nPreflight Campo v5.04 aprobado.')
+console.log('\nPreflight Campo v5.05 aprobado.')

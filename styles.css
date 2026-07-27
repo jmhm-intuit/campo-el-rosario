@@ -727,3 +727,147 @@ button:disabled{cursor:not-allowed;opacity:.45}
   .lots-summary-table th,.lots-summary-table td{padding:9px 10px}
   .animal-group-row label>span small{display:none}
 }
+
+/* Campo v5.05 ------------------------------------------------------------ */
+/* Keep the aerial image untouched outside the parcels and reduce the visual
+   scale of the repeatable condition patterns through the SVG pattern units. */
+.ranch-map{isolation:isolate}
+.map-ui-overlay{position:absolute;inset:0;z-index:8;pointer-events:none;overflow:hidden;border-radius:inherit}
+.map-animal-overlay,.map-house-overlay,.map-label-overlay{position:absolute;inset:0;pointer-events:none}
+
+/* Screen-size animal sprites: their readability no longer collapses with the
+   1154 × 1363 coordinate system in the mobile overview. */
+.map-animal-html{position:absolute;width:30px;height:auto;transform:translate(-50%,-50%) rotate(var(--animal-angle,0deg));transform-origin:center;pointer-events:none;z-index:2;object-fit:contain;filter:drop-shadow(0 1.4px 1px rgba(20,13,8,.44))}
+.map-animal-html.bull{width:32px}.map-animal-html.calf{width:22px}.map-animal-html.cowCalf{width:36px}
+.ranch-map.compact .map-animal-html{width:19px}.ranch-map.compact .map-animal-html.bull{width:20px}.ranch-map.compact .map-animal-html.calf{width:14px}.ranch-map.compact .map-animal-html.cowCalf{width:23px}
+
+/* Permanent infrastructure remains visible at any screen scale. */
+.map-house-html{position:absolute;transform:translate(-50%,-50%);object-fit:contain;pointer-events:none;z-index:2;filter:drop-shadow(0 2px 2px rgba(22,18,10,.32))}
+.map-house-html.main{width:74px}.map-house-html.secondary{width:50px}
+.ranch-map.compact .map-house-html.main{width:42px}.ranch-map.compact .map-house-html.secondary{width:29px}
+
+/* Adaptive HTML labels keep a minimum readable pixel size, independent of the
+   SVG scale. Condition and load are compact and remain independent concepts. */
+.map-label-html{position:absolute;transform:translate(-50%,-50%);z-index:4;display:grid;justify-items:center;gap:1px;min-width:58px;padding:5px 7px 4px;border:1px solid rgba(255,255,255,.62);border-radius:9px;background:rgba(12,31,22,.91);box-shadow:0 2px 5px rgba(0,0,0,.28);color:#fff;font:inherit;line-height:1;pointer-events:auto;cursor:pointer}
+.map-label-html:hover,.map-label-html:focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:1px}
+.map-label-html.source-recent,.map-label-html.source-seasonal,.map-label-html.source-general{border-style:dashed}
+.map-label-html-name{font-size:10px;font-weight:900;letter-spacing:.015em;white-space:nowrap}
+.map-label-html-count{font-size:13px;color:#fff4cf;font-variant-numeric:tabular-nums}
+.map-label-html-meta{display:flex;align-items:center;justify-content:center;gap:3px;width:100%;margin-top:1px}
+.map-condition-mini,.map-load-mini{height:13px;min-width:20px;padding:0 4px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:7px;font-weight:900;font-style:normal;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.map-condition-mini.state-muy-bueno{background:#08722c}.map-condition-mini.state-bueno{background:#689527}.map-condition-mini.state-regular{background:#c58d00}.map-condition-mini.state-malo{background:#8e4b24}.map-condition-mini.state-anegado{background:#315f76}.map-condition-mini.state-no-observado{background:#6d736e}
+.map-load-mini{gap:3px;background:rgba(255,255,255,.10)}.map-load-mini b{display:block;width:7px;height:7px;border-radius:50%;background:#8a918a}.map-load-mini em{font-style:normal;font-size:7px;color:#fff}
+.map-load-mini.low b{background:#71866a}.map-load-mini.ok b{background:#3e8072}.map-load-mini.high b{background:#bd8d35}.map-load-mini.over b{background:#b96838}.map-load-mini.critical b{background:#c74639}.map-load-mini.empty b{background:#929992}
+.map-label-html.narrow{min-width:40px;padding-left:4px;padding-right:4px}.map-label-html.narrow .map-label-html-name{font-size:9px}.map-label-html.narrow .map-label-html-count{font-size:12px}.map-label-html.narrow .map-condition-mini,.map-label-html.narrow .map-load-mini{min-width:17px;padding:0 3px;font-size:6.5px}
+.ranch-map.compact .map-label-html{min-width:45px;padding:3px 4px;border-radius:7px;gap:0}.ranch-map.compact .map-label-html-name{font-size:8px}.ranch-map.compact .map-label-html-count{font-size:10px}.ranch-map.compact .map-label-html-meta{gap:2px}.ranch-map.compact .map-condition-mini,.ranch-map.compact .map-load-mini{height:11px;min-width:16px;padding:0 3px;font-size:6px}.ranch-map.compact .map-load-mini b{width:6px;height:6px}.ranch-map.compact .map-label-html.narrow{min-width:28px;padding:2px 3px}.ranch-map.compact .map-label-html.narrow .map-label-html-name{font-size:7px}.ranch-map.compact .map-label-html.narrow .map-label-html-count{font-size:9px}.ranch-map.compact .map-label-html.narrow .map-condition-mini,.ranch-map.compact .map-label-html.narrow .map-load-mini{min-width:12px;padding:0 2px;font-size:5.5px}
+
+/* The condition is the dominant surface. The load border remains a secondary,
+   low-saturation signal. */
+.lot-condition{opacity:.94!important;filter:saturate(1.04) contrast(1.02)!important}
+.lot-condition.state-muy-bueno{filter:saturate(1.18) contrast(1.08) brightness(.90)!important}.lot-condition.state-bueno{filter:saturate(1.02) contrast(1.02) brightness(.98)!important}.lot-condition.state-regular{filter:saturate(1.08) contrast(1.06) brightness(1.01)!important}.lot-condition.state-malo{filter:saturate(.94) contrast(1.08) brightness(.92)!important}.lot-condition.state-anegado{filter:saturate(.84) contrast(1.08) brightness(.91)!important}
+.lot-load-halo{opacity:.09!important;filter:blur(2px)!important}.lot-load-halo.high,.lot-load-halo.over{opacity:.12!important}.lot-load-halo.critical{opacity:.17!important;filter:blur(2.8px)!important}
+.lot-load-border{opacity:.72!important}.lot-load-border.low{stroke-width:1!important}.lot-load-border.ok{stroke-width:1.1!important}.lot-load-border.high{stroke-width:1.45!important}.lot-load-border.over{stroke-width:1.7!important}.lot-load-border.critical{stroke-width:2.35!important}
+
+/* Compact lot table: all seven columns fit on a phone without horizontal
+   scrolling. Full labels remain available through title attributes and the
+   lot detail view. */
+.lots-table-wrap{overflow-x:hidden!important}
+.lots-summary-table{min-width:0!important;table-layout:fixed;font-size:10px}
+.lots-summary-table col.col-lot{width:20%}.lots-summary-table col.col-condition{width:11%}.lots-summary-table col.col-load{width:17%}.lots-summary-table col.col-total{width:13%}.lots-summary-table col.col-cow{width:13%}.lots-summary-table col.col-calf{width:14%}.lots-summary-table col.col-bull{width:12%}
+.lots-summary-table th,.lots-summary-table td{padding:8px 5px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lots-summary-table thead th{text-align:center;font-size:8px}.lots-summary-table thead th:first-child{text-align:left}
+.lots-summary-table tbody th{font-size:10px}.lots-summary-table .numeric{text-align:center}
+.table-condition{min-width:26px;padding:4px 5px;justify-content:center;font-size:8px}
+.table-load.compact{min-width:0;padding:4px 5px;gap:3px;justify-content:center;font-size:8px}.table-load.compact i{display:block;width:7px;height:7px;border-radius:50%;background:#929992;flex:none}.table-load.compact.low i{background:#71866a}.table-load.compact.ok i{background:#3e8072}.table-load.compact.high i{background:#bd8d35}.table-load.compact.over i{background:#b96838}.table-load.compact.critical i{background:#c74639}
+
+@media(max-width:760px){
+  .map-panel .ranch-map.compact{border-radius:0 0 14px 14px}
+  .map-label-html.full{min-width:50px;padding:4px 5px}.map-label-html.full .map-label-html-name{font-size:9px}.map-label-html.full .map-label-html-count{font-size:11px}.map-label-html.full.narrow{min-width:31px;padding:3px}
+  .map-animal-html{width:24px}.map-animal-html.bull{width:26px}.map-animal-html.calf{width:18px}.map-animal-html.cowCalf{width:29px}
+  .map-house-html.main{width:56px}.map-house-html.secondary{width:38px}
+  .lots-summary-table{font-size:8.5px}.lots-summary-table th,.lots-summary-table td{padding:7px 2px!important}.lots-summary-table tbody th{font-size:8.5px}.lot-table-link{font-size:8.5px}.table-condition,.table-load.compact{font-size:7px;padding:3px 2px}.table-load.compact i{width:6px;height:6px}.table-note{font-size:8px;margin:8px 10px 11px}
+}
+
+/* Final v5.05 framing and narrow-lot readability. */
+.ranch-map.compact{aspect-ratio:1078/1296!important}
+.ranch-map.compact .map-canvas,
+.ranch-map.compact .map-ui-overlay{width:107.05%;height:105.17%;left:-2.875%;top:-1.929%;right:auto;bottom:auto}
+.ranch-map.compact .map-label-html.narrow{min-width:31px;padding:3px 3px}
+.ranch-map.compact .map-label-html.narrow .map-label-html-name{font-size:8px}
+.ranch-map.compact .map-label-html.narrow .map-label-html-count{font-size:10px}
+.ranch-map.compact .map-label-html.narrow .map-condition-mini,
+.ranch-map.compact .map-label-html.narrow .map-load-mini{min-width:13px;font-size:6px}
+
+/* Campo v5.05 final responsive readability pass --------------------------- */
+/* The summary and detailed maps share one coordinate system, so the HTML
+   overlays always align with the aerial image and SVG polygons. */
+.ranch-map.summary-map,.ranch-map.full-map{aspect-ratio:1154/1363!important}
+
+/* Finer condition texture scale is controlled in app.js. Keep the surface
+   strong enough to communicate condition while preserving animal contrast. */
+.summary-map .lot-condition{opacity:.91!important;filter:saturate(1.02) contrast(1.01)!important}
+.summary-map .lot-condition.state-muy-bueno{filter:saturate(1.12) contrast(1.06) brightness(.92)!important}
+.summary-map .lot-condition.state-bueno{filter:saturate(1.02) contrast(1.02) brightness(.98)!important}
+.summary-map .lot-condition.state-regular{filter:saturate(1.07) contrast(1.05) brightness(1.01)!important}
+.summary-map .lot-condition.state-malo{filter:saturate(.92) contrast(1.07) brightness(.94)!important}
+.summary-map .lot-condition.state-anegado{filter:saturate(.82) contrast(1.07) brightness(.93)!important}
+
+/* Overview animals use a minimum on-screen size and never become red dots. */
+.ranch-map.compact .map-animal-html{width:22px!important}
+.ranch-map.compact .map-animal-html.bull{width:24px!important}
+.ranch-map.compact .map-animal-html.calf{width:16px!important}
+.ranch-map.compact .map-animal-html.cowCalf{width:27px!important}
+.ranch-map.compact .map-animal-html{filter:drop-shadow(0 1.4px 1px rgba(20,13,8,.52)) drop-shadow(0 0 1px rgba(255,240,207,.9))}
+
+/* The overview label contains only lot, total and a load dot. Condition is
+   already represented by the polygon texture. */
+.ranch-map.compact .map-label-html{min-width:48px!important;padding:4px 5px 3px!important;border-radius:8px!important;gap:1px!important}
+.ranch-map.compact .map-label-html-name{font-size:9px!important}
+.ranch-map.compact .map-label-html-count{font-size:12px!important}
+.ranch-map.compact .map-label-html.narrow{min-width:32px!important;padding:3px 4px!important}
+.ranch-map.compact .map-label-html.narrow .map-label-html-name{font-size:8px!important}
+.ranch-map.compact .map-label-html.narrow .map-label-html-count{font-size:11px!important}
+.ranch-map.compact .map-label-html-meta.compact-meta{height:8px;margin:0!important}
+.ranch-map.compact .compact-meta .map-load-mini{height:8px!important;min-width:8px!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+.ranch-map.compact .compact-meta .map-load-mini b{width:7px!important;height:7px!important;box-shadow:0 0 0 1px rgba(255,255,255,.48)}
+
+/* Load borders remain secondary to pasture condition. */
+.summary-map .lot-load-border{opacity:.52!important}
+.summary-map .lot-load-border.low{stroke-width:.85!important}
+.summary-map .lot-load-border.ok{stroke-width:1!important}
+.summary-map .lot-load-border.high{stroke-width:1.25!important}
+.summary-map .lot-load-border.over{stroke-width:1.5!important}
+.summary-map .lot-load-border.critical{stroke-width:1.9!important;opacity:.68!important}
+.summary-map .lot-load-halo.low,.summary-map .lot-load-halo.ok{opacity:0!important}
+.summary-map .lot-load-halo.high{opacity:.045!important}
+.summary-map .lot-load-halo.over{opacity:.075!important}
+.summary-map .lot-load-halo.critical{opacity:.11!important}
+
+/* Compact all-lot table: no horizontal expansion on a 390px phone. */
+.lots-table-wrap{overflow-x:hidden!important}
+.lots-summary-table{width:100%!important;min-width:0!important;table-layout:fixed!important}
+.lots-summary-table col.col-lot{width:20%}
+.lots-summary-table col.col-condition{width:10%}
+.lots-summary-table col.col-load{width:18%}
+.lots-summary-table col.col-total{width:13%}
+.lots-summary-table col.col-cow{width:13%}
+.lots-summary-table col.col-calf{width:14%}
+.lots-summary-table col.col-bull{width:12%}
+.lots-summary-table th,.lots-summary-table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.table-load.compact{background:transparent!important;gap:3px!important;justify-content:center!important}
+.table-load.compact i{box-shadow:none!important}
+
+@media(max-width:760px){
+  .map-panel .ranch-map.compact{max-height:none!important}
+  .lots-summary-panel .panel-head{padding:14px 14px 11px}
+  .lots-summary-table{font-size:8.4px!important}
+  .lots-summary-table th,.lots-summary-table td{padding:7px 2px!important;text-align:center!important}
+  .lots-summary-table thead th{font-size:7.2px!important;letter-spacing:0!important}
+  .lots-summary-table tbody th{text-align:left!important;padding-left:5px!important}
+  .lot-table-link{font-size:8.3px!important;max-width:100%;display:block;overflow:hidden;text-overflow:ellipsis}
+  .table-condition{font-size:7px!important;min-width:22px!important;padding:3px 2px!important}
+  .table-load.compact{font-size:7.3px!important;padding:0!important}
+  .table-load.compact i{width:6px!important;height:6px!important}
+  .lots-summary-table .numeric{font-size:8px!important}
+  .table-note{font-size:7.8px!important;line-height:1.35;margin:8px 9px 10px!important}
+}

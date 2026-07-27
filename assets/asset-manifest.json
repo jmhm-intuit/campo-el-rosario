@@ -1,10 +1,216 @@
 {
-  "version": "5.04",
+  "version": "5.05",
+  "description": "Assets activos de Campo El Rosario v5.05",
   "assets": [
+    {
+      "id": "bull-red-angus-left",
+      "type": "animal",
+      "path": "assets/animals/v505/bull-red-angus-left.png"
+    },
+    {
+      "id": "bull-red-angus",
+      "type": "animal",
+      "path": "assets/animals/v505/bull-red-angus.png"
+    },
+    {
+      "id": "calf-red-angus-left",
+      "type": "animal",
+      "path": "assets/animals/v505/calf-red-angus-left.png"
+    },
+    {
+      "id": "calf-red-angus",
+      "type": "animal",
+      "path": "assets/animals/v505/calf-red-angus.png"
+    },
+    {
+      "id": "cow-calf-red-angus-left",
+      "type": "animal",
+      "path": "assets/animals/v505/cow-calf-red-angus-left.png"
+    },
+    {
+      "id": "cow-calf-red-angus",
+      "type": "animal",
+      "path": "assets/animals/v505/cow-calf-red-angus.png"
+    },
+    {
+      "id": "cow-red-angus-left",
+      "type": "animal",
+      "path": "assets/animals/v505/cow-red-angus-left.png"
+    },
+    {
+      "id": "cow-red-angus",
+      "type": "animal",
+      "path": "assets/animals/v505/cow-red-angus.png"
+    },
+    {
+      "id": "building-house-main-er08-09",
+      "type": "building",
+      "path": "assets/buildings/building-house-main-er08-09.png"
+    },
+    {
+      "id": "building-house-secondary-er13",
+      "type": "building",
+      "path": "assets/buildings/building-house-secondary-er13.png"
+    },
+    {
+      "id": "condition-excellent-tile",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-excellent-tile.png"
+    },
+    {
+      "id": "condition-good-tile",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-good-tile.png"
+    },
+    {
+      "id": "condition-indicator-excellent",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-excellent.png"
+    },
+    {
+      "id": "condition-indicator-flooded",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-flooded.png"
+    },
+    {
+      "id": "condition-indicator-good",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-good.png"
+    },
+    {
+      "id": "condition-indicator-poor",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-poor.png"
+    },
+    {
+      "id": "condition-indicator-regular",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-regular.png"
+    },
+    {
+      "id": "condition-indicator-unobserved",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-indicator-unobserved.png"
+    },
+    {
+      "id": "condition-poor-tile",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-poor-tile.png"
+    },
+    {
+      "id": "condition-regular-tile",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-regular-tile.png"
+    },
+    {
+      "id": "condition-waterlogged-tile",
+      "type": "condition-indicator",
+      "path": "assets/conditions/condition-waterlogged-tile.png"
+    },
+    {
+      "id": "decor-water-hole",
+      "type": "condition-indicator",
+      "path": "assets/conditions/decor-water-hole.png"
+    },
+    {
+      "id": "grass-dense-01",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-dense-01.png"
+    },
+    {
+      "id": "grass-dense-02",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-dense-02.png"
+    },
+    {
+      "id": "grass-dry-01",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-dry-01.png"
+    },
+    {
+      "id": "grass-dry-02",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-dry-02.png"
+    },
+    {
+      "id": "grass-dry-03",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-dry-03.png"
+    },
+    {
+      "id": "grass-flowers",
+      "type": "condition-indicator",
+      "path": "assets/conditions/grass-flowers.png"
+    },
+    {
+      "id": "pasture-excellent",
+      "type": "condition-texture",
+      "path": "assets/conditions/v505/pasture-excellent.png"
+    },
+    {
+      "id": "pasture-good",
+      "type": "condition-texture",
+      "path": "assets/conditions/v505/pasture-good.png"
+    },
+    {
+      "id": "pasture-poor",
+      "type": "condition-texture",
+      "path": "assets/conditions/v505/pasture-poor.png"
+    },
+    {
+      "id": "pasture-regular",
+      "type": "condition-texture",
+      "path": "assets/conditions/v505/pasture-regular.png"
+    },
+    {
+      "id": "pasture-waterlogged",
+      "type": "condition-texture",
+      "path": "assets/conditions/v505/pasture-waterlogged.png"
+    },
+    {
+      "id": "polygons-reviewed-final",
+      "type": "geometry",
+      "path": "assets/geometry/polygons-reviewed-final.json"
+    },
+    {
+      "id": "icon-home-house",
+      "type": "icon",
+      "path": "assets/icons/icon-home-house.png"
+    },
+    {
+      "id": "icon-register-animals-24",
+      "type": "icon",
+      "path": "assets/icons/icon-register-animals-24.png"
+    },
+    {
+      "id": "icon-register-animals-32",
+      "type": "icon",
+      "path": "assets/icons/icon-register-animals-32.png"
+    },
+    {
+      "id": "icon-register-animals-48",
+      "type": "icon",
+      "path": "assets/icons/icon-register-animals-48.png"
+    },
+    {
+      "id": "icon-register-animals",
+      "type": "icon",
+      "path": "assets/icons/icon-register-animals.png"
+    },
     {
       "id": "kpi-animals-red-angus",
       "type": "kpi",
       "path": "assets/kpi/kpi-animals-red-angus.png"
+    },
+    {
+      "id": "kpi-cow-calf-red-angus",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-cow-calf-red-angus.png"
+    },
+    {
+      "id": "kpi-cow-red-angus",
+      "type": "kpi",
+      "path": "assets/kpi/kpi-cow-red-angus.png"
     },
     {
       "id": "kpi-growth",
@@ -37,334 +243,27 @@
       "path": "assets/kpi/kpi-weather-rain.png"
     },
     {
-      "id": "pasture-excellent",
-      "type": "condition-texture",
-      "path": "assets/conditions/condition-excellent-tile.png"
+      "id": "el-rosario-map",
+      "type": "map",
+      "path": "assets/map/el-rosario-map.png"
     },
     {
-      "id": "pasture-good",
-      "type": "condition-texture",
-      "path": "assets/conditions/condition-good-tile.png"
-    },
-    {
-      "id": "pasture-regular",
-      "type": "condition-texture",
-      "path": "assets/conditions/condition-regular-tile.png"
-    },
-    {
-      "id": "pasture-poor",
-      "type": "condition-texture",
-      "path": "assets/conditions/condition-poor-tile.png"
-    },
-    {
-      "id": "condition-waterlogged",
-      "type": "condition-texture",
-      "path": "assets/conditions/condition-waterlogged-tile.png"
-    },
-    {
-      "id": "condition-indicator-excellent",
-      "type": "condition-indicator",
-      "path": "assets/conditions/condition-indicator-excellent.png"
-    },
-    {
-      "id": "condition-indicator-good",
-      "type": "condition-indicator",
-      "path": "assets/conditions/condition-indicator-good.png"
-    },
-    {
-      "id": "condition-indicator-poor",
-      "type": "condition-indicator",
-      "path": "assets/conditions/condition-indicator-poor.png"
-    },
-    {
-      "id": "condition-indicator-regular",
-      "type": "condition-indicator",
-      "path": "assets/conditions/condition-indicator-regular.png"
-    },
-    {
-      "id": "condition-indicator-unobserved",
-      "type": "condition-indicator",
-      "path": "assets/conditions/condition-indicator-unobserved.png"
-    },
-    {
-      "id": "grass-dense-01",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-dense-01.png"
-    },
-    {
-      "id": "grass-dense-02",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-dense-02.png"
-    },
-    {
-      "id": "grass-flowers",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-flowers.png"
-    },
-    {
-      "id": "grass-dry-01",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-dry-01.png"
-    },
-    {
-      "id": "grass-dry-02",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-dry-02.png"
-    },
-    {
-      "id": "grass-dry-03",
-      "type": "condition-detail",
-      "path": "assets/conditions/grass-dry-03.png"
-    },
-    {
-      "id": "decor-water-hole",
-      "type": "condition-detail",
-      "path": "assets/conditions/decor-water-hole.png"
-    },
-    {
-      "id": "bull-diagonal-grazing-14",
-      "type": "animal",
-      "path": "assets/animals/bull-diagonal-grazing-14.png"
-    },
-    {
-      "id": "bull-diagonal-grazing-15",
-      "type": "animal",
-      "path": "assets/animals/bull-diagonal-grazing-15.png"
-    },
-    {
-      "id": "bull-vertical-front-grazing-13",
-      "type": "animal",
-      "path": "assets/animals/bull-vertical-front-grazing-13.png"
-    },
-    {
-      "id": "bull-vertical-rear-standing-11",
-      "type": "animal",
-      "path": "assets/animals/bull-vertical-rear-standing-11.png"
-    },
-    {
-      "id": "bull-vertical-rear-standing-12",
-      "type": "animal",
-      "path": "assets/animals/bull-vertical-rear-standing-12.png"
-    },
-    {
-      "id": "calf-diagonal-grazing-33",
-      "type": "animal",
-      "path": "assets/animals/calf-diagonal-grazing-33.png"
-    },
-    {
-      "id": "calf-diagonal-grazing-34",
-      "type": "animal",
-      "path": "assets/animals/calf-diagonal-grazing-34.png"
-    },
-    {
-      "id": "calf-diagonal-lying-lying-43",
-      "type": "animal",
-      "path": "assets/animals/calf-diagonal-lying-lying-43.png"
-    },
-    {
-      "id": "calf-horizontal-lying-lying-35",
-      "type": "animal",
-      "path": "assets/animals/calf-horizontal-lying-lying-35.png"
-    },
-    {
-      "id": "calf-horizontal-lying-lying-44",
-      "type": "animal",
-      "path": "assets/animals/calf-horizontal-lying-lying-44.png"
-    },
-    {
-      "id": "calf-horizontal-lying-lying-45",
-      "type": "animal",
-      "path": "assets/animals/calf-horizontal-lying-lying-45.png"
-    },
-    {
-      "id": "calf-vertical-rear-standing-31",
-      "type": "animal",
-      "path": "assets/animals/calf-vertical-rear-standing-31.png"
-    },
-    {
-      "id": "calf-vertical-rear-standing-32",
-      "type": "animal",
-      "path": "assets/animals/calf-vertical-rear-standing-32.png"
-    },
-    {
-      "id": "calf-vertical-rear-standing-41",
-      "type": "animal",
-      "path": "assets/animals/calf-vertical-rear-standing-41.png"
-    },
-    {
-      "id": "calf-vertical-rear-standing-42",
-      "type": "animal",
-      "path": "assets/animals/calf-vertical-rear-standing-42.png"
-    },
-    {
-      "id": "cow-diagonal-grazing-23",
-      "type": "animal",
-      "path": "assets/animals/cow-diagonal-grazing-23.png"
-    },
-    {
-      "id": "cow-diagonal-grazing-24",
-      "type": "animal",
-      "path": "assets/animals/cow-diagonal-grazing-24.png"
-    },
-    {
-      "id": "cow-horizontal-grazing-25",
-      "type": "animal",
-      "path": "assets/animals/cow-horizontal-grazing-25.png"
-    },
-    {
-      "id": "cow-vertical-rear-standing-21",
-      "type": "animal",
-      "path": "assets/animals/cow-vertical-rear-standing-21.png"
-    },
-    {
-      "id": "cow-vertical-rear-standing-22",
-      "type": "animal",
-      "path": "assets/animals/cow-vertical-rear-standing-22.png"
-    },
-    {
-      "id": "building-house-main-er08-09",
-      "type": "building",
-      "path": "assets/buildings/building-house-main-er08-09.png"
-    },
-    {
-      "id": "building-house-secondary-er13",
-      "type": "building",
-      "path": "assets/buildings/building-house-secondary-er13.png"
-    },
-    {
-      "id": "v503-pasture-excellent",
-      "type": "condition-texture",
-      "path": "assets/conditions/v503/pasture-excellent.png"
-    },
-    {
-      "id": "v503-pasture-good",
-      "type": "condition-texture",
-      "path": "assets/conditions/v503/pasture-good.png"
-    },
-    {
-      "id": "v503-pasture-regular",
-      "type": "condition-texture",
-      "path": "assets/conditions/v503/pasture-regular.png"
-    },
-    {
-      "id": "v503-pasture-poor",
-      "type": "condition-texture",
-      "path": "assets/conditions/v503/pasture-poor.png"
-    },
-    {
-      "id": "v503-pasture-waterlogged",
-      "type": "condition-texture",
-      "path": "assets/conditions/v503/pasture-waterlogged.png"
-    },
-    {
-      "id": "v504-pasture-excellent",
-      "type": "condition-texture",
-      "path": "assets/conditions/v504/pasture-excellent.png"
-    },
-    {
-      "id": "v504-pasture-good",
-      "type": "condition-texture",
-      "path": "assets/conditions/v504/pasture-good.png"
-    },
-    {
-      "id": "v504-pasture-regular",
-      "type": "condition-texture",
-      "path": "assets/conditions/v504/pasture-regular.png"
-    },
-    {
-      "id": "v504-pasture-poor",
-      "type": "condition-texture",
-      "path": "assets/conditions/v504/pasture-poor.png"
-    },
-    {
-      "id": "v504-pasture-waterlogged",
-      "type": "condition-texture",
-      "path": "assets/conditions/v504/pasture-waterlogged.png"
-    },
-    {
-      "id": "v504-bull-red-angus",
-      "type": "map-animal",
-      "path": "assets/animals/v504/bull-red-angus.png"
-    },
-    {
-      "id": "v504-bull-red-angus-left",
-      "type": "map-animal",
-      "path": "assets/animals/v504/bull-red-angus-left.png"
-    },
-    {
-      "id": "v504-cow-red-angus",
-      "type": "map-animal",
-      "path": "assets/animals/v504/cow-red-angus.png"
-    },
-    {
-      "id": "v504-cow-red-angus-left",
-      "type": "map-animal",
-      "path": "assets/animals/v504/cow-red-angus-left.png"
-    },
-    {
-      "id": "v504-calf-red-angus",
-      "type": "map-animal",
-      "path": "assets/animals/v504/calf-red-angus.png"
-    },
-    {
-      "id": "v504-calf-red-angus-left",
-      "type": "map-animal",
-      "path": "assets/animals/v504/calf-red-angus-left.png"
-    },
-    {
-      "id": "v504-cow-calf-red-angus",
-      "type": "map-animal",
-      "path": "assets/animals/v504/cow-calf-red-angus.png"
-    },
-    {
-      "id": "v504-cow-calf-red-angus-left",
-      "type": "map-animal",
-      "path": "assets/animals/v504/cow-calf-red-angus-left.png"
+      "id": "register-animals",
+      "type": "ui",
+      "path": "assets/ui/register-animals.png"
     }
   ],
-  "v501": {
-    "animals": {
-      "map-bull-red-angus": "assets/animals/map-bull-red-angus.png",
-      "map-cow-red-angus": "assets/animals/map-cow-red-angus.png",
-      "map-calf-red-angus": "assets/animals/map-calf-red-angus.png",
-      "map-cow-calf-red-angus": "assets/animals/map-cow-calf-red-angus.png"
-    },
-    "kpi": {
-      "animals": "assets/kpi/kpi-cow-red-angus.png",
-      "births": "assets/kpi/kpi-cow-calf-red-angus.png"
-    },
-    "pastureTiles": {
-      "muy-bueno": "assets/conditions/v501/pasture-excellent.png",
-      "bueno": "assets/conditions/v501/pasture-good.png",
-      "regular": "assets/conditions/v501/pasture-regular.png",
-      "malo": "assets/conditions/v501/pasture-poor.png",
-      "muy-malo": "assets/conditions/v501/pasture-very-poor.png",
-      "anegado": "assets/conditions/v501/pasture-waterlogged.png"
-    },
-    "sourceSheets": {
-      "animals": "a_collection_of_five_pixel_art_animal_sprites_feat.png",
-      "pasture": "a_set_of_four_square_seamless_top_down_view_terr.png"
-    }
+  "conditionTextures": {
+    "muy-bueno": "assets/conditions/v505/pasture-excellent.png",
+    "bueno": "assets/conditions/v505/pasture-good.png",
+    "regular": "assets/conditions/v505/pasture-regular.png",
+    "malo": "assets/conditions/v505/pasture-poor.png",
+    "anegado": "assets/conditions/v505/pasture-waterlogged.png"
   },
-  "conditionTexturesV503": {
-    "muy-bueno": "assets/conditions/v503/pasture-excellent.png",
-    "bueno": "assets/conditions/v503/pasture-good.png",
-    "regular": "assets/conditions/v503/pasture-regular.png",
-    "malo": "assets/conditions/v503/pasture-poor.png",
-    "anegado": "assets/conditions/v503/pasture-waterlogged.png"
-  },
-  "registerAnimalsIcon": "assets/icons/icon-register-animals.png",
-  "conditionUsage": {
-    "muy-bueno": "assets/conditions/v504/pasture-excellent.png",
-    "bueno": "assets/conditions/v504/pasture-good.png",
-    "regular": "assets/conditions/v504/pasture-regular.png",
-    "malo": "assets/conditions/v504/pasture-poor.png",
-    "anegado": "assets/conditions/v504/pasture-waterlogged.png"
-  },
-  "animalUsage": {
-    "toro": "assets/animals/v504/bull-red-angus.png",
-    "vaca": "assets/animals/v504/cow-red-angus.png",
-    "vaca-con-ternero": "assets/animals/v504/cow-calf-red-angus.png",
-    "ternero-a": "assets/animals/v504/calf-red-angus.png"
+  "animalSprites": {
+    "toro": "assets/animals/v505/bull-red-angus.png",
+    "vaca": "assets/animals/v505/cow-red-angus.png",
+    "vaca-con-ternero": "assets/animals/v505/cow-calf-red-angus.png",
+    "ternero-a": "assets/animals/v505/calf-red-angus.png"
   }
 }

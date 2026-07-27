@@ -42,28 +42,31 @@ const source = rawSource + `\n;globalThis.__campoTest = {
   renderSurveyWizard, renderLotFormModal, renderRainModal, renderSurveyHistoryModal,
   startSurvey, editSurvey, draftAsSurvey, spriteCountForLot, dominantAnimalKind,
   allocateVisualKinds, suggestedCategoryIds, suggestedCategoryGroups, lotFormModel,
-  lotCategoryRollup, renderLotsSummaryTable, sortedSurveys, resolveLotCondition,
-  monthlyRainSummary, rainAnalysis, surveyMetrics, normalizeFieldState,
-  FIELD_STATES, CATEGORIES, state, ui, LOTS
+  lotCategoryRollup, renderLotsSummaryTable, renderHerdSpritesHtml, renderMapLabelHtml,
+  sortedSurveys, resolveLotCondition, monthlyRainSummary, rainAnalysis, surveyMetrics,
+  normalizeFieldState, FIELD_STATES, CATEGORIES, state, ui, LOTS
 };`
 vm.runInContext(source, context, { filename: 'app.js' })
 const api = context.__campoTest
 const checks = []
 const check = (condition, message) => { if (!condition) throw new Error(message); checks.push(message) }
 
-check(appElement.innerHTML.includes('Campo v5.04'), 'La versión Campo v5.04 aparece en la interfaz')
+check(appElement.innerHTML.includes('Campo v5.05'), 'La versión Campo v5.05 aparece en la interfaz')
 check(appElement.innerHTML.includes('survey-navigator'), 'El selector visible de relevamientos está en la pantalla principal')
-check(appElement.innerHTML.includes('lots-summary-table'), 'El resumen incluye la tabla simplificada de todos los lotes')
-check(appElement.innerHTML.includes('table-condition'), 'La tabla presenta la condición por lote')
-check(appElement.innerHTML.includes('table-load'), 'La tabla presenta la carga por lote')
-check(appElement.innerHTML.includes('condition-pill'), 'Las etiquetas del mapa incluyen un indicador de condición')
-check(appElement.innerHTML.includes('load-pill'), 'Las etiquetas del mapa incluyen un indicador de carga')
-check(appElement.innerHTML.includes('v504/pasture-excellent.png'), 'El mapa usa las texturas contrastadas v5.04')
-check(appElement.innerHTML.includes('animals/v504/cow-red-angus.png'), 'El mapa usa los animales naturales v5.04')
-check(appElement.innerHTML.includes('cow-calf-red-angus'), 'La representación visual incluye vaca con ternero')
-check(appElement.innerHTML.includes('animal-ground-shadow'), 'Los animales incorporan sombra de suelo')
-check(appElement.innerHTML.includes('animal-contrast-filter'), 'Los animales usan doble contorno adaptable')
+check(appElement.innerHTML.includes('lots-summary-table'), 'El resumen incluye la tabla compacta de todos los lotes')
+check(appElement.innerHTML.includes('map-ui-overlay'), 'El mapa usa overlays HTML alineados para animales y etiquetas')
+check(appElement.innerHTML.includes('map-animal-html'), 'Los animales mantienen un tamaño mínimo en pantalla')
+check(appElement.innerHTML.includes('map-label-html'), 'Los nombres y cantidades usan etiquetas responsivas')
+check(appElement.innerHTML.includes('v505/pasture-excellent.png'), 'El mapa usa las texturas finas v5.05')
+check(appElement.innerHTML.includes('animals/v505/cow-red-angus.png'), 'El mapa usa los animales v5.05')
 check(!appElement.innerHTML.includes('map-condition-legend'), 'No se muestra una leyenda permanente de condiciones')
+
+const summaryMap = api.renderMap(api.state.surveys[0], true)
+const fullMap = api.renderMap(api.state.surveys[0], false)
+check(summaryMap.includes('summary-map'), 'El resumen usa un modo de mapa específico')
+check(fullMap.includes('full-map'), 'La vista del mapa usa un modo detallado')
+check(summaryMap.includes('compact-meta'), 'El resumen muestra solo lote, total y punto de carga')
+check(fullMap.includes('map-condition-mini') && fullMap.includes('map-load-mini'), 'El mapa detallado muestra condición y carga juntas')
 
 check(api.FIELD_STATES.filter((item) => item.id !== 'no-observado').length === 5, 'La app ofrece cinco condiciones visuales')
 check(api.normalizeFieldState('muy-malo') === 'malo', 'Los registros Muy malo migran automáticamente a Malo')
@@ -114,8 +117,9 @@ check(api.surveyMetrics(latest).byLot['ER-04'].animals === 0, 'Un lote observado
 check(api.resolveLotCondition(latest, 'ER-04').source === 'observed', 'La condición de un lote vacío puede ser observada')
 
 check(api.spriteCountForLot({}, { animals: 1 }, false) === 1, 'Un lote ocupado muestra al menos un sprite')
-check(api.spriteCountForLot({}, { animals: 60 }, false) === 2, 'La escala visual es un sprite cada 30 animales')
-check(api.spriteCountForLot({}, { animals: 500 }, false) === 8, 'La vista general limita a ocho sprites')
+check(api.spriteCountForLot({}, { animals: 60 }, true) === 2, 'Sesenta animales muestran dos sprites en el resumen')
+check(api.spriteCountForLot({}, { animals: 500 }, true) === 3, 'El resumen limita a tres sprites por lote')
+check(api.spriteCountForLot({}, { animals: 500 }, false) === 8, 'El mapa detallado limita a ocho sprites')
 
 api.state.rainEntries.push({ id: 'rain-zero', date: '2026-08-01', millimeters: 0, note: 'Sin lluvia' })
 api.state.rainEntries.push({ id: 'rain-ten', date: '2026-08-10', millimeters: 10, note: '' })
@@ -127,8 +131,6 @@ const lotModal = api.renderLotFormModal()
 check(lotModal.includes('Las cuatro más frecuentes'), 'El formulario explica el orden dinámico de categorías')
 check((lotModal.match(/data-group-category=/g) || []).length === 4, 'Un lote vacío muestra cuatro filas de categoría')
 check(lotModal.includes('value="0"'), 'Las filas sugeridas comienzan en cero')
-api.ui.selectedLotId = 'ER-04'
-check(api.renderMapPage().includes('lot-concept-grid'), 'Condición y carga aparecen juntas en el inspector del mapa')
 api.ui.modal = null
 
 for (const view of ['resumen', 'mapa', 'historico', 'datos']) {
@@ -137,4 +139,4 @@ for (const view of ['resumen', 'mapa', 'historico', 'datos']) {
   check(appElement.innerHTML.length > 1000, `La vista ${view} se renderiza`)
 }
 
-console.log(`Smoke test Campo v5.04 aprobado (${checks.length} comprobaciones).`)
+console.log(`Smoke test Campo v5.05 aprobado (${checks.length} comprobaciones).`)

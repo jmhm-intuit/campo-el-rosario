@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 504
-const APP_VERSION_LABEL = '5.04'
-const RELEASE_DATE = '2026-07-27'
+const APP_VERSION = 505
+const APP_VERSION_LABEL = '5.05'
+const RELEASE_DATE = '2026-07-26'
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
 
@@ -27,33 +27,33 @@ const LOTS = [
 ]
 
 const CATEGORIES = [
-  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/v504/bull-red-angus.png' },
-  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
-  { id: 'terneros-as', name: 'Terneros/as', short: 'Terneros/as', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
-  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
-  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
-  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/v504/calf-red-angus.png' },
-  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
-  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
-  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
-  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/v504/cow-red-angus.png' },
+  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/v505/bull-red-angus.png' },
+  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+  { id: 'terneros-as', name: 'Terneros/as', short: 'Terneros/as', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
+  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
+  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
+  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
 ]
 
 const DEFAULT_CATEGORY_IDS = ['vacas', 'terneros-as', 'toros', 'vaquillonas']
 
 const SPRITE_VARIANTS = {
-  cow: ['animals/v504/cow-red-angus.png', 'animals/v504/cow-red-angus-left.png'],
-  bull: ['animals/v504/bull-red-angus.png', 'animals/v504/bull-red-angus-left.png'],
-  calf: ['animals/v504/calf-red-angus.png', 'animals/v504/calf-red-angus-left.png'],
-  cowCalf: ['animals/v504/cow-calf-red-angus.png', 'animals/v504/cow-calf-red-angus-left.png'],
+  cow: ['animals/v505/cow-red-angus.png', 'animals/v505/cow-red-angus-left.png'],
+  bull: ['animals/v505/bull-red-angus.png', 'animals/v505/bull-red-angus-left.png'],
+  calf: ['animals/v505/calf-red-angus.png', 'animals/v505/calf-red-angus-left.png'],
+  cowCalf: ['animals/v505/cow-calf-red-angus.png', 'animals/v505/cow-calf-red-angus-left.png'],
 }
 
 const FIELD_STATES = [
-  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v504/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
-  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v504/pasture-good.png', indicator: 'condition-indicator-good.png' },
-  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v504/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
-  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v504/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
-  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v504/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
+  { id: 'muy-bueno', label: 'Muy bueno', short: 'Muy b.', tone: 'excellent', pattern: 'v505/pasture-excellent.png', indicator: 'condition-indicator-excellent.png' },
+  { id: 'bueno', label: 'Bueno', short: 'Bueno', tone: 'good', pattern: 'v505/pasture-good.png', indicator: 'condition-indicator-good.png' },
+  { id: 'regular', label: 'Regular', short: 'Regular', tone: 'regular', pattern: 'v505/pasture-regular.png', indicator: 'condition-indicator-regular.png' },
+  { id: 'malo', label: 'Malo', short: 'Malo', tone: 'poor', pattern: 'v505/pasture-poor.png', indicator: 'condition-indicator-poor.png' },
+  { id: 'anegado', label: 'Anegado', short: 'Aneg.', tone: 'flooded', pattern: 'v505/pasture-waterlogged.png', indicator: 'condition-indicator-flooded.png' },
   { id: 'no-observado', label: 'Sin información', short: 'Sin info.', tone: 'unknown', pattern: null, indicator: 'condition-indicator-unobserved.png' },
 ]
 
@@ -682,10 +682,12 @@ function renderLotsSummaryTable(survey) {
     const metric = metrics.byLot[lot.id]
     const condition = resolveLotCondition(survey, lot.id)
     const rollup = lotCategoryRollup(entry?.groups || [])
-    const conditionLabel = `${conditionIsAssumed(condition.source) ? '≈ ' : ''}${condition.label}`
-    return `<tr data-lot="${lot.id}"><th><button class="lot-table-link" data-lot="${lot.id}">${lot.name}</button></th><td><span class="table-condition state-${condition.stateId} source-${condition.source}">${esc(conditionLabel)}</span></td><td><span class="table-load ${capacityClass(metric.load)}">${entry ? `${capacityLabel(metric.load)} · ${decimal(metric.load)}` : 'Sin carga'}</span></td><td class="numeric"><strong>${entry ? fmt(metric.animals) : '—'}</strong></td><td class="numeric">${entry ? fmt(rollup.cows) : '—'}</td><td class="numeric">${entry ? fmt(rollup.calves) : '—'}</td><td class="numeric">${entry ? fmt(rollup.bulls) : '—'}</td></tr>`
+    const conditionCode = `${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}`
+    const loadClass = entry ? capacityClass(metric.load) : 'empty'
+    const loadValue = entry ? decimal(metric.load) : '—'
+    return `<tr data-lot="${lot.id}"><th><button class="lot-table-link" data-lot="${lot.id}">${lot.name}</button></th><td><span class="table-condition state-${condition.stateId} source-${condition.source}" title="${esc(condition.label)}">${esc(conditionCode)}</span></td><td><span class="table-load compact ${loadClass}" title="${entry ? `${capacityLabel(metric.load)} · ${loadValue} EV/ha` : 'Sin carga'}"><i></i>${loadValue}</span></td><td class="numeric"><strong>${entry ? fmt(metric.animals) : '—'}</strong></td><td class="numeric">${entry ? fmt(rollup.cows) : '—'}</td><td class="numeric">${entry ? fmt(rollup.calves) : '—'}</td><td class="numeric">${entry ? fmt(rollup.bulls) : '—'}</td></tr>`
   }).join('')
-  return `<section class="panel lots-summary-panel"><div class="panel-head"><div><span class="eyebrow">Vista simplificada</span><h3>Todos los lotes</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div><div class="lots-table-wrap"><table class="lots-summary-table"><thead><tr><th>Lote</th><th>Condición</th><th>Carga</th><th>Total</th><th>Vacas</th><th>Terneros/as</th><th>Toros</th></tr></thead><tbody>${rows}</tbody></table></div><p class="table-note">≈ condición estimada automáticamente. Los totales de vacas incluyen vacas de cría y descarte.</p></section>`
+  return `<section class="panel lots-summary-panel"><div class="panel-head"><div><span class="eyebrow">Vista simplificada</span><h3>Todos los lotes</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div><div class="lots-table-wrap"><table class="lots-summary-table"><colgroup><col class="col-lot"><col class="col-condition"><col class="col-load"><col class="col-total"><col class="col-cow"><col class="col-calf"><col class="col-bull"></colgroup><thead><tr><th>Lote</th><th title="Condición">C.</th><th title="Carga EV/ha">EV</th><th title="Total de animales">Σ</th><th title="Vacas">V</th><th title="Terneros/as">T/A</th><th title="Toros">To</th></tr></thead><tbody>${rows}</tbody></table></div><p class="table-note">MB: muy bueno · B: bueno · R: regular · M: malo · AN: anegado · ≈ estimada.</p></section>`
 }
 
 function renderRecentSurveys() {
@@ -727,7 +729,8 @@ function seededNumber(seed) {
 function spriteCountForLot(lot, metric, compact) {
   const heads = Number(metric.animals) || 0
   if (!heads) return 0
-  return Math.min(8, Math.max(1, Math.ceil(heads / 30)))
+  const raw = Math.max(1, Math.ceil(heads / 30))
+  return compact ? Math.min(3, raw) : Math.min(8, raw)
 }
 
 function dominantAnimalKind(lotEntry) {
@@ -798,11 +801,11 @@ function spritePositions(lot, count, spriteWidth) {
     return [[x,y],[x-halfW,y-halfH],[x+halfW,y-halfH],[x-halfW,y+halfH],[x+halfW,y+halfH]].every((point) => pointInPolygon(point, polygon))
   }
   for (let attempt = 0; attempt < 900 && positions.length < count; attempt++) {
-    const x = minX + marginX + seededNumber(`${lot.id}-v504-x-${attempt}`) * Math.max(1, width - marginX * 2)
-    const y = minY + marginY + seededNumber(`${lot.id}-v504-y-${attempt}`) * Math.max(1, height - marginY * 2)
+    const x = minX + marginX + seededNumber(`${lot.id}-v505-x-${attempt}`) * Math.max(1, width - marginX * 2)
+    const y = minY + marginY + seededNumber(`${lot.id}-v505-y-${attempt}`) * Math.max(1, height - marginY * 2)
     const labelDistance = Math.hypot(x - lot.label[0], y - lot.label[1])
     const minDistance = Math.max(spriteWidth * .82, Math.min(38, width / Math.max(2.2, Math.sqrt(count))))
-    if (!fitsInside(x, y) || labelDistance < 59 || isHouseZone(lot.id, x, y)) continue
+    if (!fitsInside(x, y) || labelDistance < Math.max(70, spriteWidth * 2.4) || isHouseZone(lot.id, x, y)) continue
     if (positions.some((point) => Math.hypot(x - point.x, y - point.y) < minDistance)) continue
     positions.push({ x, y })
   }
@@ -810,28 +813,52 @@ function spritePositions(lot, count, spriteWidth) {
   return positions
 }
 
-function renderHerdSprites(lotEntry, lot, compact, metric, condition) {
+function conditionShortCode(stateId) {
+  return ({ 'muy-bueno': 'MB', bueno: 'B', regular: 'R', malo: 'M', anegado: 'AN', 'no-observado': '—' })[stateId] || '—'
+}
+
+function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition) {
   const count = spriteCountForLot(lot, metric, compact)
-  const polygon = parseLotPoints(lot)
-  const width = Math.max(...polygon.map((point) => point[0])) - Math.min(...polygon.map((point) => point[0]))
-  const spriteWidth = Math.max(compact ? 13 : 15, Math.min(compact ? 20 : 23, width / (compact ? 6.6 : 5.9)))
-  const positions = spritePositions(lot, count, spriteWidth)
+  const virtualWidth = compact ? 46 : 38
+  const positions = spritePositions(lot, count, virtualWidth)
   const kinds = allocateVisualKinds(lotEntry, positions.length)
   return positions.map((position, index) => {
     const kind = kinds[index] || 'cow'
     const variants = SPRITE_VARIANTS[kind] || SPRITE_VARIANTS.cow
-    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v504`) * variants.length) % variants.length]
-    const scale = kind === 'calf' ? .74 : kind === 'bull' ? 1.08 : kind === 'cowCalf' ? 1.12 : 1
-    const drawWidth = spriteWidth * scale
-    const drawHeight = drawWidth * .60
-    const angle = (seededNumber(`${lot.id}-${index}-angle-v504`) - .5) * 7
-    const shadowWidth = drawWidth * .88
-    const shadowHeight = Math.max(2.2, drawHeight * .18)
-    return `<g class="animal-unit ${kind} state-${condition?.stateId || 'no-observado'}" transform="rotate(${angle.toFixed(1)} ${position.x.toFixed(1)} ${position.y.toFixed(1)})">
-      <ellipse class="animal-ground-shadow" cx="${position.x.toFixed(1)}" cy="${(position.y + drawHeight * .29).toFixed(1)}" rx="${(shadowWidth/2).toFixed(1)}" ry="${(shadowHeight/2).toFixed(1)}" />
-      <image class="animal-sprite ${kind}" href="./assets/${asset}" x="${(position.x - drawWidth/2).toFixed(1)}" y="${(position.y - drawHeight/2).toFixed(1)}" width="${drawWidth.toFixed(1)}" height="${drawHeight.toFixed(1)}" preserveAspectRatio="xMidYMid meet" filter="url(#animal-contrast-filter)" />
-    </g>`
+    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v505`) * variants.length) % variants.length]
+    const angle = (seededNumber(`${lot.id}-${index}-angle-v505`) - .5) * 8
+    const left = (position.x / 1154 * 100).toFixed(3)
+    const top = (position.y / 1363 * 100).toFixed(3)
+    return `<img class="map-animal-html ${kind} state-${condition?.stateId || 'no-observado'}" src="./assets/${asset}" alt="" style="left:${left}%;top:${top}%;--animal-angle:${angle.toFixed(1)}deg" />`
   }).join('')
+}
+
+function renderMapLabelHtml(lot, metric, entry, condition, compact) {
+  const points = parseLotPoints(lot)
+  const width = Math.max(...points.map((point) => point[0])) - Math.min(...points.map((point) => point[0]))
+  const narrow = width <= 108
+  const observed = Boolean(entry)
+  const status = observed ? capacityClass(metric.load) : 'empty'
+  const conditionCode = `${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}`
+  const loadValue = observed ? decimal(metric.load) : '—'
+  const count = observed ? fmt(metric.animals) : '—'
+  const code = lot.name.replace('ER-', '')
+  const left = (lot.label[0] / 1154 * 100).toFixed(3)
+  const top = (lot.label[1] / 1363 * 100).toFixed(3)
+  const displayName = compact && narrow ? code : lot.name
+  const meta = compact
+    ? `<span class="map-label-html-meta compact-meta"><i class="map-load-mini ${status}" title="Carga: ${observed ? `${loadValue} EV/ha` : 'sin información'}"><b></b></i></span>`
+    : `<span class="map-label-html-meta"><i class="map-condition-mini state-${condition.stateId}" title="Condición: ${esc(condition.label)}">${esc(conditionCode)}</i><i class="map-load-mini ${status}" title="Carga: ${observed ? `${loadValue} EV/ha` : 'sin información'}"><b></b><em>${loadValue}</em></i></span>`
+  return `<button class="map-label-html ${narrow ? 'narrow' : 'standard'} ${compact ? 'compact' : 'full'} source-${condition.source}" data-map-lot="${lot.id}" style="left:${left}%;top:${top}%" aria-label="${lot.name}: ${count} animales, condición ${condition.label}, carga ${loadValue} EV por hectárea">
+    <span class="map-label-html-name">${esc(displayName)}${compact && conditionIsAssumed(condition.source) ? '≈' : ''}</span>
+    <strong class="map-label-html-count">${count}</strong>
+    ${meta}
+  </button>`
+}
+
+function renderMapHousesHtml(compact) {
+  return `<img class="map-house-html main" src="./assets/buildings/building-house-main-er08-09.png" alt="Casa principal" style="left:${(337/1154*100).toFixed(3)}%;top:${(406/1363*100).toFixed(3)}%" />
+    <img class="map-house-html secondary" src="./assets/buildings/building-house-secondary-er13.png" alt="Casa secundaria" style="left:${(610/1154*100).toFixed(3)}%;top:${(748/1363*100).toFixed(3)}%" />`
 }
 
 function renderMap(survey, compact = false) {
@@ -840,27 +867,15 @@ function renderMap(survey, compact = false) {
   const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
   const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
   const patternDefs = LOTS.flatMap((lot) => FIELD_STATES.filter((item) => item.pattern).map((item) => {
-    const tileSize = 250 + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v504`) * 56)
-    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v504`) * tileSize)
-    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v504`) * tileSize)
+    const baseSize = compact ? 70 : 96
+    const tileSize = baseSize + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v505`) * (compact ? 16 : 20))
+    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v505`) * tileSize)
+    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v505`) * tileSize)
     return `
     <pattern id="condition-${item.id}-${lot.id}" patternUnits="userSpaceOnUse" x="${offsetX}" y="${offsetY}" width="${tileSize}" height="${tileSize}">
       <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${tileSize}" height="${tileSize}" preserveAspectRatio="xMidYMid slice" />
     </pattern>`
   })).join('') + `
-    <filter id="animal-contrast-filter" x="-40%" y="-50%" width="180%" height="205%" color-interpolation-filters="sRGB">
-      <feMorphology in="SourceAlpha" operator="dilate" radius="1.18" result="animal-outer-shape" />
-      <feFlood flood-color="#fff1cf" flood-opacity="0.84" result="animal-outer-color" />
-      <feComposite in="animal-outer-color" in2="animal-outer-shape" operator="in" result="animal-outer-outline" />
-      <feMorphology in="SourceAlpha" operator="dilate" radius="0.58" result="animal-inner-shape" />
-      <feFlood flood-color="#32170f" flood-opacity="0.86" result="animal-inner-color" />
-      <feComposite in="animal-inner-color" in2="animal-inner-shape" operator="in" result="animal-inner-outline" />
-      <feGaussianBlur in="SourceAlpha" stdDeviation="1.18" result="animal-shadow-blur" />
-      <feOffset in="animal-shadow-blur" dx="0.6" dy="1.35" result="animal-shadow-offset" />
-      <feFlood flood-color="#17100c" flood-opacity="0.34" result="animal-shadow-color" />
-      <feComposite in="animal-shadow-color" in2="animal-shadow-offset" operator="in" result="animal-shadow" />
-      <feMerge><feMergeNode in="animal-shadow"/><feMergeNode in="animal-outer-outline"/><feMergeNode in="animal-inner-outline"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <pattern id="condition-assumed-hatch" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(32)">
       <rect width="18" height="18" fill="transparent" />
       <rect width="2" height="18" fill="rgba(255,255,255,.30)" />
@@ -885,64 +900,24 @@ function renderMap(survey, compact = false) {
     const metric = metrics.byLot[lot.id]
     return `<polygon class="lot-load-border ${capacityClass(metric.load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`
   }).join('')
-  const animals = survey.lots.filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0).map((lotEntry) => renderHerdSprites(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId], conditions[lotEntry.lotId])).join('')
-  const houses = `
-    <image class="map-house main-house" href="./assets/buildings/building-house-main-er08-09.png" x="285" y="355" width="104" height="96" preserveAspectRatio="xMidYMid meet" />
-    <image class="map-house secondary-house" href="./assets/buildings/building-house-secondary-er13.png" x="578" y="716" width="64" height="64" preserveAspectRatio="xMidYMid meet" />`
   const hitAreas = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
+  const animals = survey.lots.filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0).map((lotEntry) => renderHerdSpritesHtml(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId], conditions[lotEntry.lotId])).join('')
+  const labels = LOTS.map((lot) => renderMapLabelHtml(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], compact)).join('')
 
-  const labels = LOTS.map((lot) => {
-    const metric = metrics.byLot[lot.id]
-    const status = capacityClass(metric.load)
-    const entry = lotEntries[lot.id]
-    const condition = conditions[lot.id]
-    const points = parseLotPoints(lot)
-    const width = Math.max(...points.map((point) => point[0])) - Math.min(...points.map((point) => point[0]))
-    const narrow = width <= 108
-    const longName = lot.name.length > 7
-    const observed = Boolean(entry)
-    const countText = observed ? fmt(metric.animals) : '—'
-    const assumedMark = conditionIsAssumed(condition.source) ? '≈' : ''
-    const conditionText = `${assumedMark}${conditionAbbreviation(condition.stateId)}`
-    const loadText = observed ? loadAbbreviation(metric.load) : 'Sin carga'
-    const conditionClass = `condition-${condition.stateId} source-${condition.source}`
-    if (narrow) {
-      const code = lot.name.replace('ER-', '')
-      const cardWidth = longName ? 70 : 60
-      return `<g class="map-label narrow ${conditionClass}" transform="translate(${lot.label[0]} ${lot.label[1]})" data-map-lot="${lot.id}">
-        <rect class="label-card" x="-${cardWidth/2}" y="-38" width="${cardWidth}" height="76" rx="10"/>
-        <text class="lot-prefix" text-anchor="middle" y="-23">ER</text>
-        <text class="lot-code" text-anchor="middle" y="-7">${esc(code)}</text>
-        <text class="lot-heads" text-anchor="middle" y="14">${countText}</text>
-        <rect class="status-pill condition-pill state-${condition.stateId}" x="-${cardWidth/2-5}" y="20" width="${(cardWidth-12)/2}" height="13" rx="5"/>
-        <text class="status-pill-text" text-anchor="middle" x="-${(cardWidth-12)/4+2}" y="29">${esc(conditionText.replace('Muy b.','MB').replace('Bueno','B').replace('Regular','R').replace('Malo','M').replace('Aneg.','A').replace('Sin info.','—'))}</text>
-        <rect class="status-pill load-pill ${status}" x="2" y="20" width="${(cardWidth-12)/2}" height="13" rx="5"/>
-        <text class="status-pill-text" text-anchor="middle" x="${2+(cardWidth-12)/4}" y="29">${esc(loadText.replace('Sin carga','0').replace('Adecuada','OK').replace('Sobrecarga','S').replace('Crítica','C').replace('Baja','B').replace('Alta','A'))}</text>
-      </g>`
-    }
-    const cardWidth = longName ? 122 : 112
-    return `<g class="map-label standard ${conditionClass}" transform="translate(${lot.label[0]} ${lot.label[1]})" data-map-lot="${lot.id}">
-      <rect class="label-card" x="-${cardWidth/2}" y="-31" width="${cardWidth}" height="62" rx="11"/>
-      <text class="lot-name" text-anchor="middle" y="-12">${lot.name}</text>
-      <text class="lot-heads" text-anchor="middle" y="9">${countText}</text>
-      <rect class="status-pill condition-pill state-${condition.stateId}" x="-${cardWidth/2-6}" y="16" width="${(cardWidth-16)/2}" height="13" rx="5"/>
-      <text class="status-pill-text" text-anchor="middle" x="-${(cardWidth-16)/4+4}" y="25">${esc(conditionText)}</text>
-      <rect class="status-pill load-pill ${status}" x="4" y="16" width="${(cardWidth-16)/2}" height="13" rx="5"/>
-      <text class="status-pill-text" text-anchor="middle" x="${4+(cardWidth-16)/4}" y="25">${esc(loadText)}</text>
-    </g>`
-  }).join('')
-
-  return `<div class="ranch-map ${compact ? 'compact' : ''}">
+  return `<div class="ranch-map ${compact ? 'compact summary-map' : 'full full-map'}">
     <svg class="map-canvas" viewBox="0 0 1154 1363" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario">
       <defs>${patternDefs}</defs>
       <image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none" />
       <g class="condition-layer">${conditionLayer}</g>
       <g class="load-halo-layer">${loadHalos}</g>
       <g class="load-border-layer">${loadBorders}</g>
-      <g class="animal-layer">${animals}</g>
-      <g class="house-layer">${houses}</g>
-      <g class="interaction-layer">${hitAreas}${labels}</g>
+      <g class="interaction-layer">${hitAreas}</g>
     </svg>
+    <div class="map-ui-overlay ${compact ? 'compact' : 'full'}">
+      <div class="map-animal-overlay">${animals}</div>
+      <div class="map-house-overlay">${renderMapHousesHtml(compact)}</div>
+      <div class="map-label-overlay">${labels}</div>
+    </div>
     <div class="map-load-badge"><span>Carga total</span><strong>${decimal(metrics.load)} EV/ha</strong></div>
   </div>`
 }
@@ -967,7 +942,7 @@ function renderMapPage() {
     <div class="concept-explanation"><strong>${conditionIsAssumed(condition.source) ? 'Condición estimada' : condition.source === 'observed' ? 'Condición observada' : 'Condición sin información'}</strong><p>${esc(condition.explanation)}</p></div>
     <div class="load-meter"><i class="${loadClass}" style="width:${lotEntry ? Math.min(100, metric.capacityUse * 100) : 0}%"></i></div>
     <h3>Composición</h3>
-    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/v504/cow-red-angus.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : `<p class="empty-inline">${lotEntry ? 'Lote registrado sin animales.' : 'No se registró este lote.'}</p>`}</div>
+    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/v505/cow-red-angus.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : `<p class="empty-inline">${lotEntry ? 'Lote registrado sin animales.' : 'No se registró este lote.'}</p>`}</div>
     <div class="lot-inspector-actions"><button class="btn primary" data-edit-map-lot="${lot.id}">${icon('edit',16)} ${lotEntry ? 'Editar lote' : 'Registrar lote'}</button><button class="btn secondary" data-open-survey-history>${icon('history',16)} Cambiar fecha</button></div>
   </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver animales, carga y condición juntos, y editarlo directamente.</p></aside>`
   const content = `${renderSurveyNavigator()}<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey, false)}</article>${side}</div>`
