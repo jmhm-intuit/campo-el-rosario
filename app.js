@@ -1,9 +1,230 @@
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 601
-const APP_VERSION_LABEL = '6.01'
-const RELEASE_DATE = '2026-07-27'
+const APP_VERSION = 701
+const APP_VERSION_LABEL = '7.01'
+const RELEASE_DATE = '2026-07-28'
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
+
+const RAIN_STATION = 'Laprida'
+const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+const RAIN_HISTORICAL_FORTNIGHTS = [
+  {
+    "month": 1,
+    "monthName": "Enero",
+    "half": 1,
+    "period": "1–15",
+    "average": 43.0,
+    "p10": 19.8,
+    "p90": 69.4
+  },
+  {
+    "month": 1,
+    "monthName": "Enero",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 45.8,
+    "p10": 21.2,
+    "p90": 74.1
+  },
+  {
+    "month": 2,
+    "monthName": "Febrero",
+    "half": 1,
+    "period": "1–15",
+    "average": 52.5,
+    "p10": 21.3,
+    "p90": 75.5
+  },
+  {
+    "month": 2,
+    "monthName": "Febrero",
+    "half": 2,
+    "period": "16–28/29",
+    "average": 46.4,
+    "p10": 18.8,
+    "p90": 66.8
+  },
+  {
+    "month": 3,
+    "monthName": "Marzo",
+    "half": 1,
+    "period": "1–15",
+    "average": 44.3,
+    "p10": 17.8,
+    "p90": 73.7
+  },
+  {
+    "month": 3,
+    "monthName": "Marzo",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 47.3,
+    "p10": 19.0,
+    "p90": 78.7
+  },
+  {
+    "month": 4,
+    "monthName": "Abril",
+    "half": 1,
+    "period": "1–15",
+    "average": 39.2,
+    "p10": 9.9,
+    "p90": 72.3
+  },
+  {
+    "month": 4,
+    "monthName": "Abril",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 39.2,
+    "p10": 9.9,
+    "p90": 72.3
+  },
+  {
+    "month": 5,
+    "monthName": "Mayo",
+    "half": 1,
+    "period": "1–15",
+    "average": 25.7,
+    "p10": 3.4,
+    "p90": 58.3
+  },
+  {
+    "month": 5,
+    "monthName": "Mayo",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 27.5,
+    "p10": 3.6,
+    "p90": 62.2
+  },
+  {
+    "month": 6,
+    "monthName": "Junio",
+    "half": 1,
+    "period": "1–15",
+    "average": 14.5,
+    "p10": 1.2,
+    "p90": 36.0
+  },
+  {
+    "month": 6,
+    "monthName": "Junio",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 14.5,
+    "p10": 1.2,
+    "p90": 36.0
+  },
+  {
+    "month": 7,
+    "monthName": "Julio",
+    "half": 1,
+    "period": "1–15",
+    "average": 13.9,
+    "p10": 0.5,
+    "p90": 37.3
+  },
+  {
+    "month": 7,
+    "monthName": "Julio",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 14.9,
+    "p10": 0.5,
+    "p90": 39.7
+  },
+  {
+    "month": 8,
+    "monthName": "Agosto",
+    "half": 1,
+    "period": "1–15",
+    "average": 19.3,
+    "p10": 1.9,
+    "p90": 44.5
+  },
+  {
+    "month": 8,
+    "monthName": "Agosto",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 20.6,
+    "p10": 2.1,
+    "p90": 47.5
+  },
+  {
+    "month": 9,
+    "monthName": "Septiembre",
+    "half": 1,
+    "period": "1–15",
+    "average": 28.1,
+    "p10": 8.7,
+    "p90": 55.2
+  },
+  {
+    "month": 9,
+    "monthName": "Septiembre",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 28.1,
+    "p10": 8.7,
+    "p90": 55.2
+  },
+  {
+    "month": 10,
+    "monthName": "Octubre",
+    "half": 1,
+    "period": "1–15",
+    "average": 40.2,
+    "p10": 16.7,
+    "p90": 65.1
+  },
+  {
+    "month": 10,
+    "monthName": "Octubre",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 42.8,
+    "p10": 17.8,
+    "p90": 69.4
+  },
+  {
+    "month": 11,
+    "monthName": "Noviembre",
+    "half": 1,
+    "period": "1–15",
+    "average": 41.5,
+    "p10": 16.7,
+    "p90": 67.5
+  },
+  {
+    "month": 11,
+    "monthName": "Noviembre",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 41.5,
+    "p10": 16.7,
+    "p90": 67.5
+  },
+  {
+    "month": 12,
+    "monthName": "Diciembre",
+    "half": 1,
+    "period": "1–15",
+    "average": 36.9,
+    "p10": 14.0,
+    "p90": 64.4
+  },
+  {
+    "month": 12,
+    "monthName": "Diciembre",
+    "half": 2,
+    "period": "16–fin de mes",
+    "average": 39.3,
+    "p10": 15.0,
+    "p90": 68.6
+  }
+]
 
 const LOTS = [
   { id: 'ER-01', name: 'ER-01', hectares: 150, points: '51,45 219,45 219,278 51,278', label: [135,145], sprite: [135,190] },
@@ -26,26 +247,157 @@ const LOTS = [
   { id: 'ER-20-21', name: 'ER-20/21', hectares: 180, points: '980,840 1089,840 1089,1301 980,1301', label: [1034,927], sprite: [1034,1070] },
 ]
 
-const CATEGORIES = [
-  { id: 'toros', name: 'Toros reproductores', short: 'Toros', factor: 1.25, kind: 'bull', asset: 'animals/v505/bull-red-angus.png' },
-  { id: 'vacas', name: 'Vacas de cría', short: 'Vacas', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
-  { id: 'terneros-as', name: 'Terneros/as', short: 'Terneros/as', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
-  { id: 'vaquillonas', name: 'Vaquillonas de reposición', short: 'Vaquillonas', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
-  { id: 'terneros', name: 'Terneros', short: 'Terneros', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
-  { id: 'terneras', name: 'Terneras', short: 'Terneras', factor: 0.5, kind: 'calf', asset: 'animals/v505/calf-red-angus.png' },
-  { id: 'machos-recria', name: 'Machos de recría y engorde', short: 'Recría/engorde', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
-  { id: 'hembras-no-cria', name: 'Hembras no destinadas a cría', short: 'Hembras no cría', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
-  { id: 'vacas-descarte', name: 'Vacas de descarte', short: 'Vacas descarte', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
-  { id: 'otros', name: 'Otros animales', short: 'Otros', factor: 1, kind: 'cow', asset: 'animals/v505/cow-red-angus.png' },
+const CATEGORY_FAMILIES = [
+  { id: 'vacas', label: 'Vacas' },
+  { id: 'vaquillonas', label: 'Vaquillonas' },
+  { id: 'terneros', label: 'Terneros/as' },
+  { id: 'toros', label: 'Toros' },
+  { id: 'novillos', label: 'Novillos' },
 ]
 
-const DEFAULT_CATEGORY_IDS = ['vacas', 'terneros-as', 'toros', 'vaquillonas']
+const CATEGORIES = [
+  { id: 'vacas-cria', parent: 'vacas', name: 'Vaca de cría', short: 'Vaca cría', factor: 1, kind: 'cow' },
+  { id: 'vacas-descarte', parent: 'vacas', name: 'Vaca de descarte', short: 'Vaca descarte', factor: 1, kind: 'cow' },
+  { id: 'vaquillonas-reposicion', parent: 'vaquillonas', name: 'Vaquillona de reposición', short: 'Vaq. reposición', factor: 1, kind: 'cow' },
+  { id: 'vaquillonas-primer-servicio', parent: 'vaquillonas', name: 'Vaquillona de primer servicio', short: 'Vaq. 1er servicio', factor: 1, kind: 'cow' },
+  { id: 'ternero-macho', parent: 'terneros', name: 'Ternero macho', short: 'Ternero', factor: 0.5, kind: 'calf' },
+  { id: 'ternera-hembra', parent: 'terneros', name: 'Ternera hembra', short: 'Ternera', factor: 0.5, kind: 'calf' },
+  { id: 'ternero-sin-definir', parent: 'terneros', name: 'Ternero/a sin definir', short: 'Tern. s/def.', factor: 0.5, kind: 'calf' },
+  { id: 'toro-reproductor', parent: 'toros', name: 'Toro reproductor', short: 'Toro', factor: 1.25, kind: 'bull' },
+  { id: 'torito', parent: 'toros', name: 'Torito', short: 'Torito', factor: 1, kind: 'bull' },
+  { id: 'novillito', parent: 'novillos', name: 'Novillito', short: 'Novillito', factor: 1, kind: 'bull' },
+  { id: 'novillo', parent: 'novillos', name: 'Novillo', short: 'Novillo', factor: 1, kind: 'bull' },
+]
+
+const CATEGORY_MIGRATION = {
+  vacas: 'vacas-cria',
+  'vacas-descarte': 'vacas-descarte',
+  'hembras-no-cria': 'vacas-descarte',
+  vaquillonas: 'vaquillonas-reposicion',
+  terneros: 'ternero-macho',
+  terneras: 'ternera-hembra',
+  'terneros-as': 'ternero-sin-definir',
+  toros: 'toro-reproductor',
+  'machos-recria': 'novillito',
+  otros: 'vacas-descarte',
+}
+
+const EVENT_TYPES = [
+  { id: 'sale', label: 'Venta', group: 'commercial', sign: -1, icon: '↗' },
+  { id: 'purchase', label: 'Compra', group: 'commercial', sign: 1, icon: '↙' },
+  { id: 'death', label: 'Mortandad', group: 'herd', sign: -1, icon: '✚' },
+  { id: 'birth', label: 'Nacimiento', group: 'herd', sign: 1, icon: '●' },
+  { id: 'reclassification', label: 'Recategorización', group: 'herd', sign: 0, icon: '⇄' },
+]
+
+
+const DEFAULT_CATEGORY_IDS = ['vacas-cria', 'ternero-sin-definir', 'toro-reproductor', 'vaquillonas-reposicion']
 
 const SPRITE_VARIANTS = {
-  cow: ['animals/v505/cow-red-angus.png', 'animals/v505/cow-red-angus-left.png'],
-  bull: ['animals/v505/bull-red-angus.png', 'animals/v505/bull-red-angus-left.png'],
-  calf: ['animals/v505/calf-red-angus.png', 'animals/v505/calf-red-angus-left.png'],
-  cowCalf: ['animals/v505/cow-calf-red-angus.png', 'animals/v505/cow-calf-red-angus-left.png'],
+  "cow": {
+    "north": [
+      "animals/v601/cow/cow-north-1.png",
+      "animals/v601/cow/cow-north-2.png",
+      "animals/v601/cow/cow-north-3.png",
+      "animals/v601/cow/cow-north-4.png"
+    ],
+    "east": [
+      "animals/v601/cow/cow-east-1.png",
+      "animals/v601/cow/cow-east-2.png",
+      "animals/v601/cow/cow-east-3.png",
+      "animals/v601/cow/cow-east-4.png"
+    ],
+    "south": [
+      "animals/v601/cow/cow-south-1.png",
+      "animals/v601/cow/cow-south-2.png",
+      "animals/v601/cow/cow-south-3.png",
+      "animals/v601/cow/cow-south-4.png"
+    ],
+    "west": [
+      "animals/v601/cow/cow-west-1.png",
+      "animals/v601/cow/cow-west-2.png",
+      "animals/v601/cow/cow-west-3.png",
+      "animals/v601/cow/cow-west-4.png"
+    ]
+  },
+  "bull": {
+    "north": [
+      "animals/v601/bull/bull-north-1.png",
+      "animals/v601/bull/bull-north-2.png",
+      "animals/v601/bull/bull-north-3.png",
+      "animals/v601/bull/bull-north-4.png"
+    ],
+    "east": [
+      "animals/v601/bull/bull-east-1.png",
+      "animals/v601/bull/bull-east-2.png",
+      "animals/v601/bull/bull-east-3.png",
+      "animals/v601/bull/bull-east-4.png"
+    ],
+    "south": [
+      "animals/v601/bull/bull-south-1.png",
+      "animals/v601/bull/bull-south-2.png",
+      "animals/v601/bull/bull-south-3.png",
+      "animals/v601/bull/bull-south-4.png"
+    ],
+    "west": [
+      "animals/v601/bull/bull-west-1.png",
+      "animals/v601/bull/bull-west-2.png",
+      "animals/v601/bull/bull-west-3.png",
+      "animals/v601/bull/bull-west-4.png"
+    ]
+  },
+  "calf": {
+    "north": [
+      "animals/v601/calf/calf-north-1.png",
+      "animals/v601/calf/calf-north-2.png",
+      "animals/v601/calf/calf-north-3.png",
+      "animals/v601/calf/calf-north-4.png"
+    ],
+    "east": [
+      "animals/v601/calf/calf-east-1.png",
+      "animals/v601/calf/calf-east-2.png",
+      "animals/v601/calf/calf-east-3.png",
+      "animals/v601/calf/calf-east-4.png"
+    ],
+    "south": [
+      "animals/v601/calf/calf-south-1.png",
+      "animals/v601/calf/calf-south-2.png",
+      "animals/v601/calf/calf-south-3.png",
+      "animals/v601/calf/calf-south-4.png"
+    ],
+    "west": [
+      "animals/v601/calf/calf-west-1.png",
+      "animals/v601/calf/calf-west-2.png",
+      "animals/v601/calf/calf-west-3.png",
+      "animals/v601/calf/calf-west-4.png"
+    ]
+  },
+  "cowCalf": {
+    "north": [
+      "animals/v601/cow-calf/cow-calf-north-1.png",
+      "animals/v601/cow-calf/cow-calf-north-2.png",
+      "animals/v601/cow-calf/cow-calf-north-3.png",
+      "animals/v601/cow-calf/cow-calf-north-4.png"
+    ],
+    "east": [
+      "animals/v601/cow-calf/cow-calf-east-1.png",
+      "animals/v601/cow-calf/cow-calf-east-2.png",
+      "animals/v601/cow-calf/cow-calf-east-3.png",
+      "animals/v601/cow-calf/cow-calf-east-4.png"
+    ],
+    "south": [
+      "animals/v601/cow-calf/cow-calf-south-1.png",
+      "animals/v601/cow-calf/cow-calf-south-2.png",
+      "animals/v601/cow-calf/cow-calf-south-3.png",
+      "animals/v601/cow-calf/cow-calf-south-4.png"
+    ],
+    "west": [
+      "animals/v601/cow-calf/cow-calf-west-1.png",
+      "animals/v601/cow-calf/cow-calf-west-2.png",
+      "animals/v601/cow-calf/cow-calf-west-3.png",
+      "animals/v601/cow-calf/cow-calf-west-4.png"
+    ]
+  }
 }
 
 const FIELD_STATES = [
@@ -70,6 +422,8 @@ const UI_ASSETS = {
   home: 'icons/icon-home-house.png',
   register: 'icons/icon-register-animals.png',
 }
+
+const SAMPLE_DATA_URL = './data/campo-muestra-16-meses-v7.json'
 
 const INITIAL_GROUPS = {
   'ER-01': { fieldState: 'bueno', groups: [['vacas', 80], ['toros', 2], ['vacas-descarte', 96]] },
@@ -119,74 +473,85 @@ const monthLabel = (period) => new Intl.DateTimeFormat('es-AR', { month: 'long',
 const todayISO = () => new Date().toISOString().slice(0, 10)
 
 function createInitialState() {
+  if (window.CAMPO_SAMPLE_STATE) {
+    const sample = JSON.parse(JSON.stringify(window.CAMPO_SAMPLE_STATE))
+    sample.version = APP_VERSION
+    sample.sampleMode = true
+    sample.settings = { userName: 'Muestra', establishment: 'El Rosario', introSeen: false, showArchived: false, ...(sample.settings || {}) }
+    sample.updatedAt = new Date().toISOString()
+    sample.lastSavedAt = sample.updatedAt
+    return sample
+  }
   const survey = {
-    id: uid(),
-    date: '2026-07-15',
-    createdAt: '2026-07-15T18:00:00.000Z',
-    rainPeriod: '2026-07',
+    id: uid(), nombre: 'Muestra', date: '2026-07-15', createdAt: '2026-07-15T18:00:00.000Z', rainPeriod: '2026-07', archived: false,
     lots: Object.entries(INITIAL_GROUPS).map(([lotId, value]) => ({
-      lotId,
-      fieldState: value.fieldState,
-      conditionSource: 'observed',
-      groups: value.groups.map(([categoryId, quantity]) => ({ id: uid(), categoryId, quantity, birthYear: '', notes: '' })),
+      nombre: 'Muestra', lotId, fieldState: value.fieldState, conditionSource: 'observed',
+      groups: value.groups.map(([categoryId, quantity]) => ({ id: uid(), nombre: 'Muestra', categoryId: CATEGORY_MIGRATION[categoryId] || categoryId, quantity, birthYear: '', notes: '' })),
     })),
-    events: { births: 0, deaths: 5, purchases: 0, sales: 0 },
-    note: 'Relevamiento inicial basado en la información de referencia de El Rosario.',
+    events: { nombre: 'Muestra', births: 0, deaths: 5, purchases: 0, sales: 0 }, note: 'Relevamiento inicial de muestra.',
   }
   return {
-    version: APP_VERSION,
-    selectedSurveyId: survey.id,
-    surveys: [survey],
-    rain: [
-      { period: '2025-08', millimeters: 38 },
-      { period: '2025-09', millimeters: 64 },
-      { period: '2025-10', millimeters: 91 },
-      { period: '2025-11', millimeters: 77 },
-      { period: '2025-12', millimeters: 83 },
-      { period: '2026-01', millimeters: 61 },
-      { period: '2026-02', millimeters: 73 },
-      { period: '2026-03', millimeters: 98 },
-      { period: '2026-04', millimeters: 88 },
-      { period: '2026-05', millimeters: 44 },
-      { period: '2026-06', millimeters: 57 },
-      { period: '2026-07', millimeters: 82 },
-    ],
-    rainEntries: [],
-    draft: null,
-    settings: { userName: 'Juan', establishment: 'El Rosario' },
-    updatedAt: new Date().toISOString(),
-    lastSavedAt: new Date().toISOString(),
+    nombre: 'Muestra', version: APP_VERSION, selectedSurveyId: survey.id, surveys: [survey], animalEvents: [], sampleMode: true,
+    rain: [{ period: '2026-07', millimeters: 82 }], rainEntries: [], draft: null,
+    settings: { nombre: 'Muestra', userName: 'Muestra', establishment: 'El Rosario', introSeen: false, showArchived: false },
+    updatedAt: new Date().toISOString(), lastSavedAt: new Date().toISOString(),
   }
 }
 
 function migrateState(parsed) {
   if (!parsed || !Array.isArray(parsed.surveys)) return null
+  const migrateCategoryId = (id) => categoryLookup[id] ? id : (CATEGORY_MIGRATION[id] || 'vacas-descarte')
+  const normalizeGroup = (group) => ({
+    ...group,
+    id: group.id || uid(),
+    nombre: group.nombre || parsed.nombre || 'Muestra',
+    categoryId: migrateCategoryId(group.categoryId),
+    quantity: Math.max(0, Number(group.quantity) || 0),
+    birthYear: group.birthYear || '',
+    notes: group.notes || '',
+  })
   const normalizeLot = (lot) => {
     const fieldState = normalizeFieldState(lot.fieldState)
     return {
       ...lot,
+      nombre: lot.nombre || parsed.nombre || 'Muestra',
       fieldState,
       conditionSource: lot.conditionSource || (fieldState !== 'no-observado' ? 'observed' : 'unobserved'),
-      groups: Array.isArray(lot.groups) ? lot.groups : [],
+      groups: Array.isArray(lot.groups) ? lot.groups.map(normalizeGroup) : [],
     }
   }
+  const normalizeEvent = (event) => ({
+    ...event,
+    id: event.id || uid(),
+    nombre: event.nombre || parsed.nombre || 'Muestra',
+    type: EVENT_TYPES.some((item) => item.id === event.type) ? event.type : 'sale',
+    categoryId: event.categoryId ? migrateCategoryId(event.categoryId) : '',
+    toCategoryId: event.toCategoryId ? migrateCategoryId(event.toCategoryId) : '',
+    quantity: Math.max(0, Number(event.quantity) || 0),
+    notes: event.notes || '',
+  })
   const migrated = {
     ...parsed,
+    nombre: parsed.nombre || 'Muestra',
     version: APP_VERSION,
     surveys: parsed.surveys.map((survey) => ({
       ...survey,
+      nombre: survey.nombre || parsed.nombre || 'Muestra',
+      archived: Boolean(survey.archived),
       lots: Array.isArray(survey.lots) ? survey.lots.map(normalizeLot) : [],
-      events: survey.events || { births: 0, deaths: 0, purchases: 0, sales: 0 },
+      events: { nombre: parsed.nombre || 'Muestra', births: 0, deaths: 0, purchases: 0, sales: 0, ...(survey.events || {}) },
     })),
+    animalEvents: Array.isArray(parsed.animalEvents) ? parsed.animalEvents.map(normalizeEvent) : [],
     rain: Array.isArray(parsed.rain) ? parsed.rain : [],
     rainEntries: Array.isArray(parsed.rainEntries) ? parsed.rainEntries : [],
     draft: parsed.draft ? { mode: parsed.draft.mode || 'new', editingSurveyId: parsed.draft.editingSurveyId || null, ...parsed.draft } : null,
-    settings: parsed.settings || { userName: 'Juan', establishment: 'El Rosario' },
+    settings: { userName: 'Juan', establishment: 'El Rosario', introSeen: false, showArchived: false, ...(parsed.settings || {}) },
+    sampleMode: Boolean(parsed.sampleMode || parsed.nombre === 'Muestra'),
     lastSavedAt: parsed.lastSavedAt || parsed.updatedAt || new Date().toISOString(),
   }
   if (migrated.draft?.lots) migrated.draft.lots = migrated.draft.lots.map(normalizeLot)
-  if (!migrated.selectedSurveyId || !migrated.surveys.some((survey) => survey.id === migrated.selectedSurveyId)) {
-    migrated.selectedSurveyId = [...migrated.surveys].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0]?.id || null
+  if (!migrated.selectedSurveyId || !migrated.surveys.some((survey) => survey.id === migrated.selectedSurveyId && !survey.archived)) {
+    migrated.selectedSurveyId = [...migrated.surveys].filter((survey) => !survey.archived).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0]?.id || null
   }
   return migrated
 }
@@ -208,6 +573,16 @@ let ui = {
   view: location.hash.replace('#/', '') || 'resumen',
   selectedLotId: null,
   wizardStep: state.draft ? state.draft.step || 1 : 1,
+  mapMode: 'map',
+  mapInspectorTab: 'actual',
+  mapViewBox: null,
+  mapDragging: false,
+  eventFilter: 'all',
+  historyShowArchived: false,
+  rainTab: 'period',
+  rainGranularity: 'monthly',
+  rainYear: Number((selectedSurvey()?.date || '2026-01-01').slice(0, 4)),
+  rainEndPeriod: monthKey(selectedSurvey()?.date || todayISO()),
   modal: null,
   toast: null,
 }
@@ -227,12 +602,14 @@ function selectedSurvey() {
   return latest
 }
 
-function sortedSurveys() {
-  return [...state.surveys].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
+function sortedSurveys(includeArchived = false) {
+  return [...state.surveys]
+    .filter((survey) => includeArchived || !survey.archived)
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
 }
 
 function latestSurvey() {
-  return sortedSurveys()[0] || null
+  return sortedSurveys(false)[0] || null
 }
 
 function surveyNavigation() {
@@ -353,7 +730,7 @@ function renderSurveySwitcher() {
 }
 
 function previousSurvey(survey) {
-  const list = state.surveys.filter((item) => item.id !== survey?.id).sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')) || String(a.createdAt || '').localeCompare(String(b.createdAt || '')))
+  const list = sortedSurveys(false).filter((item) => item.id !== survey?.id).sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')) || String(a.createdAt || '').localeCompare(String(b.createdAt || '')))
   if (!survey?.date) return list.at(-1) || null
   const currentCreated = String(survey.createdAt || '9999')
   return [...list].reverse().find((item) => String(item.date || '') < survey.date || (item.date === survey.date && String(item.createdAt || '') < currentCreated)) || null
@@ -365,15 +742,17 @@ function surveyMetrics(survey) {
   let equivalents = 0
   const categories = Object.fromEntries(CATEGORIES.map((category) => [category.id, 0]))
   for (const lotEntry of survey?.lots || []) {
+    if (!byLot[lotEntry.lotId]) continue
     for (const group of lotEntry.groups || []) {
+      const categoryId = categoryLookup[group.categoryId] ? group.categoryId : (CATEGORY_MIGRATION[group.categoryId] || 'vacas-descarte')
       const quantity = Math.max(0, Number(group.quantity) || 0)
-      const factor = categoryLookup[group.categoryId]?.factor || 1
+      const factor = categoryLookup[categoryId]?.factor || 1
       animals += quantity
       equivalents += quantity * factor
-      categories[group.categoryId] = (categories[group.categoryId] || 0) + quantity
+      categories[categoryId] = (categories[categoryId] || 0) + quantity
       byLot[lotEntry.lotId].animals += quantity
       byLot[lotEntry.lotId].equivalents += quantity * factor
-      byLot[lotEntry.lotId].groups.push(group)
+      byLot[lotEntry.lotId].groups.push({ ...group, categoryId })
     }
   }
   for (const lot of LOTS) {
@@ -381,6 +760,175 @@ function surveyMetrics(survey) {
     byLot[lot.id].capacityUse = byLot[lot.id].load / TARGET_LOAD
   }
   return { animals, equivalents, load: equivalents / 1735, categories, byLot }
+}
+
+
+const eventTypeLookup = Object.fromEntries(EVENT_TYPES.map((item) => [item.id, item]))
+
+function categoryFamily(categoryId) {
+  return categoryLookup[categoryId]?.parent || 'vacas'
+}
+
+function categoryOptionsHtml(selected = '', filter = null) {
+  const allowed = filter ? new Set(filter) : null
+  return CATEGORY_FAMILIES.map((family) => {
+    const options = CATEGORIES.filter((category) => category.parent === family.id && (!allowed || allowed.has(category.id)))
+    if (!options.length) return ''
+    return `<optgroup label="${esc(family.label)}">${options.map((category) => `<option value="${category.id}" ${selected === category.id ? 'selected' : ''}>${esc(category.name)}</option>`).join('')}</optgroup>`
+  }).join('')
+}
+
+function activeAnimalEvents() {
+  return [...(state.animalEvents || [])].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
+}
+
+function eventsBetween(startDate, endDate, includeStart = false) {
+  return activeAnimalEvents().filter((event) => {
+    const date = String(event.date || '')
+    const afterStart = !startDate || (includeStart ? date >= startDate : date > startDate)
+    const beforeEnd = !endDate || date <= endDate
+    return afterStart && beforeEnd
+  }).sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')))
+}
+
+function eventTotals(events = []) {
+  const totals = { sale: 0, purchase: 0, death: 0, birth: 0, reclassification: 0 }
+  for (const event of events) totals[event.type] = (totals[event.type] || 0) + Math.max(0, Number(event.quantity) || 0)
+  return totals
+}
+
+function eventTypeLabel(type) {
+  return eventTypeLookup[type]?.label || type
+}
+
+function eventSignedQuantity(event) {
+  const quantity = Math.max(0, Number(event.quantity) || 0)
+  const sign = eventTypeLookup[event.type]?.sign || 0
+  return quantity * sign
+}
+
+function inventoryFromSurvey(survey) {
+  const inventory = Object.fromEntries(LOTS.map((lot) => [lot.id, Object.fromEntries(CATEGORIES.map((category) => [category.id, 0]))]))
+  for (const lotEntry of survey?.lots || []) {
+    if (!inventory[lotEntry.lotId]) continue
+    for (const group of lotEntry.groups || []) {
+      const id = categoryLookup[group.categoryId] ? group.categoryId : CATEGORY_MIGRATION[group.categoryId]
+      if (!id) continue
+      inventory[lotEntry.lotId][id] = (inventory[lotEntry.lotId][id] || 0) + Math.max(0, Number(group.quantity) || 0)
+    }
+  }
+  return inventory
+}
+
+function cloneInventory(inventory) {
+  return JSON.parse(JSON.stringify(inventory))
+}
+
+function applyEventToInventory(inventory, event) {
+  const lotId = event.lotId
+  if (!inventory[lotId]) inventory[lotId] = Object.fromEntries(CATEGORIES.map((category) => [category.id, 0]))
+  const quantity = Math.max(0, Number(event.quantity) || 0)
+  const categoryId = categoryLookup[event.categoryId] ? event.categoryId : CATEGORY_MIGRATION[event.categoryId]
+  const toCategoryId = categoryLookup[event.toCategoryId] ? event.toCategoryId : CATEGORY_MIGRATION[event.toCategoryId]
+  if (event.type === 'purchase' || event.type === 'birth') inventory[lotId][categoryId] = Math.max(0, (inventory[lotId][categoryId] || 0) + quantity)
+  if (event.type === 'sale' || event.type === 'death') inventory[lotId][categoryId] = Math.max(0, (inventory[lotId][categoryId] || 0) - quantity)
+  if (event.type === 'reclassification') {
+    inventory[lotId][categoryId] = Math.max(0, (inventory[lotId][categoryId] || 0) - quantity)
+    inventory[lotId][toCategoryId] = Math.max(0, (inventory[lotId][toCategoryId] || 0) + quantity)
+  }
+  return inventory
+}
+
+function surveyBeforeOrOn(date) {
+  return sortedSurveys(false).filter((survey) => String(survey.date || '') <= String(date || '')).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0] || null
+}
+
+function projectedInventoryAt(date, excludeEventId = null) {
+  const base = surveyBeforeOrOn(date) || sortedSurveys(false).at(-1) || null
+  const inventory = inventoryFromSurvey(base)
+  if (!base) return { base: null, inventory, events: [] }
+  const events = eventsBetween(base.date, date).filter((event) => event.id !== excludeEventId)
+  events.forEach((event) => applyEventToInventory(inventory, event))
+  return { base, inventory, events }
+}
+
+function projectedLotsForDate(date) {
+  const { base, inventory, events } = projectedInventoryAt(date)
+  if (!base) return { base: null, lots: [], events }
+  const sourceByLot = Object.fromEntries((base.lots || []).map((entry) => [entry.lotId, entry]))
+  const lots = LOTS.map((lot) => {
+    const source = sourceByLot[lot.id]
+    const groups = CATEGORIES.map((category) => ({
+      id: uid(), nombre: state.nombre || 'Muestra', categoryId: category.id,
+      quantity: Math.max(0, Math.round(inventory[lot.id]?.[category.id] || 0)), birthYear: '', notes: 'Precargado desde eventos', projected: true,
+    })).filter((group) => group.quantity > 0)
+    const fieldState = source?.fieldState || 'no-observado'
+    if (!groups.length && !source) return null
+    return { nombre: state.nombre || 'Muestra', lotId: lot.id, fieldState, conditionSource: source?.conditionSource || 'unobserved', groups, projected: true }
+  }).filter(Boolean)
+  return { base, lots, events }
+}
+
+function availableCategoryQuantity(date, lotId, categoryId, excludeEventId = null) {
+  const { inventory } = projectedInventoryAt(date, excludeEventId)
+  return Math.max(0, Number(inventory?.[lotId]?.[categoryId]) || 0)
+}
+
+function eventsForSurveyInterval(survey) {
+  const previous = previousSurvey(survey)
+  return eventsBetween(previous?.date || null, survey?.date || null)
+}
+
+function categoryEventDelta(events) {
+  const result = Object.fromEntries(CATEGORIES.map((category) => [category.id, 0]))
+  for (const event of events) {
+    const quantity = Math.max(0, Number(event.quantity) || 0)
+    if (event.type === 'birth' || event.type === 'purchase') result[event.categoryId] = (result[event.categoryId] || 0) + quantity
+    if (event.type === 'sale' || event.type === 'death') result[event.categoryId] = (result[event.categoryId] || 0) - quantity
+    if (event.type === 'reclassification') {
+      result[event.categoryId] = (result[event.categoryId] || 0) - quantity
+      result[event.toCategoryId] = (result[event.toCategoryId] || 0) + quantity
+    }
+  }
+  return result
+}
+
+function herdBalanceForSurvey(survey) {
+  const previous = previousSurvey(survey)
+  if (!previous || !survey) return null
+  const priorMetrics = surveyMetrics(previous)
+  const currentMetrics = surveyMetrics(survey)
+  const events = eventsBetween(previous.date, survey.date)
+  const totals = eventTotals(events)
+  const expected = priorMetrics.animals + totals.birth + totals.purchase - totals.sale - totals.death
+  const discrepancy = currentMetrics.animals - expected
+  const deltas = categoryEventDelta(events)
+  const categoryDifferences = CATEGORIES.map((category) => {
+    const expectedCategory = (priorMetrics.categories[category.id] || 0) + (deltas[category.id] || 0)
+    const observed = currentMetrics.categories[category.id] || 0
+    return { category, expected: expectedCategory, observed, difference: observed - expectedCategory }
+  }).filter((item) => item.expected || item.observed).sort((a, b) => Math.abs(b.difference) - Math.abs(a.difference))
+  return { previous, survey, priorMetrics, currentMetrics, events, totals, expected, discrepancy, discrepancyPct: expected ? discrepancy / expected * 100 : 0, categoryDifferences }
+}
+
+function eventsForLot(lotId, untilDate = null) {
+  return activeAnimalEvents().filter((event) => event.lotId === lotId && (!untilDate || String(event.date || '') <= String(untilDate))).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+}
+
+function lotHistorySeries(lotId) {
+  return [...sortedSurveys(false)].reverse().map((survey) => {
+    const metric = surveyMetrics(survey).byLot[lotId]
+    const condition = resolveLotCondition(survey, lotId)
+    return { survey, load: metric.load, animals: metric.animals, condition }
+  })
+}
+
+function eventAffectsTotal(type) {
+  return ['sale', 'purchase', 'death', 'birth'].includes(type)
+}
+
+function eventGroupLabel(type) {
+  return eventTypeLookup[type]?.group === 'commercial' ? 'Comercial' : 'Cambios del rodeo'
 }
 
 function discrepancyAlerts(survey) {
@@ -415,31 +963,42 @@ function discrepancyAlerts(survey) {
 function operationalAlerts(survey) {
   if (!survey) return []
   const metrics = surveyMetrics(survey)
-  const alerts = []
+  const highLots = []
+  const combinedRisk = []
   for (const lot of LOTS) {
     const metric = metrics.byLot[lot.id]
-    if (metric.load > TARGET_LOAD * 1.5) alerts.push({ severity: 'danger', lotId: lot.id, title: `Carga crítica en ${lot.name}`, text: `${decimal(metric.load)} EV/ha, muy por encima del objetivo de ${decimal(TARGET_LOAD)}.` })
-    else if (metric.load > TARGET_LOAD * 1.15) alerts.push({ severity: 'warning', lotId: lot.id, title: `Carga alta en ${lot.name}`, text: `${decimal(metric.load)} EV/ha.` })
+    const loadState = capacityClass(metric.load)
+    const high = ['high', 'over', 'critical'].includes(loadState)
+    if (high) highLots.push({ lot, metric, loadState })
+    const condition = resolveLotCondition(survey, lot.id)
+    if (high && ['malo', 'anegado'].includes(condition.stateId)) combinedRisk.push({ lot, metric, loadState, condition })
   }
+  const alerts = []
+  if (highLots.length) alerts.push({
+    severity: highLots.some((item) => item.loadState === 'critical') ? 'danger' : 'warning',
+    title: `Carga alta en ${highLots.length} ${highLots.length === 1 ? 'lote' : 'lotes'}`,
+    text: highLots.map((item) => item.lot.name).join(', '),
+    lotIds: highLots.map((item) => item.lot.id),
+  })
+  if (combinedRisk.length) alerts.push({
+    severity: 'danger',
+    title: 'Condición comprometida y carga alta',
+    text: `${combinedRisk.length} ${combinedRisk.length === 1 ? 'lote requiere' : 'lotes requieren'} atención: ${combinedRisk.map((item) => item.lot.name).join(', ')}.`,
+    lotIds: combinedRisk.map((item) => item.lot.id),
+  })
   return alerts
 }
 
 function rainAnalysis(period) {
   const summary = monthlyRainSummary(period)
   const current = summary.millimeters
-  const month = period?.slice(5, 7)
-  const history = allRainPeriods()
-    .filter((candidate) => candidate < period && candidate.slice(5, 7) === month)
-    .map(monthlyRainSummary)
-    .filter((item) => item.millimeters != null)
-  if (current == null) return { current: null, status: 'Sin dato', delta: null, detail: 'No se registró lluvia para este mes.', source: summary.source, entries: summary.entries }
-  if (!history.length) return { current, status: 'Sin base', delta: null, detail: summary.source === 'daily' ? `${summary.entries.length} registros diarios.` : 'Dato mensual heredado; todavía no hay años anteriores para comparar.', source: summary.source, entries: summary.entries }
-  const average = history.reduce((sum, item) => sum + item.millimeters, 0) / history.length
-  const delta = current - average
-  const ratio = average ? delta / average : 0
-  const status = ratio < -0.2 ? 'Déficit' : ratio > 0.2 ? 'Exceso' : 'Normal'
-  const sourceText = summary.source === 'daily' ? `${summary.entries.length} registros diarios` : 'total mensual'
-  return { current, status, delta, average, detail: `${sourceText} · ${delta >= 0 ? '+' : ''}${fmt(delta)} mm vs. histórico del mes.`, source: summary.source, entries: summary.entries }
+  const historical = historicalMonth(Number(String(period).slice(5, 7)))
+  if (current == null) return { current: null, status: 'Sin dato', delta: null, average: historical.average, p10: historical.p10, p90: historical.p90, index: null, detail: 'No se registró lluvia para este mes.', source: summary.source, entries: summary.entries }
+  const index = hydricIndex(current, historical.average)
+  const status = hydricState(index)
+  const delta = current - historical.average
+  const sourceText = summary.source === 'daily' ? `${summary.entries.length} registros por fecha` : 'total mensual'
+  return { current, status, delta, average: historical.average, p10: historical.p10, p90: historical.p90, index, detail: `${sourceText} · ${delta >= 0 ? '+' : ''}${fmt(delta)} mm frente al promedio de Laprida.`, source: summary.source, entries: summary.entries }
 }
 
 function capacityClass(load) {
@@ -459,17 +1018,15 @@ function capacityLabel(load) {
 
 function categoryUsageStats() {
   const stats = Object.fromEntries(CATEGORIES.map((category) => [category.id, { occurrences: 0, quantity: 0 }]))
-  for (const survey of state.surveys || []) {
+  for (const survey of sortedSurveys(true)) {
     for (const lotEntry of survey.lots || []) {
       const seen = new Set()
       for (const group of lotEntry.groups || []) {
-        if (!stats[group.categoryId]) continue
+        const id = categoryLookup[group.categoryId] ? group.categoryId : CATEGORY_MIGRATION[group.categoryId]
+        if (!stats[id]) continue
         const quantity = Math.max(0, Number(group.quantity) || 0)
-        stats[group.categoryId].quantity += quantity
-        if (quantity > 0 && !seen.has(group.categoryId)) {
-          stats[group.categoryId].occurrences += 1
-          seen.add(group.categoryId)
-        }
+        stats[id].quantity += quantity
+        if (quantity > 0 && !seen.has(id)) { stats[id].occurrences += 1; seen.add(id) }
       }
     }
   }
@@ -497,12 +1054,16 @@ function lotFormModel(lot, suggestWhenEmpty = false) {
 }
 
 function lotCategoryRollup(groups = []) {
-  const totals = { cows: 0, calves: 0, bulls: 0 }
+  const totals = { cows: 0, calves: 0, bulls: 0, heifers: 0, steers: 0 }
   for (const group of groups) {
     const quantity = Math.max(0, Number(group.quantity) || 0)
-    if (['vacas', 'vacas-descarte'].includes(group.categoryId)) totals.cows += quantity
-    if (['terneros', 'terneras', 'terneros-as'].includes(group.categoryId)) totals.calves += quantity
-    if (group.categoryId === 'toros') totals.bulls += quantity
+    const category = categoryLookup[group.categoryId]
+    if (!category) continue
+    if (category.parent === 'vacas') totals.cows += quantity
+    if (category.parent === 'terneros') totals.calves += quantity
+    if (category.parent === 'toros') totals.bulls += quantity
+    if (category.parent === 'vaquillonas') totals.heifers += quantity
+    if (category.parent === 'novillos') totals.steers += quantity
   }
   return totals
 }
@@ -534,6 +1095,14 @@ function icon(name, size = 20) {
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     back: '<path d="m15 18-6-6 6-6"/>',
     calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+    event: '<path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="3"/><path d="M18 15.5v3M16.5 17h3"/>',
+    balance: '<path d="M12 3v18M5 7h14M6 7l-3 6h6ZM18 7l-3 6h6Z"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+    archive: '<path d="M4 7h16v13H4z"/><path d="M3 3h18v4H3zM9 11h6"/>',
+    restore: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+    zoomIn: '<circle cx="10" cy="10" r="7"/><path d="M15 15l6 6M10 7v6M7 10h6"/>',
+    zoomOut: '<circle cx="10" cy="10" r="7"/><path d="M15 15l6 6M7 10h6"/>',
+    target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
   }
   return `<svg class="icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] || ''}</svg>`
 }
@@ -562,44 +1131,66 @@ function navItemAsset(view, label, assetPath) {
 }
 
 function renderShell(content, title, subtitle, action = '') {
-  const survey = selectedSurvey()
   const latest = latestSurvey()
   const dataDate = latest ? compactDateLabel(latest.date) : 'Sin datos'
+  const sampleBadge = state.sampleMode ? '<span class="sample-badge">MODO MUESTRA</span>' : ''
   return `
     <div class="app-shell ${ui.view === 'relevamiento' ? 'survey-mode' : ''}">
       <aside class="sidebar">
         <div class="brand"><img src="./assets/${UI_ASSETS.home}" alt="Casa principal de El Rosario"><div><strong>CAMPO</strong><span>El Rosario</span></div></div>
+        ${sampleBadge}
         <nav>
           ${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}
           ${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}
-          ${navItem('mapa', 'Mapa', 'map')}
-          ${navItem('historico', 'Histórico y lluvia', 'history')}
+          ${navItem('eventos', 'Eventos', 'event')}
+          ${navItem('mapa', 'Mapa y lotes', 'map')}
+          ${navItem('lluvias', 'Lluvias', 'rain')}
+          ${navItem('historico', 'Histórico', 'history')}
+          ${navItem('intro', 'Introducción', 'info')}
           ${navItem('datos', 'Exportar y respaldo', 'download')}
         </nav>
-        <div class="sidebar-card">
-          <small>Datos más recientes</small>
-          <strong>${latest ? dateLabel(latest.date) : 'Sin datos'}</strong>
-          <span>Los datos se guardan en este dispositivo.</span>
-        </div>
+        <div class="sidebar-card"><small>Datos más recientes</small><strong>${latest ? dateLabel(latest.date) : 'Sin datos'}</strong><span>Los datos se guardan en este dispositivo.</span></div>
         <div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Datos: ${dataDate}</span></div>
       </aside>
       <div class="content-shell">
         <header class="topbar">
           <button class="mobile-menu" data-toggle-nav aria-label="Menú">${icon('menu', 24)}</button>
           <div><h1>${title}</h1><p>${subtitle}</p></div>
-          <div class="topbar-actions"><span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos más recientes ${dataDate}</small></span>${action}</div>
+          <div class="topbar-actions">${sampleBadge}<span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos más recientes ${dataDate}</small></span>${action}</div>
         </header>
         <main class="page">${content}</main>
       </div>
-      <nav class="mobile-nav">
+      <nav class="mobile-nav mobile-nav-v7">
         ${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}
         ${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}
+        ${navItem('eventos', 'Eventos', 'event')}
         ${navItem('mapa', 'Mapa', 'map')}
-        ${navItem('historico', 'Histórico', 'history')}
+        ${navItem('intro', 'Más', 'menu')}
       </nav>
       ${ui.modal ? renderModal() : ''}
       ${ui.toast ? `<div class="toast">${icon('check', 18)} ${esc(ui.toast)}</div>` : ''}
     </div>`
+}
+
+
+function renderBalancePanel(balance, compact = false) {
+  if (!balance) return `<div class="empty-inline">Se necesita un relevamiento anterior para calcular el balance.</div>`
+  const status = balance.discrepancy === 0 ? 'ok' : Math.abs(balance.discrepancyPct) <= .5 ? 'minor' : 'warning'
+  const lines = [
+    ['Stock observado anterior', balance.priorMetrics.animals, 'neutral'],
+    ['Nacimientos', balance.totals.birth, 'positive'],
+    ['Compras', balance.totals.purchase, 'positive'],
+    ['Ventas', -balance.totals.sale, 'negative'],
+    ['Mortandad', -balance.totals.death, 'negative'],
+  ]
+  return `<div class="herd-balance ${compact?'compact':''}"><div class="balance-equation">${lines.map(([label,value,tone])=>`<div class="${tone}"><span>${label}</span><strong>${value>0?'+':''}${fmt(value)}</strong></div>`).join('')}<div class="expected"><span>Stock esperado</span><strong>${fmt(balance.expected)}</strong></div><div><span>Stock observado</span><strong>${fmt(balance.currentMetrics.animals)}</strong></div><div class="discrepancy ${status}"><span>Discrepancia</span><strong>${balance.discrepancy>0?'+':''}${fmt(balance.discrepancy)} <small>${balance.expected?`(${decimal(balance.discrepancyPct,1)}%)`:''}</small></strong></div></div>${compact?'':`<details class="balance-category-details"><summary>Ver diferencias por categoría</summary><div>${balance.categoryDifferences.slice(0,8).map((item)=>`<p><span>${esc(item.category.name)}</span><b>Esperado ${fmt(item.expected)} · observado ${fmt(item.observed)} · ${item.difference>0?'+':''}${fmt(item.difference)}</b></p>`).join('')}</div></details>`}</div>`
+}
+
+function periodEventTotalsForSurvey(survey) {
+  const events = eventsForSurveyInterval(survey)
+  const totals = eventTotals(events)
+  if (!events.length && survey?.events) return { birth:Number(survey.events.births||0), death:Number(survey.events.deaths||0), purchase:Number(survey.events.purchases||0), sale:Number(survey.events.sales||0), reclassification:0 }
+  return totals
 }
 
 function renderDashboard() {
@@ -610,59 +1201,36 @@ function renderDashboard() {
   const prevMetrics = prev ? surveyMetrics(prev) : null
   const rainPeriod = survey.rainPeriod || monthKey(survey.date)
   const rain = rainAnalysis(rainPeriod)
-  const alerts = operationalAlerts(survey).slice(0, 5)
-  const events = survey.events || { births: 0, deaths: 0, purchases: 0, sales: 0 }
+  const alerts = operationalAlerts(survey)
+  const eventTotalsCurrent = periodEventTotalsForSurvey(survey)
   const deltaAnimals = prevMetrics ? metrics.animals - prevMetrics.animals : null
   const resolved = LOTS.map((lot) => resolveLotCondition(survey, lot.id))
   const assumedCount = resolved.filter((item) => conditionIsAssumed(item.source)).length
   const noInfoCount = resolved.filter((item) => item.source === 'none').length
-  const cards = `
-    <section class="kpi-grid v2">
-      ${kpiCard('Ganado total', fmt(metrics.animals), deltaAnimals == null ? 'Primer relevamiento' : `${deltaAnimals >= 0 ? '+' : ''}${fmt(deltaAnimals)} vs. anterior`, KPI_ASSETS.animals, 'brown')}
-      ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, KPI_ASSETS.load, capacityClass(metrics.load))}
-      ${kpiCard('Nacimientos', fmt(events.births), 'Desde el relevamiento anterior', KPI_ASSETS.births, 'gold')}
-      ${kpiCard('Mortandad', fmt(events.deaths), 'Registro opcional del período', KPI_ASSETS.deaths, events.deaths ? 'red' : 'neutral')}
-      ${kpiCard('Compras y ventas', `${fmt(events.purchases)} / ${fmt(events.sales)}`, 'Compras / ventas', KPI_ASSETS.trade, 'blue')}
-      ${kpiCard('Lluvia', rain.current == null ? 'Sin dato' : `${fmt(rain.current)} mm`, `${rain.status} · ${rain.detail}`, KPI_ASSETS.rain, rain.status.toLowerCase().replace('é','e'), `data-open-rain="${rainPeriod}" role="button" tabindex="0"`)}
-    </section>`
-
-  const content = `
-    ${renderSurveyNavigator()}
-    <section class="welcome-strip">
-      <div><span class="eyebrow">Relevamiento seleccionado</span><h2>${dateLabel(survey.date)}</h2><p>${survey.lots.length} lotes observados · ${assumedCount} condiciones estimadas · ${noInfoCount} sin información</p></div>
-      <div class="welcome-actions"><button class="btn secondary large" data-edit-selected-survey>${icon('edit', 18)} Editar relevamiento</button><button class="btn primary large" data-start-survey>${icon('plus', 19)} Nuevo relevamiento</button></div>
-    </section>
+  const balance = herdBalanceForSurvey(survey)
+  const cards = `<section class="kpi-grid v7">
+    ${kpiCard('Ganado total', fmt(metrics.animals), deltaAnimals == null ? 'Primer relevamiento' : `${deltaAnimals >= 0 ? '+' : ''}${fmt(deltaAnimals)} vs. anterior`, KPI_ASSETS.animals, 'brown')}
+    ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, KPI_ASSETS.load, capacityClass(metrics.load))}
+    ${kpiCard('Nacimientos', fmt(eventTotalsCurrent.birth), 'Entre relevamientos', KPI_ASSETS.births, 'gold', 'data-nav="eventos" role="button" tabindex="0"')}
+    ${kpiCard('Mortandad', fmt(eventTotalsCurrent.death), 'Entre relevamientos', KPI_ASSETS.deaths, eventTotalsCurrent.death ? 'red' : 'neutral', 'data-nav="eventos" role="button" tabindex="0"')}
+    ${kpiCard('Compras y ventas', `${fmt(eventTotalsCurrent.purchase)} / ${fmt(eventTotalsCurrent.sale)}`, 'Compras / ventas', KPI_ASSETS.trade, 'blue', 'data-nav="eventos" role="button" tabindex="0"')}
+    ${kpiCard('Lluvia en Laprida', rain.current == null ? 'Sin dato' : `${fmt(rain.current)} mm`, `${rain.status}${rain.index == null ? '' : ` · IH ${Math.round(rain.index)}%`}`, KPI_ASSETS.rain, 'blue', 'data-nav="lluvias" role="button" tabindex="0"')}
+  </section>`
+  const content = `${renderSurveyNavigator()}
+    <section class="welcome-strip"><div><span class="eyebrow">Relevamiento seleccionado</span><h2>${dateLabel(survey.date)}</h2><p>${survey.lots.length} lotes observados · ${assumedCount} condiciones estimadas · ${noInfoCount} sin información</p></div><div class="welcome-actions"><button class="btn secondary large" data-edit-selected-survey>${icon('edit',18)} Editar relevamiento</button><button class="btn primary large" data-start-survey>${icon('plus',19)} Nuevo relevamiento</button></div></section>
     ${cards}
-    <section class="dashboard-grid">
-      <article class="panel map-panel">
-        <div class="panel-head"><div><span class="eyebrow">Mapa vivo</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>
-        ${renderMap(survey, true)}
-      </article>
+    <section class="dashboard-grid v7-dashboard-grid">
+      <article class="panel map-panel"><div class="panel-head"><div><span class="eyebrow">Lectura visual sin etiquetas</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>${renderMap(survey,true)}<p class="map-reading-note">Terreno = condición · borde = carga · sprites = cantidad y composición.</p></article>
       <aside class="dashboard-side">
-        <article class="panel alerts-panel">
-          <div class="panel-head"><h3>Alertas de carga</h3><span class="count-pill">${alerts.length}</span></div>
-          ${alerts.length ? `<div class="alert-list">${alerts.map(renderAlert).join('')}</div>` : '<div class="empty-inline">Sin alertas de carga.</div>'}
-        </article>
-        <article class="panel">
-          <div class="panel-head"><h3>Composición del rodeo</h3></div>
-          ${renderCategoryBars(metrics.categories, metrics.animals)}
-        </article>
-        <article class="panel rain-card interactive" data-open-rain="${rainPeriod}">
-          <div class="panel-head"><h3>Registro de lluvia</h3><button class="text-link" data-open-rain="${rainPeriod}">Cargar / editar</button></div>
-          <div class="rain-hero"><strong>${rain.current == null ? '—' : fmt(rain.current)}</strong><span>mm · ${monthLabel(rainPeriod)}</span><b class="rain-state ${esc(rain.status.toLowerCase().replace('é','e'))}">${esc(rain.status)}</b></div>
-          <p>${esc(rain.detail)}</p>
-        </article>
+        <article class="panel alerts-panel"><div class="panel-head"><h3>Alertas resumidas</h3><span class="count-pill">${alerts.length}</span></div>${alerts.length?`<div class="alert-list">${alerts.map(renderAlert).join('')}</div>`:'<div class="empty-inline success">Sin alertas operativas.</div>'}</article>
+        <article class="panel"><div class="panel-head"><h3>Composición del rodeo</h3></div>${renderCategoryBars(metrics.categories,metrics.animals)}</article>
+        <article class="panel balance-panel"><div class="panel-head"><div><span class="eyebrow">Cambio entre fotografías</span><h3>Balance del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver eventos</button></div>${renderBalancePanel(balance,true)}</article>
+        <article class="panel rain-card interactive" data-nav="lluvias"><div class="panel-head"><h3>Lluvia · Laprida</h3><button class="text-link" data-nav="lluvias">Abrir módulo</button></div><div class="rain-hero"><strong>${rain.current==null?'—':fmt(rain.current)}</strong><span>mm · ${monthLabel(rainPeriod)}</span><b class="rain-state ${hydricClass(rain.index)}">${esc(rain.status)}</b></div><p>${esc(rain.detail)}</p></article>
       </aside>
     </section>
     ${renderLotsSummaryTable(survey)}
-    <section class="bottom-grid">
-      <article class="panel adoption-card">
-        <div class="adoption-visual single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div>
-        <div><span class="eyebrow">Carga simple, datos útiles</span><h3>Registrá cada lote observado</h3><p>Podés cargar animales y condición, o registrar un lote vacío solamente para informar su estado.</p><button class="btn primary" data-start-survey>Comenzar relevamiento</button></div>
-      </article>
-      <article class="panel recent-panel"><div class="panel-head"><h3>Últimos relevamientos</h3><button class="text-link" data-open-survey-history>Ver todos</button></div>${renderRecentSurveys()}</article>
-    </section>`
-  return renderShell(content, 'Resumen del campo', 'Animales, carga y condición del relevamiento seleccionado')
+    <section class="bottom-grid"><article class="panel adoption-card"><div class="adoption-visual single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div><div><span class="eyebrow">Del evento a la próxima fotografía</span><h3>Registrá cambios y validá el siguiente relevamiento</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones preparan el stock esperado.</p><div class="button-row"><button class="btn secondary" data-nav="eventos">Registrar evento</button><button class="btn primary" data-start-survey>Nuevo relevamiento</button></div></div></article><article class="panel recent-panel"><div class="panel-head"><h3>Últimos relevamientos</h3><button class="text-link" data-open-survey-history>Ver todos</button></div>${renderRecentSurveys()}</article></section>`
+  return renderShell(content,'Resumen del campo','Condición, carga, rodeo, eventos y lluvia del relevamiento seleccionado')
 }
 
 function kpiCard(label, value, note, assetPath, tone, attrs = '') {
@@ -670,29 +1238,57 @@ function kpiCard(label, value, note, assetPath, tone, attrs = '') {
 }
 
 function renderAlert(alert) {
-  return `<button class="alert-item ${alert.severity}" ${alert.lotId ? `data-lot="${alert.lotId}"` : ''}><span>${icon('alert', 18)}</span><div><strong>${esc(alert.title)}</strong><p>${esc(alert.text)}</p></div>${alert.lotId ? icon('chevron', 17) : ''}</button>`
+  const lotAttr = alert.lotIds?.length ? `data-alert-lots="${alert.lotIds.join(',')}"` : alert.lotId ? `data-lot="${alert.lotId}"` : ''
+  return `<button class="alert-item ${alert.severity}" ${lotAttr}><span>${icon('alert', 18)}</span><div><strong>${esc(alert.title)}</strong><p>${esc(alert.text)}</p></div>${lotAttr ? icon('chevron', 17) : ''}</button>`
 }
 
 function renderCategoryBars(categories, total) {
-  const rows = CATEGORIES.map((category) => ({ ...category, quantity: categories[category.id] || 0 })).filter((item) => item.quantity > 0).sort((a, b) => b.quantity - a.quantity).slice(0, 6)
-  return `<div class="category-bars">${rows.map((item) => `<div class="category-row"><div><span>${esc(item.short)}</span><strong>${fmt(item.quantity)}</strong></div><div class="bar"><i style="width:${Math.max(3, item.quantity / Math.max(1, total) * 100)}%"></i></div></div>`).join('')}</div>`
+  const families = CATEGORY_FAMILIES.map((family) => ({
+    ...family,
+    quantity: CATEGORIES.filter((category) => category.parent === family.id).reduce((sum, category) => sum + Number(categories[category.id] || 0), 0),
+  })).filter((item) => item.quantity > 0).sort((a, b) => b.quantity - a.quantity)
+  const max = Math.max(1, ...families.map((item) => item.quantity))
+  return `<div class="category-bars v7-category-bars">${families.map((item) => {
+    const pct = total ? item.quantity / total * 100 : 0
+    return `<div class="category-row"><div><span>${esc(item.label)}</span><strong>${fmt(item.quantity)} <em>${decimal(pct, 0)}%</em></strong></div><div class="bar"><i style="width:${Math.max(3, item.quantity / max * 100)}%"></i></div></div>`
+  }).join('')}</div>`
 }
 
+function lotTableData(survey, lot) {
+  const metrics = surveyMetrics(survey)
+  const entry = (survey.lots || []).find((item) => item.lotId === lot.id)
+  const metric = metrics.byLot[lot.id]
+  const condition = resolveLotCondition(survey, lot.id)
+  const rollup = lotCategoryRollup(entry?.groups || [])
+  return { lot, entry, metric, condition, rollup }
+}
+
+function renderLotsDataTable(survey, context = 'summary') {
+  const rows = LOTS.map((lot) => {
+    const { entry, metric, condition, rollup } = lotTableData(survey, lot)
+    const conditionCode = `${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}`
+    const loadValue = entry ? decimal(metric.load) : '—'
+    const loadClass = entry ? capacityClass(metric.load) : 'empty'
+    return `<div class="lot-data-row v7-one-line ${ui.selectedLotId === lot.id ? 'selected' : ''}" data-table-lot="${lot.id}">
+      <button class="lot-data-main" data-table-lot="${lot.id}" aria-label="Abrir ${lot.name}">
+        <span class="lot-data-cell lot-name">${lot.name.replace('ER-','')}</span>
+        <span class="lot-data-cell condition"><b class="state-${condition.stateId}">${conditionCode}</b></span>
+        <span class="lot-data-cell load"><i class="load-dot ${loadClass}"></i>${loadValue}</span>
+        <span class="lot-data-cell total"><strong>${entry ? fmt(metric.animals) : '—'}</strong></span>
+        <span class="lot-data-cell cow">${entry ? fmt(rollup.cows) : '—'}</span>
+        <span class="lot-data-cell calf">${entry ? fmt(rollup.calves) : '—'}</span>
+        <span class="lot-data-cell bull">${entry ? fmt(rollup.bulls) : '—'}</span>
+        <span class="lot-data-cell heifer">${entry ? fmt(rollup.heifers) : '—'}</span>
+        <span class="lot-data-cell steer">${entry ? fmt(rollup.steers) : '—'}</span>
+      </button>
+      <button class="lot-data-edit" data-edit-table-lot="${lot.id}" aria-label="Editar ${lot.name}">${icon('edit', 15)}</button>
+    </div>`
+  }).join('')
+  return `<div class="lot-data-table v7 ${context}"><div class="lot-data-header"><span>Lote</span><span>Cond.</span><span>EV</span><span>Total</span><span>Vaca</span><span>Tern.</span><span>Toro</span><span class="heifer">Vaq.</span><span class="steer">Nov.</span><span></span></div>${rows}</div>`
+}
 
 function renderLotsSummaryTable(survey) {
-  const metrics = surveyMetrics(survey)
-  const observed = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
-  const rows = LOTS.map((lot) => {
-    const entry = observed[lot.id]
-    const metric = metrics.byLot[lot.id]
-    const condition = resolveLotCondition(survey, lot.id)
-    const rollup = lotCategoryRollup(entry?.groups || [])
-    const conditionCode = `${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}`
-    const loadClass = entry ? capacityClass(metric.load) : 'empty'
-    const loadValue = entry ? decimal(metric.load) : '—'
-    return `<tr data-lot="${lot.id}"><th><button class="lot-table-link" data-lot="${lot.id}">${lot.name}</button></th><td><span class="table-condition state-${condition.stateId} source-${condition.source}" title="${esc(condition.label)}">${esc(conditionCode)}</span></td><td><span class="table-load compact ${loadClass}" title="${entry ? `${capacityLabel(metric.load)} · ${loadValue} EV/ha` : 'Sin carga'}"><i></i>${loadValue}</span></td><td class="numeric"><strong>${entry ? fmt(metric.animals) : '—'}</strong></td><td class="numeric">${entry ? fmt(rollup.cows) : '—'}</td><td class="numeric">${entry ? fmt(rollup.calves) : '—'}</td><td class="numeric">${entry ? fmt(rollup.bulls) : '—'}</td></tr>`
-  }).join('')
-  return `<section class="panel lots-summary-panel"><div class="panel-head"><div><span class="eyebrow">Vista simplificada</span><h3>Todos los lotes</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div><div class="lots-table-wrap"><table class="lots-summary-table"><colgroup><col class="col-lot"><col class="col-condition"><col class="col-load"><col class="col-total"><col class="col-cow"><col class="col-calf"><col class="col-bull"></colgroup><thead><tr><th>Lote</th><th title="Condición">C.</th><th title="Carga EV/ha">EV</th><th title="Total de animales">Σ</th><th title="Vacas">V</th><th title="Terneros/as">T/A</th><th title="Toros">To</th></tr></thead><tbody>${rows}</tbody></table></div><p class="table-note">MB: muy bueno · B: bueno · R: regular · M: malo · AN: anegado · ≈ estimada.</p></section>`
+  return `<section class="panel lots-summary-panel"><div class="panel-head"><div><span class="eyebrow">Comparación operativa</span><h3>Todos los lotes</h3></div><button class="btn ghost" data-open-map-table>Mapa / Tabla</button></div>${renderLotsDataTable(survey, 'summary')}<p class="table-note">MB: muy bueno · B: bueno · R: regular · M: malo · AN: anegado · ≈ estimada.</p></section>`
 }
 
 function renderRecentSurveys() {
@@ -734,8 +1330,7 @@ function seededNumber(seed) {
 function spriteCountForLot(lot, metric, compact) {
   const heads = Number(metric.animals) || 0
   if (!heads) return 0
-  const raw = Math.max(1, Math.ceil(heads / 30))
-  return compact ? Math.min(3, raw) : Math.min(8, raw)
+  return Math.max(1, Math.ceil(heads / 10))
 }
 
 function dominantAnimalKind(lotEntry) {
@@ -750,39 +1345,27 @@ function dominantAnimalKind(lotEntry) {
 }
 
 function allocateVisualKinds(lotEntry, slotCount) {
-  const totals = { motherCow: 0, otherCow: 0, bull: 0, calf: 0 }
-  for (const group of lotEntry.groups || []) {
-    const quantity = Math.max(0, Number(group.quantity) || 0)
-    if (group.categoryId === 'vacas') totals.motherCow += quantity
-    else {
-      const kind = categoryLookup[group.categoryId]?.kind || 'cow'
-      if (kind === 'cow') totals.otherCow += quantity
-      else totals[kind] += quantity
-    }
+  const totals = { cow: 0, bull: 0, calf: 0 }
+  for (const group of lotEntry?.groups || []) {
+    const category = categoryLookup[group.categoryId]
+    if (!category) continue
+    totals[category.kind] = (totals[category.kind] || 0) + Math.max(0, Number(group.quantity) || 0)
   }
-  const paired = Math.min(totals.motherCow, totals.calf)
-  const weights = {
-    cowCalf: paired * 2,
-    cow: Math.max(0, totals.motherCow - paired) + totals.otherCow,
-    calf: Math.max(0, totals.calf - paired),
-    bull: totals.bull,
+  const total = Object.values(totals).reduce((sum, value) => sum + value, 0)
+  if (!total || !slotCount) return []
+  const raw = Object.entries(totals).filter(([, quantity]) => quantity > 0).map(([kind, quantity]) => ({ kind, exact: quantity / total * slotCount }))
+  const allocations = Object.fromEntries(raw.map((item) => [item.kind, Math.floor(item.exact)]))
+  let assigned = Object.values(allocations).reduce((sum, value) => sum + value, 0)
+  raw.sort((a, b) => (b.exact - Math.floor(b.exact)) - (a.exact - Math.floor(a.exact)))
+  for (const item of raw) {
+    if (assigned >= slotCount) break
+    allocations[item.kind] = (allocations[item.kind] || 0) + 1
+    assigned += 1
   }
-  const positive = Object.entries(weights).filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1])
-  if (!positive.length || !slotCount) return []
-  const selected = positive.slice(0, slotCount)
-  const allocations = Object.fromEntries(selected.map(([kind]) => [kind, 1]))
-  let remaining = slotCount - selected.length
-  while (remaining > 0) {
-    const kind = selected
-      .map(([name, weight]) => ({ name, score: weight / (allocations[name] + 1) }))
-      .sort((a, b) => b.score - a.score)[0].name
-    allocations[kind] += 1
-    remaining -= 1
-  }
-  const order = ['cowCalf', 'cow', 'calf', 'bull']
   const result = []
-  for (const kind of order) for (let index = 0; index < (allocations[kind] || 0); index++) result.push(kind)
-  return result
+  for (const kind of ['cow','calf','bull']) for (let index = 0; index < (allocations[kind] || 0); index++) result.push(kind)
+  while (result.length < slotCount) result.push(raw[0]?.kind || 'cow')
+  return result.slice(0, slotCount)
 }
 
 function isHouseZone(lotId, x, y) {
@@ -798,24 +1381,38 @@ function spritePositions(lot, count, spriteWidth) {
   const minX = Math.min(...xs), maxX = Math.max(...xs)
   const minY = Math.min(...ys), maxY = Math.max(...ys)
   const width = maxX - minX, height = maxY - minY
-  const marginX = Math.max(spriteWidth * .62, Math.min(22, width * .13))
-  const marginY = Math.max(spriteWidth * .38, Math.min(22, height * .11))
+  const marginX = Math.max(5, spriteWidth * .45)
+  const marginY = Math.max(5, spriteWidth * .35)
   const positions = []
-  const fitsInside = (x, y) => {
-    const halfW = spriteWidth * .48, halfH = spriteWidth * .28
-    return [[x,y],[x-halfW,y-halfH],[x+halfW,y-halfH],[x-halfW,y+halfH],[x+halfW,y+halfH]].every((point) => pointInPolygon(point, polygon))
+  const cols = Math.max(1, Math.ceil(Math.sqrt(count * Math.max(.45, width / Math.max(1, height)))))
+  const rows = Math.max(1, Math.ceil(count / cols))
+  const candidates = []
+  for (let row = 0; row < rows + 3; row++) {
+    for (let col = 0; col < cols + 3; col++) {
+      const jitterX = (seededNumber(`${lot.id}-grid-x-${row}-${col}`) - .5) * .34
+      const jitterY = (seededNumber(`${lot.id}-grid-y-${row}-${col}`) - .5) * .34
+      const x = minX + marginX + ((col + .5 + jitterX) / (cols + 3)) * Math.max(1, width - marginX * 2)
+      const y = minY + marginY + ((row + .5 + jitterY) / (rows + 3)) * Math.max(1, height - marginY * 2)
+      if (pointInPolygon([x, y], polygon) && !isHouseZone(lot.id, x, y)) candidates.push({ x, y, rank: seededNumber(`${lot.id}-rank-${row}-${col}`) })
+    }
   }
-  for (let attempt = 0; attempt < 900 && positions.length < count; attempt++) {
-    const x = minX + marginX + seededNumber(`${lot.id}-v505-x-${attempt}`) * Math.max(1, width - marginX * 2)
-    const y = minY + marginY + seededNumber(`${lot.id}-v505-y-${attempt}`) * Math.max(1, height - marginY * 2)
-    const labelDistance = Math.hypot(x - lot.label[0], y - lot.label[1])
-    const minDistance = Math.max(spriteWidth * .82, Math.min(38, width / Math.max(2.2, Math.sqrt(count))))
-    if (!fitsInside(x, y) || labelDistance < Math.max(70, spriteWidth * 2.4) || isHouseZone(lot.id, x, y)) continue
-    if (positions.some((point) => Math.hypot(x - point.x, y - point.y) < minDistance)) continue
-    positions.push({ x, y })
+  for (let attempt = 0; attempt < 1500 && candidates.length < count * 5; attempt++) {
+    const x = minX + marginX + seededNumber(`${lot.id}-x-${attempt}`) * Math.max(1, width - marginX * 2)
+    const y = minY + marginY + seededNumber(`${lot.id}-y-${attempt}`) * Math.max(1, height - marginY * 2)
+    if (pointInPolygon([x, y], polygon) && !isHouseZone(lot.id, x, y)) candidates.push({ x, y, rank: seededNumber(`${lot.id}-r-${attempt}`) })
   }
-  if (!positions.length && fitsInside(lot.sprite[0], lot.sprite[1])) positions.push({ x: lot.sprite[0], y: lot.sprite[1] })
-  return positions
+  candidates.sort((a, b) => a.rank - b.rank)
+  let minDistance = Math.max(5, Math.min(spriteWidth * .72, Math.sqrt(Math.max(1, polygonArea(polygon) / Math.max(1, count))) * .42))
+  for (let pass = 0; pass < 6 && positions.length < count; pass++) {
+    for (const candidate of candidates) {
+      if (positions.length >= count) break
+      if (positions.some((point) => Math.hypot(candidate.x - point.x, candidate.y - point.y) < minDistance)) continue
+      positions.push({ x: candidate.x, y: candidate.y })
+    }
+    minDistance *= .76
+  }
+  while (positions.length < count && candidates.length) positions.push(candidates[positions.length % candidates.length])
+  return positions.slice(0, count)
 }
 
 function conditionShortCode(stateId) {
@@ -824,46 +1421,99 @@ function conditionShortCode(stateId) {
 
 function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition) {
   const count = spriteCountForLot(lot, metric, compact)
-  const virtualWidth = compact ? 46 : 38
-  const positions = spritePositions(lot, count, virtualWidth)
+  if (!count) return ''
+  const area = polygonArea(parseLotPoints(lot))
+  const calculated = Math.sqrt(Math.max(1, area / count)) * (compact ? .45 : .52)
+  const spriteWidth = Math.max(compact ? 10 : 14, Math.min(compact ? 22 : 31, calculated))
+  const positions = spritePositions(lot, count, spriteWidth)
   const kinds = allocateVisualKinds(lotEntry, positions.length)
+  const directions = ['north', 'east', 'south', 'west']
   return positions.map((position, index) => {
     const kind = kinds[index] || 'cow'
-    const variants = SPRITE_VARIANTS[kind] || SPRITE_VARIANTS.cow
-    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v505`) * variants.length) % variants.length]
-    const angle = (seededNumber(`${lot.id}-${index}-angle-v505`) - .5) * 8
-    const left = (position.x / 1154 * 100).toFixed(3)
-    const top = (position.y / 1363 * 100).toFixed(3)
-    return `<img class="map-animal-html ${kind} state-${condition?.stateId || 'no-observado'}" src="./assets/${asset}" alt="" style="left:${left}%;top:${top}%;--animal-angle:${angle.toFixed(1)}deg" />`
+    const direction = directions[Math.floor(seededNumber(`${lot.id}-${index}-direction-v701`) * directions.length) % directions.length]
+    const variants = SPRITE_VARIANTS[kind]?.[direction] || SPRITE_VARIANTS.cow.east
+    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v701`) * variants.length) % variants.length]
+    const width = kind === 'calf' ? spriteWidth * .78 : kind === 'bull' ? spriteWidth * 1.08 : spriteWidth
+    const height = width
+    return `<image class="map-animal-svg ${kind} direction-${direction} state-${condition?.stateId || 'no-observado'}" href="./assets/${asset}" x="${(position.x - width / 2).toFixed(2)}" y="${(position.y - height / 2).toFixed(2)}" width="${width.toFixed(2)}" height="${height.toFixed(2)}" preserveAspectRatio="xMidYMid meet" />`
   }).join('')
 }
 
-function renderMapLabelHtml(lot, metric, entry, condition, compact) {
+
+function fullMapViewBox() {
+  return { x: 25, y: 22, width: 1085, height: 1305 }
+}
+
+function lotBounds(lot) {
   const points = parseLotPoints(lot)
-  const width = Math.max(...points.map((point) => point[0])) - Math.min(...points.map((point) => point[0]))
-  const narrow = width <= 108
-  const observed = Boolean(entry)
-  const status = observed ? capacityClass(metric.load) : 'empty'
-  const conditionCode = `${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}`
-  const loadValue = observed ? decimal(metric.load) : '—'
-  const count = observed ? fmt(metric.animals) : '—'
-  const code = lot.name.replace('ER-', '')
-  const left = (lot.label[0] / 1154 * 100).toFixed(3)
-  const top = (lot.label[1] / 1363 * 100).toFixed(3)
-  const displayName = compact && narrow ? code : lot.name
-  const meta = compact
-    ? `<span class="map-label-html-meta compact-meta"><i class="map-load-mini ${status}" title="Carga: ${observed ? `${loadValue} EV/ha` : 'sin información'}"><b></b></i></span>`
-    : `<span class="map-label-html-meta"><i class="map-condition-mini state-${condition.stateId}" title="Condición: ${esc(condition.label)}">${esc(conditionCode)}</i><i class="map-load-mini ${status}" title="Carga: ${observed ? `${loadValue} EV/ha` : 'sin información'}"><b></b><em>${loadValue}</em></i></span>`
-  return `<button class="map-label-html ${narrow ? 'narrow' : 'standard'} ${compact ? 'compact' : 'full'} source-${condition.source}" data-map-lot="${lot.id}" style="left:${left}%;top:${top}%" aria-label="${lot.name}: ${count} animales, condición ${condition.label}, carga ${loadValue} EV por hectárea">
-    <span class="map-label-html-name">${esc(displayName)}${compact && conditionIsAssumed(condition.source) ? '≈' : ''}</span>
-    <strong class="map-label-html-count">${count}</strong>
-    ${meta}
-  </button>`
+  const xs = points.map((point) => point[0]), ys = points.map((point) => point[1])
+  return { x: Math.min(...xs), y: Math.min(...ys), width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys) }
+}
+
+function clampViewBox(box) {
+  const full = fullMapViewBox()
+  const width = Math.max(150, Math.min(full.width, box.width))
+  const height = Math.max(180, Math.min(full.height, box.height))
+  return {
+    x: Math.max(full.x, Math.min(full.x + full.width - width, box.x)),
+    y: Math.max(full.y, Math.min(full.y + full.height - height, box.y)),
+    width, height,
+  }
+}
+
+function viewBoxForLot(lotId, padding = .34) {
+  const lot = lotLookup[lotId] || lotLookup['ER-08-09']
+  const bounds = lotBounds(lot)
+  const width = Math.max(250, bounds.width * (1 + padding * 2))
+  const height = Math.max(300, bounds.height * (1 + padding * 2))
+  return clampViewBox({ x: bounds.x - (width - bounds.width) / 2, y: bounds.y - (height - bounds.height) / 2, width, height })
+}
+
+function currentMapViewBox() {
+  if (!ui.mapViewBox) ui.mapViewBox = viewBoxForLot(ui.selectedLotId || 'ER-08-09')
+  return clampViewBox(ui.mapViewBox)
+}
+
+function zoomMap(factor, anchorX = .5, anchorY = .5) {
+  const box = currentMapViewBox()
+  const width = box.width * factor
+  const height = box.height * factor
+  ui.mapViewBox = clampViewBox({ x: box.x + (box.width - width) * anchorX, y: box.y + (box.height - height) * anchorY, width, height })
+}
+
+function focusMapLot(lotId) {
+  ui.selectedLotId = lotId
+  ui.mapViewBox = viewBoxForLot(lotId)
+  ui.mapInspectorTab = 'actual'
+}
+
+function renderMapPillSvg(lot, metric, entry, condition, selected, viewBox) {
+  const shouldShow = selected || viewBox.width < 700
+  if (!shouldShow) return ''
+  const detailed = selected && viewBox.width < 520
+  const narrow = lotBounds(lot).width < 110
+  const scale = Math.max(.65, Math.min(1.45, viewBox.width / 520))
+  const width = (detailed ? 142 : narrow ? 64 : 92) * scale
+  const height = (detailed ? 52 : 38) * scale
+  const x = lot.label[0] - width / 2
+  const y = lot.label[1] - height / 2
+  const total = entry ? fmt(metric.animals) : '—'
+  const title = narrow && !detailed ? lot.name.replace('ER-','') : lot.name
+  const second = detailed ? `${total} · ${entry ? decimal(metric.load) : '—'} EV/ha` : `${total}${conditionIsAssumed(condition.source) ? ' ≈' : ''}`
+  const third = detailed ? `${conditionShortCode(condition.stateId)} · ${capacityLabel(metric.load)}` : ''
+  return `<g class="map-pill-svg ${selected ? 'selected' : ''}" data-map-lot="${lot.id}" transform="translate(${x.toFixed(2)} ${y.toFixed(2)})"><rect width="${width.toFixed(2)}" height="${height.toFixed(2)}" rx="${(11*scale).toFixed(2)}"/><text x="${(width/2).toFixed(2)}" y="${(detailed?16:15)*scale}" text-anchor="middle"><tspan class="pill-title">${esc(title)}</tspan><tspan class="pill-value" x="${(width/2).toFixed(2)}" dy="${(detailed?17:15)*scale}">${esc(second)}</tspan>${third?`<tspan class="pill-meta" x="${(width/2).toFixed(2)}" dy="${12*scale}">${esc(third)}</tspan>`:''}</text></g>`
+}
+
+function renderMapHousesSvg() {
+  return `<image class="map-house-svg main" href="./assets/buildings/building-house-main-er08-09.png" x="309" y="375" width="58" height="58" preserveAspectRatio="xMidYMid meet"/><image class="map-house-svg secondary" href="./assets/buildings/building-house-secondary-er13.png" x="586" y="719" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`
+}
+
+function renderMapLabelHtml(lot, metric, entry, condition, compact) {
+  return ''
 }
 
 function renderMapHousesHtml(compact) {
-  return `<img class="map-house-html main" src="./assets/buildings/building-house-main-er08-09.png" alt="Casa principal" style="left:${(337/1154*100).toFixed(3)}%;top:${(406/1363*100).toFixed(3)}%" />
-    <img class="map-house-html secondary" src="./assets/buildings/building-house-secondary-er13.png" alt="Casa secundaria" style="left:${(610/1154*100).toFixed(3)}%;top:${(748/1363*100).toFixed(3)}%" />`
+  return renderMapHousesSvg()
 }
 
 function renderMap(survey, compact = false) {
@@ -871,101 +1521,88 @@ function renderMap(survey, compact = false) {
   const selected = ui.selectedLotId
   const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
   const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
+  const viewBox = compact ? fullMapViewBox() : currentMapViewBox()
   const patternDefs = LOTS.flatMap((lot) => FIELD_STATES.filter((item) => item.pattern).map((item) => {
-    const baseSize = compact ? 70 : 96
-    const tileSize = baseSize + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v505`) * (compact ? 16 : 20))
-    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v505`) * tileSize)
-    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v505`) * tileSize)
-    return `
-    <pattern id="condition-${item.id}-${lot.id}" patternUnits="userSpaceOnUse" x="${offsetX}" y="${offsetY}" width="${tileSize}" height="${tileSize}">
-      <image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${tileSize}" height="${tileSize}" preserveAspectRatio="xMidYMid slice" />
-    </pattern>`
-  })).join('') + `
-    <pattern id="condition-assumed-hatch" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(32)">
-      <rect width="18" height="18" fill="transparent" />
-      <rect width="2" height="18" fill="rgba(255,255,255,.30)" />
-    </pattern>
-    <pattern id="condition-no-info" patternUnits="userSpaceOnUse" width="22" height="22" patternTransform="rotate(35)">
-      <rect width="22" height="22" fill="rgba(232,232,222,.10)" />
-      <rect width="2" height="22" fill="rgba(255,255,255,.28)" />
-    </pattern>`
-
+    const baseSize = compact ? 34 : 46
+    const tileSize = baseSize + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v701`) * (compact ? 8 : 12))
+    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v701`) * tileSize)
+    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v701`) * tileSize)
+    return `<pattern id="condition-${item.id}-${lot.id}-${compact?'c':'f'}" patternUnits="userSpaceOnUse" x="${offsetX}" y="${offsetY}" width="${tileSize}" height="${tileSize}"><image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${tileSize}" height="${tileSize}" preserveAspectRatio="xMidYMid slice" /></pattern>`
+  })).join('') + `<pattern id="condition-assumed-hatch-${compact?'c':'f'}" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(32)"><rect width="18" height="18" fill="transparent"/><rect width="1.5" height="18" fill="rgba(255,255,255,.22)"/></pattern><pattern id="condition-no-info-${compact?'c':'f'}" patternUnits="userSpaceOnUse" width="22" height="22" patternTransform="rotate(35)"><rect width="22" height="22" fill="rgba(232,232,222,.05)"/><rect width="1.2" height="22" fill="rgba(255,255,255,.18)"/></pattern>`
   const conditionLayer = LOTS.map((lot) => {
     const condition = conditions[lot.id]
-    if (condition.source === 'none') return `<polygon class="lot-condition source-none state-no-observado" points="${lot.points}" fill="url(#condition-no-info)" />`
-    const assumed = conditionIsAssumed(condition.source)
-    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${lot.id})" />${assumed ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
+    if (condition.source === 'none') return `<polygon class="lot-condition source-none state-no-observado" points="${lot.points}" fill="url(#condition-no-info-${compact?'c':'f'})" />`
+    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${lot.id}-${compact?'c':'f'})" />${conditionIsAssumed(condition.source) ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch-${compact?'c':'f'})" />` : ''}`
   }).join('')
-
-  const loadHalos = LOTS.map((lot) => {
-    const metric = metrics.byLot[lot.id]
-    return `<polygon class="lot-load-halo ${capacityClass(metric.load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`
-  }).join('')
-  const loadBorders = LOTS.map((lot) => {
-    const metric = metrics.byLot[lot.id]
-    return `<polygon class="lot-load-border ${capacityClass(metric.load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`
-  }).join('')
+  const loadHalos = LOTS.map((lot) => `<polygon class="lot-load-halo ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
+  const loadBorders = LOTS.map((lot) => `<polygon class="lot-load-border ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
+  const animals = (survey.lots || []).filter((entry) => metrics.byLot[entry.lotId]?.animals > 0).map((entry) => renderHerdSpritesHtml(entry, lotLookup[entry.lotId], compact, metrics.byLot[entry.lotId], conditions[entry.lotId])).join('')
+  const pills = compact ? '' : LOTS.map((lot) => renderMapPillSvg(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], selected === lot.id, viewBox)).join('')
   const hitAreas = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
-  const animals = survey.lots.filter((lotEntry) => metrics.byLot[lotEntry.lotId]?.animals > 0).map((lotEntry) => renderHerdSpritesHtml(lotEntry, lotLookup[lotEntry.lotId], compact, metrics.byLot[lotEntry.lotId], conditions[lotEntry.lotId])).join('')
-  const labels = LOTS.map((lot) => renderMapLabelHtml(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], compact)).join('')
+  const svg = `<svg class="map-canvas v701-map-svg ${compact?'summary':'zoomable'}" data-map-svg="${compact?'summary':'full'}" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario"><defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="map-animal-layer">${animals}</g><g class="map-house-layer">${renderMapHousesSvg()}</g><g class="map-pill-layer">${pills}</g><g class="interaction-layer">${hitAreas}</g></svg>`
+  if (compact) return `<div class="ranch-map compact summary-map v701-summary-map">${svg}</div>`
+  return `<div class="map-zoom-shell"><div class="ranch-map full full-map v701-full-map">${svg}</div><div class="map-zoom-controls"><button data-map-zoom-in title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all title="Ver todo">Todo</button></div><div class="map-zoom-hint">Arrastrá para mover · rueda o botones para zoom</div></div>`
+}
 
-  return `<div class="ranch-map ${compact ? 'compact summary-map' : 'full full-map'}">
-    <svg class="map-canvas" viewBox="0 0 1154 1363" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario">
-      <defs>${patternDefs}</defs>
-      <image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none" />
-      <g class="condition-layer">${conditionLayer}</g>
-      <g class="load-halo-layer">${loadHalos}</g>
-      <g class="load-border-layer">${loadBorders}</g>
-      <g class="interaction-layer">${hitAreas}</g>
-    </svg>
-    <div class="map-ui-overlay ${compact ? 'compact' : 'full'}">
-      <div class="map-animal-overlay">${animals}</div>
-      <div class="map-house-overlay">${renderMapHousesHtml(compact)}</div>
-      <div class="map-label-overlay">${labels}</div>
-    </div>
-    <div class="map-load-badge"><span>Carga total</span><strong>${decimal(metrics.load)} EV/ha</strong></div>
-  </div>`
+
+function renderLotHistoryChart(lotId, compact = false) {
+  const series = lotHistorySeries(lotId)
+  if (!series.length) return '<div class="empty-inline">No hay historial para este lote.</div>'
+  const width = compact ? 430 : 620, height = compact ? 180 : 250, padX = 30, top = 22, chartBottom = compact ? 122 : 174
+  const maxLoad = Math.max(1.2, TARGET_LOAD * 1.4, ...series.map((item) => item.load || 0))
+  const x = (index) => series.length === 1 ? width / 2 : padX + index * (width - padX * 2) / (series.length - 1)
+  const y = (value) => chartBottom - (value / maxLoad) * (chartBottom - top)
+  const points = series.map((item, index) => `${x(index)},${y(item.load || 0)}`).join(' ')
+  const targetY = y(TARGET_LOAD)
+  const conditionY = compact ? 142 : 196
+  const stripWidth = (width - padX * 2) / series.length
+  return `<svg class="lot-history-chart ${compact?'compact':''}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Evolución de carga y condición"><line class="history-target" x1="${padX}" y1="${targetY}" x2="${width-padX}" y2="${targetY}"/><text class="history-target-label" x="${width-padX}" y="${targetY-5}" text-anchor="end">0,8 EV/ha</text><polyline class="history-load-line" points="${points}"/>${series.map((item,index)=>`<circle class="history-point ${capacityClass(item.load)}" cx="${x(index)}" cy="${y(item.load || 0)}" r="${compact?3.5:4.5}"><title>${compactDateLabel(item.survey.date)} · ${decimal(item.load)} EV/ha · ${item.condition.label}</title></circle>`).join('')}${series.map((item,index)=>`<rect class="history-condition state-${item.condition.stateId} source-${item.condition.source}" x="${padX+index*stripWidth+1}" y="${conditionY}" width="${Math.max(2,stripWidth-2)}" height="18" rx="3"><title>${compactDateLabel(item.survey.date)} · ${item.condition.label}${conditionIsAssumed(item.condition.source)?' estimada':''}</title></rect>`).join('')}${series.map((item,index)=>index%Math.max(1,Math.ceil(series.length/6))===0?`<text class="history-date" x="${x(index)}" y="${height-8}" text-anchor="middle">${item.survey.date.slice(5,7)}/${item.survey.date.slice(2,4)}</text>`:'').join('')}</svg>`
+}
+
+function renderLotEvents(lotId, untilDate = null) {
+  const events = eventsForLot(lotId, untilDate)
+  if (!events.length) return '<div class="empty-inline">No hay eventos registrados para este lote.</div>'
+  return `<div class="lot-event-list">${events.map((event)=>`<article><span class="event-type-icon type-${event.type}">${eventTypeLookup[event.type]?.icon||'•'}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)}</strong><p>${compactDateLabel(event.date)} · ${esc(categoryLookup[event.categoryId]?.name || '')}${event.toCategoryId?` → ${esc(categoryLookup[event.toCategoryId]?.name || '')}`:''}</p>${event.notes?`<small>${esc(event.notes)}</small>`:''}</div></article>`).join('')}</div>`
+}
+
+function renderLotInspector(survey) {
+  const metrics = surveyMetrics(survey)
+  const lot = ui.selectedLotId ? lotLookup[ui.selectedLotId] : null
+  if (!lot) return `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá un lote o una fila para ver su estado, evolución y eventos.</p></aside>`
+  const lotEntry = (survey.lots || []).find((entry) => entry.lotId === lot.id)
+  const metric = metrics.byLot[lot.id]
+  const condition = resolveLotCondition(survey, lot.id)
+  const loadClass = capacityClass(metric.load)
+  const rollup = lotCategoryRollup(lotEntry?.groups || [])
+  const index = LOTS.findIndex((item) => item.id === lot.id)
+  const prevLot = LOTS[Math.max(0, index - 1)], nextLot = LOTS[Math.min(LOTS.length - 1, index + 1)]
+  const tabs = `<div class="inspector-tabs"><button class="${ui.mapInspectorTab==='actual'?'active':''}" data-inspector-tab="actual">Actual</button><button class="${ui.mapInspectorTab==='evolution'?'active':''}" data-inspector-tab="evolution">Evolución</button><button class="${ui.mapInspectorTab==='events'?'active':''}" data-inspector-tab="events">Eventos</button></div>`
+  const actual = `<div class="inspector-tab-content"><div class="lot-concept-grid"><div class="concept-card condition state-${condition.stateId} source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${conditionSourceLabel(condition.source)}</span></div></div><div class="concept-card load ${loadClass}"><span class="concept-dot"></span><div><small>Carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${lotEntry ? `${decimal(metric.load)} EV/ha · ${Math.round(metric.capacityUse * 100)}%` : 'No registrada'}</span></div></div></div><div class="lot-stat-grid"><div><small>Total</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>Vaca</small><strong>${lotEntry ? fmt(rollup.cows) : '—'}</strong></div><div><small>Tern.</small><strong>${lotEntry ? fmt(rollup.calves) : '—'}</strong></div><div><small>Toro</small><strong>${lotEntry ? fmt(rollup.bulls) : '—'}</strong></div></div><h3 class="mini-history-title">Historia de carga y condición</h3>${renderLotHistoryChart(lot.id,true)}</div>`
+  const evolution = `<div class="inspector-tab-content"><div class="section-heading"><h3>Evolución del lote</h3><p>La línea representa EV/ha y la franja inferior la condición de cada relevamiento.</p></div>${renderLotHistoryChart(lot.id,false)}</div>`
+  const events = `<div class="inspector-tab-content"><div class="section-heading"><h3>Eventos del lote</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones.</p></div>${renderLotEvents(lot.id,survey.date)}<button class="btn secondary full-width" data-add-event data-event-lot="${lot.id}">${icon('plus',16)} Registrar evento</button></div>`
+  const tabContent = ui.mapInspectorTab==='evolution'?evolution:ui.mapInspectorTab==='events'?events:actual
+  return `<aside class="lot-inspector v7"><button class="inspector-close" data-close-lot>${icon('close',20)}</button><span class="eyebrow">Detalle del lote</span><h2>${lot.name}</h2><p>${lot.hectares} hectáreas · ${lotEntry ? 'Observado' : 'No observado en esta fecha'}</p>${tabs}${tabContent}<div class="lot-inspector-actions"><button class="btn primary" data-edit-map-lot="${lot.id}">${icon('edit',16)} ${lotEntry ? 'Editar lote' : 'Registrar lote'}</button><button class="btn secondary" data-add-event data-event-lot="${lot.id}">${icon('event',16)} Evento</button></div><div class="lot-quick-nav"><button data-select-map-lot="${prevLot.id}" ${prevLot.id===lot.id?'disabled':''}>‹ ${prevLot.name}</button><strong>${lot.name}</strong><button data-select-map-lot="${nextLot.id}" ${nextLot.id===lot.id?'disabled':''}>${nextLot.name} ›</button></div></aside>`
 }
 
 function renderMapPage() {
   const survey = selectedSurvey()
-  const metrics = surveyMetrics(survey)
-  const lot = ui.selectedLotId ? lotLookup[ui.selectedLotId] : null
-  const lotEntry = lot ? survey.lots.find((entry) => entry.lotId === lot.id) : null
-  const metric = lot ? metrics.byLot[lot.id] : null
-  const loadClass = metric ? capacityClass(metric.load) : 'empty'
-  const condition = lot ? resolveLotCondition(survey, lot.id) : null
-  const sourceLabel = condition ? conditionSourceLabel(condition.source) : ''
-  const side = lot ? `<aside class="lot-inspector">
-    <button class="inspector-close" data-close-lot>${icon('close',20)}</button>
-    <span class="eyebrow">Lote seleccionado</span><h2>${lot.name}</h2><p>${lot.hectares} hectáreas · ${lotEntry ? 'Observado' : 'No observado en esta fecha'}</p>
-    <div class="lot-stat-grid"><div><small>Animales</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>EV/ha</small><strong>${lotEntry ? decimal(metric.load) : '—'}</strong></div></div>
-    <div class="lot-concept-grid">
-      <div class="concept-card condition state-${condition.stateId} source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${sourceLabel}</span></div></div>
-      <div class="concept-card load ${loadClass}"><span class="concept-dot"></span><div><small>Carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${lotEntry ? `${Math.round(metric.capacityUse * 100)}% del objetivo` : 'No registrada'}</span></div></div>
-    </div>
-    <div class="concept-explanation"><strong>${conditionIsAssumed(condition.source) ? 'Condición estimada' : condition.source === 'observed' ? 'Condición observada' : 'Condición sin información'}</strong><p>${esc(condition.explanation)}</p></div>
-    <div class="load-meter"><i class="${loadClass}" style="width:${lotEntry ? Math.min(100, metric.capacityUse * 100) : 0}%"></i></div>
-    <h3>Composición</h3>
-    <div class="group-list">${lotEntry?.groups?.length ? lotEntry.groups.map((group) => `<div><img src="./assets/${categoryLookup[group.categoryId]?.asset || 'animals/v505/cow-red-angus.png'}"><span>${esc(categoryLookup[group.categoryId]?.short || group.categoryId)}${group.birthYear ? `<small>Nac. ${group.birthYear}</small>` : ''}</span><strong>${fmt(group.quantity)}</strong></div>`).join('') : `<p class="empty-inline">${lotEntry ? 'Lote registrado sin animales.' : 'No se registró este lote.'}</p>`}</div>
-    <div class="lot-inspector-actions"><button class="btn primary" data-edit-map-lot="${lot.id}">${icon('edit',16)} ${lotEntry ? 'Editar lote' : 'Registrar lote'}</button><button class="btn secondary" data-open-survey-history>${icon('history',16)} Cambiar fecha</button></div>
-  </aside>` : `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá cualquier lote para ver animales, carga y condición juntos, y editarlo directamente.</p></aside>`
-  const content = `${renderSurveyNavigator()}<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey, false)}</article>${side}</div>`
-  return renderShell(content, 'Mapa del campo', `Relevamiento del ${dateLabel(survey.date)}`, `<button class="btn primary" data-start-survey>${icon('plus',17)} Nuevo</button>`)
+  if (!ui.selectedLotId) ui.selectedLotId = 'ER-08-09'
+  if (!ui.mapViewBox) ui.mapViewBox = viewBoxForLot(ui.selectedLotId)
+  const switcher = `<div class="view-switch"><button class="${ui.mapMode==='map'?'active':''}" data-map-mode="map">${icon('map',17)} Mapa</button><button class="${ui.mapMode==='table'?'active':''}" data-map-mode="table">▦ Tabla</button></div>`
+  const body = ui.mapMode === 'map'
+    ? `<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey,false)}</article>${renderLotInspector(survey)}</div>`
+    : `<section class="panel map-table-panel"><div class="panel-head"><div><span class="eyebrow">Comparar y gestionar</span><h3>Todos los lotes</h3></div><span>Una línea por lote. Tocá la fila para centrarlo o el lápiz para editar.</span></div>${renderLotsDataTable(survey,'management')}</section>`
+  const content = `${renderSurveyNavigator()}<section class="map-toolbar"><div><span class="eyebrow">Vista de trabajo</span><h2>${ui.mapMode==='map'?'Mapa interactivo':'Tabla de lotes'}</h2></div>${switcher}</section>${body}`
+  return renderShell(content,'Mapa y lotes',`Relevamiento del ${dateLabel(survey.date)}`,`<button class="btn primary" data-start-survey>${icon('plus',17)} Nuevo</button>`)
 }
 
 function startSurvey() {
+  const date = todayISO()
+  const projection = projectedLotsForDate(date)
   state.draft = {
-    id: uid(),
-    mode: 'new',
-    editingSurveyId: null,
-    date: todayISO(),
-    rainPeriod: monthKey(todayISO()),
-    lots: [],
-    events: { births: 0, deaths: 0, purchases: 0, sales: 0 },
-    note: '',
-    step: 1,
-    lastSavedAt: new Date().toISOString(),
+    id: uid(), nombre: state.nombre || 'Muestra', mode: 'new', editingSurveyId: null, date, rainPeriod: monthKey(date),
+    basedOnSurveyId: projection.base?.id || null, projectionEventIds: projection.events.map((event) => event.id), lots: projection.lots,
+    events: { births: 0, deaths: 0, purchases: 0, sales: 0 }, note: '', step: 1, lastSavedAt: new Date().toISOString(),
   }
   ui.wizardStep = 1
   saveState()
@@ -1011,11 +1648,13 @@ function renderSurveyWizard() {
 
 function renderSurveyStepOne(draft) {
   const rain = rainAnalysis(draft.rainPeriod)
-  return `<section class="wizard-card narrow"><div class="wizard-title"><span class="step-number">1</span><div><h2>¿Cuándo se hizo el relevamiento?</h2><p>Puede haber varios relevamientos en un mes o pasar más de un mes entre ellos.</p></div></div>
+  const base = draft.basedOnSurveyId ? state.surveys.find((survey) => survey.id === draft.basedOnSurveyId) : null
+  return `<section class="wizard-card narrow"><div class="wizard-title"><span class="step-number">1</span><div><h2>¿Cuándo se hizo el relevamiento?</h2><p>La app precarga el estado esperado usando el último relevamiento y los eventos registrados.</p></div></div>
+    ${base ? `<div class="projection-banner">${icon('balance',18)} <span><strong>Base proyectada desde ${compactDateLabel(base.date)}</strong><small>${draft.projectionEventIds?.length || 0} eventos aplicados antes de revisar el campo.</small></span></div>` : ''}
     <label class="field"><span>Fecha del relevamiento</span><div class="input-icon">${icon('calendar',18)}<input type="date" id="survey-date" value="${esc(draft.date)}"></div></label>
     <div class="soft-divider"></div>
-    <div class="wizard-title compact"><span class="step-number water">${icon('rain',20)}</span><div><h3>Lluvia del mes <small>(opcional)</small></h3><p>Podés cargar un total mensual o agregar registros por fecha. Cero milímetros y campo vacío son datos diferentes.</p></div></div>
-    <button class="rain-month-summary" data-open-rain="${draft.rainPeriod}"><span><small>${monthLabel(draft.rainPeriod)}</small><strong>${rain.current == null ? 'Sin información' : `${fmt(rain.current)} mm`}</strong></span><b>${rain.entries?.length ? `${rain.entries.length} registros diarios` : rain.source === 'monthly' ? 'Total mensual heredado' : 'Cargar lluvia'}</b>${icon('chevron',18)}</button>
+    <div class="wizard-title compact"><span class="step-number water">${icon('rain',20)}</span><div><h3>Lluvia del mes <small>(opcional)</small></h3><p>Podés cargar eventos diarios o dejar el mes sin información. Cero milímetros y campo vacío son datos diferentes.</p></div></div>
+    <button class="rain-month-summary" data-open-rain="${draft.rainPeriod}"><span><small>${monthLabel(draft.rainPeriod)}</small><strong>${rain.current == null ? 'Sin información' : `${fmt(rain.current)} mm`}</strong></span><b>${rain.entries?.length ? `${rain.entries.length} registros diarios` : rain.source === 'monthly' ? 'Total mensual heredado' : 'Cargar lluvia diaria'}</b>${icon('chevron',18)}</button>
     <div class="wizard-actions"><span></span><button class="btn primary large" data-step-one-next>Continuar ${icon('chevron',18)}</button></div>
   </section>`
 }
@@ -1026,41 +1665,46 @@ function renderSurveyStepTwo(draft) {
     const lot = lotLookup[lotEntry.lotId]
     const quantity = lotEntry.groups.reduce((sum, group) => sum + Number(group.quantity || 0), 0)
     const stateInfo = fieldStateLookup[lotEntry.fieldState] || fieldStateLookup['no-observado']
-    return `<article class="loaded-lot-card"><div class="lot-card-number">${lot.name.replace('ER-','')}</div><div class="loaded-lot-content"><div><h3>${lot.name}</h3><p>${quantity ? `${fmt(quantity)} animales · ${lotEntry.groups.length} ${lotEntry.groups.length===1?'grupo':'grupos'}` : 'Lote observado sin animales'}</p></div><span class="field-mini ${stateInfo.tone}">${fieldStateIcon(stateInfo)}<b>${stateInfo.label}</b></span></div><div class="lot-card-actions"><button data-edit-draft-lot="${lot.id}" aria-label="Editar">${icon('edit',18)}</button><button data-remove-draft-lot="${lot.id}" aria-label="Eliminar">${icon('trash',18)}</button></div></article>`
-  }).join('') : `<div class="empty-add"><img src="./assets/${UI_ASSETS.register}"><h3>Todavía no registraste lotes</h3><p>Agregá un lote con animales o registralo vacío para informar su condición.</p><button class="btn primary" data-add-draft-lot>${icon('plus',18)} Registrar un lote</button></div>`
-  return `<section class="wizard-card wide"><div class="wizard-title"><span class="step-number">2</span><div><h2>Registrar lotes observados</h2><p>Podés cargar animales y condición, o solamente la condición de un lote vacío.</p></div></div>
-    <div class="loaded-summary"><div><small>Lotes observados</small><strong>${draft.lots.length}</strong></div><div><small>Animales ingresados</small><strong>${fmt(total)}</strong></div><button class="btn secondary" data-add-draft-lot>${icon('plus',18)} Agregar lote</button></div>
+    return `<article class="loaded-lot-card ${lotEntry.projected ? 'projected' : ''}"><div class="lot-card-number">${lot.name.replace('ER-','')}</div><div class="loaded-lot-content"><div><h3>${lot.name}${lotEntry.projected ? '<small>Precargado</small>' : ''}</h3><p>${quantity ? `${fmt(quantity)} animales · ${lotEntry.groups.length} ${lotEntry.groups.length===1?'grupo':'grupos'}` : 'Lote observado sin animales'}</p></div><span class="field-mini ${stateInfo.tone}">${fieldStateIcon(stateInfo)}<b>${stateInfo.label}</b></span></div><div class="lot-card-actions"><button data-edit-draft-lot="${lot.id}" aria-label="Editar">${icon('edit',18)}</button><button data-remove-draft-lot="${lot.id}" aria-label="Eliminar">${icon('trash',18)}</button></div></article>`
+  }).join('') : `<div class="empty-add"><img src="./assets/${UI_ASSETS.register}"><h3>No hay lotes precargados</h3><p>Agregá un lote con animales o registralo vacío para informar su condición.</p><button class="btn primary" data-add-draft-lot>${icon('plus',18)} Registrar un lote</button></div>`
+  return `<section class="wizard-card wide"><div class="wizard-title"><span class="step-number">2</span><div><h2>Revisar el estado esperado</h2><p>Los eventos ayudan a preparar esta fotografía. Editá solamente lo que cambió o no coincide con lo observado.</p></div></div>
+    <div class="loaded-summary"><div><small>Lotes incluidos</small><strong>${draft.lots.length}</strong></div><div><small>Stock esperado</small><strong>${fmt(total)}</strong></div><button class="btn secondary" data-add-draft-lot>${icon('plus',18)} Agregar lote</button></div>
     <div class="loaded-lots">${cards}</div>
-    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Atrás</button><button class="btn primary large" data-step-two-next>Revisar resumen ${icon('chevron',18)}</button></div>
+    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Atrás</button><button class="btn primary large" data-step-two-next>Validar balance ${icon('chevron',18)}</button></div>
   </section>`
 }
 
 function draftAsSurvey(draft) {
   const now = new Date().toISOString()
-  return { id: draft.id, date: draft.date, createdAt: draft.originalCreatedAt || now, editedAt: draft.mode === 'edit' ? now : null, rainPeriod: draft.rainPeriod, lots: draft.lots, events: draft.events, note: draft.note }
+  const previous = draft.basedOnSurveyId ? state.surveys.find((survey) => survey.id === draft.basedOnSurveyId) : previousSurvey({ id: draft.id, date: draft.date, createdAt: draft.originalCreatedAt || now })
+  const intervalEvents = eventsBetween(previous?.date || null, draft.date)
+  const totals = eventTotals(intervalEvents)
+  return {
+    id: draft.id, nombre: state.nombre || 'Muestra', date: draft.date, createdAt: draft.originalCreatedAt || now,
+    editedAt: draft.mode === 'edit' ? now : null, rainPeriod: draft.rainPeriod, lots: draft.lots, archived: draft.mode === 'edit' ? Boolean(state.surveys.find((item)=>item.id===draft.editingSurveyId)?.archived) : false,
+    basedOnSurveyId: draft.basedOnSurveyId || previous?.id || null,
+    events: { nombre: state.nombre || 'Muestra', births: totals.birth, deaths: totals.death, purchases: totals.purchase, sales: totals.sale },
+    note: draft.note,
+  }
 }
 
 function renderSurveyStepThree(draft) {
   const survey = draftAsSurvey(draft)
   const metrics = surveyMetrics(survey)
-  const alerts = discrepancyAlerts(survey)
+  const balance = herdBalanceForSurvey(survey)
   const loadAlerts = operationalAlerts(survey)
   const unobservedLots = LOTS.filter((lot) => !draft.lots.some((item) => item.lotId === lot.id))
   const conditionSummary = LOTS.map((lot) => resolveLotCondition(survey, lot.id))
   const observedConditions = conditionSummary.filter((item) => item.source === 'observed').length
   const assumedConditions = conditionSummary.filter((item) => conditionIsAssumed(item.source)).length
   const noInfoConditions = conditionSummary.filter((item) => item.source === 'none').length
-  return `<section class="wizard-card wide review-card"><div class="wizard-title"><span class="step-number">3</span><div><h2>Revisá y guardá</h2><p>Cualquier diferencia de uno o más animales aparece aquí. Las alertas nunca impiden guardar.</p></div></div>
-    <div class="review-hero"><div><small>Fecha</small><strong>${dateLabel(draft.date)}</strong></div><div><small>Animales</small><strong>${fmt(metrics.animals)}</strong></div><div><small>Carga promedio</small><strong>${decimal(metrics.load)} EV/ha</strong></div><div><small>Lotes observados</small><strong>${draft.lots.length} / 18</strong></div></div>
-    <div class="review-grid">
-      <article class="review-section"><h3>Totales por categoría</h3>${metrics.animals ? renderCategoryBars(metrics.categories, metrics.animals) : '<div class="empty-inline">No se registraron animales.</div>'}</article>
-      <article class="review-section"><h3>Condición de los lotes</h3><div class="condition-origin-summary"><div><strong>${observedConditions}</strong><span>observadas</span></div><div><strong>${assumedConditions}</strong><span>estimadas</span></div><div><strong>${noInfoConditions}</strong><span>sin información</span></div></div>${renderFieldStateSummary(draft)}</article>
-    </div>
-    <details class="optional-events"><summary>Eventos opcionales desde el relevamiento anterior</summary><p>Completá estos datos solo si los tenés. No se registran movimientos entre lotes en esta versión.</p><div class="event-grid"><label>Nacimientos<input type="number" min="0" data-event-field="births" value="${draft.events.births || 0}"></label><label>Mortandad<input type="number" min="0" data-event-field="deaths" value="${draft.events.deaths || 0}"></label><label>Compras<input type="number" min="0" data-event-field="purchases" value="${draft.events.purchases || 0}"></label><label>Ventas<input type="number" min="0" data-event-field="sales" value="${draft.events.sales || 0}"></label></div></details>
-    <section class="review-alerts"><div class="panel-head"><h3>Diferencias y alertas</h3><span>${alerts.length + loadAlerts.length}</span></div>${alerts.length || loadAlerts.length ? `<div class="alert-list">${[...alerts,...loadAlerts].map(renderAlert).join('')}</div>` : '<div class="empty-inline success">No detectamos diferencias ni alertas de carga.</div>'}</section>
-    <details class="empty-lots"><summary>${unobservedLots.length} lotes no fueron observados</summary><div>${unobservedLots.map((lot) => { const condition=resolveLotCondition(survey,lot.id); return `<span>${lot.name} · ${condition.label}${conditionIsAssumed(condition.source)?' ≈':''}</span>` }).join('')}</div></details>
-    <label class="field"><span>Nota general (opcional)</span><textarea id="survey-note" rows="3" placeholder="Observaciones del relevamiento">${esc(draft.note || '')}</textarea></label>
-    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Volver a editar</button><button class="btn primary large" data-save-survey>${icon('check',18)} ${draft.mode === 'edit' ? 'Guardar cambios' : 'Confirmar y guardar'}</button></div>
+  return `<section class="wizard-card wide review-card"><div class="wizard-title"><span class="step-number">3</span><div><h2>Validá el balance y guardá</h2><p>Los eventos explican el stock esperado. La discrepancia no bloquea el relevamiento, pero queda visible.</p></div></div>
+    <div class="review-hero"><div><small>Fecha</small><strong>${dateLabel(draft.date)}</strong></div><div><small>Animales observados</small><strong>${fmt(metrics.animals)}</strong></div><div><small>Carga promedio</small><strong>${decimal(metrics.load)} EV/ha</strong></div><div><small>Lotes incluidos</small><strong>${draft.lots.length} / 18</strong></div></div>
+    <div class="review-grid"><article class="review-section"><h3>Balance del rodeo</h3>${renderBalancePanel(balance,false)}</article><article class="review-section"><h3>Condición de los lotes</h3><div class="condition-origin-summary"><div><strong>${observedConditions}</strong><span>observadas</span></div><div><strong>${assumedConditions}</strong><span>estimadas</span></div><div><strong>${noInfoConditions}</strong><span>sin información</span></div></div>${renderFieldStateSummary(draft)}</article></div>
+    <section class="review-alerts"><div class="panel-head"><h3>Alertas operativas</h3><span>${loadAlerts.length}</span></div>${loadAlerts.length?`<div class="alert-list">${loadAlerts.map(renderAlert).join('')}</div>`:'<div class="empty-inline success">No detectamos alertas de carga.</div>'}</section>
+    <details class="empty-lots"><summary>${unobservedLots.length} lotes no fueron incluidos</summary><div>${unobservedLots.map((lot)=>{const condition=resolveLotCondition(survey,lot.id);return `<span>${lot.name} · ${condition.label}${conditionIsAssumed(condition.source)?' ≈':''}</span>`}).join('')}</div></details>
+    <label class="field"><span>Nota general (opcional)</span><textarea id="survey-note" rows="3" placeholder="Observaciones del relevamiento">${esc(draft.note||'')}</textarea></label>
+    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Volver a editar</button><button class="btn primary large" data-save-survey>${icon('check',18)} ${draft.mode==='edit'?'Guardar cambios':'Confirmar y guardar'}</button></div>
   </section>`
 }
 
@@ -1074,10 +1718,13 @@ function renderFieldStateSummary(draft) {
 
 function renderModal() {
   if (ui.modal.type === 'lot-form') return renderLotFormModal()
+  if (ui.modal.type === 'event-form') return renderEventModal()
   if (ui.modal.type === 'survey-detail') return renderSurveyDetailModal()
   if (ui.modal.type === 'survey-history') return renderSurveyHistoryModal()
   if (ui.modal.type === 'rain-manager') return renderRainModal()
-  if (ui.modal.type === 'confirm-reset') return `<div class="modal-backdrop"><div class="modal small"><button class="modal-close" data-close-modal>${icon('close')}</button><h2>Restablecer datos de demostración</h2><p>Se eliminarán los relevamientos guardados en este dispositivo.</p><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-reset>Restablecer</button></div></div></div>`
+  if (ui.modal.type === 'confirm-delete-survey') return `<div class="modal-backdrop"><div class="modal small"><span class="eyebrow">Eliminación permanente</span><h2>Eliminar ${compactDateLabel(ui.modal.survey?.date)}</h2><p>Esta acción recalculará comparaciones y balances. Se recomienda exportar un respaldo antes de continuar.</p><label class="confirm-input"><span>Escribí ELIMINAR para confirmar</span><input id="delete-survey-confirm" autocomplete="off"></label><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-delete-survey="${ui.modal.survey?.id}">Eliminar definitivamente</button></div></div></div>`
+  if (ui.modal.type === 'zero-rain-confirm') return `<div class="modal-backdrop"><div class="modal small"><span class="eyebrow">Confirmación requerida</span><h2>Ingresaste 0 mm</h2><p>¿Realmente no llovió en ${monthLabel(ui.modal.period)} o querés dejar el mes sin información?</p><div class="modal-actions stacked"><button class="btn primary" data-confirm-zero-rain>Fue realmente 0 mm</button><button class="btn secondary" data-zero-rain-no-info>No hay información</button><button class="btn ghost" data-close-modal>Cancelar</button></div></div></div>`
+  if (ui.modal.type === 'confirm-reset') return `<div class="modal-backdrop"><div class="modal small"><button class="modal-close" data-close-modal>${icon('close')}</button><h2>Restablecer datos de demostración</h2><p>Se eliminarán los datos guardados en este dispositivo y se volverá a cargar la muestra de 16 meses.</p><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-reset>Restablecer</button></div></div></div>`
   return ''
 }
 
@@ -1087,11 +1734,11 @@ function renderLotFormModal() {
   const directSurvey = modal.context === 'direct' ? state.surveys.find((survey) => survey.id === modal.surveyId) : null
   const collection = modal.context === 'direct' ? (directSurvey?.lots || []) : (state.draft?.lots || [])
   const available = LOTS.filter((lot) => lot.id === model.lotId || !collection.some((item) => item.lotId === lot.id))
-  const groups = model.groups.length ? model.groups.map((group, index) => `<div class="animal-group-row ${group.suggested ? 'suggested' : ''}" data-group-index="${index}"><div class="group-main"><label><span>Categoría${group.suggested ? '<small>Sugerida por uso</small>' : ''}</span><select data-group-category="${index}"><option value="">Elegir categoría</option>${CATEGORIES.map((category) => `<option value="${category.id}" ${group.categoryId===category.id?'selected':''}>${category.name}</option>`).join('')}</select></label><label class="quantity-field"><span>Cantidad</span><input type="number" inputmode="numeric" min="0" data-group-quantity="${index}" value="${esc(group.quantity)}" placeholder="0"></label><button class="icon-button remove-group" data-remove-group="${index}" aria-label="Eliminar categoría">${icon('trash',18)}</button></div><details ${group.birthYear || group.notes ? 'open' : ''}><summary>Agregar detalle opcional</summary><div class="group-details"><label><span>Año de nacimiento</span><input type="number" min="1990" max="2035" data-group-year="${index}" value="${esc(group.birthYear || '')}" placeholder="Ej. 2025"></label><label><span>Nota</span><input type="text" data-group-notes="${index}" value="${esc(group.notes || '')}" placeholder="Ej. Listas para servicio"></label></div></details></div>`).join('') : `<div class="empty-groups"><img src="./assets/${UI_ASSETS.register}" alt=""><div><strong>Sin categorías disponibles</strong><p>Agregá una categoría o guardá el lote vacío si elegís una condición.</p></div></div>`
+  const groups = model.groups.length ? model.groups.map((group,index)=>`<div class="animal-group-row ${group.suggested?'suggested':''}" data-group-index="${index}"><div class="group-main"><label><span>Categoría${group.suggested?'<small>Sugerida por uso</small>':''}</span><select data-group-category="${index}"><option value="">Elegir categoría</option>${categoryOptionsHtml(group.categoryId)}</select></label><label class="quantity-field"><span>Cantidad</span><input type="number" inputmode="numeric" min="0" data-group-quantity="${index}" value="${esc(group.quantity)}" placeholder="0"></label><button class="icon-button remove-group" data-remove-group="${index}" aria-label="Eliminar categoría">${icon('trash',18)}</button></div><details ${group.birthYear||group.notes?'open':''}><summary>Agregar detalle opcional</summary><div class="group-details"><label><span>Año de nacimiento</span><input type="number" min="1990" max="2035" data-group-year="${index}" value="${esc(group.birthYear||'')}" placeholder="Ej. 2025"></label><label><span>Nota</span><input type="text" data-group-notes="${index}" value="${esc(group.notes||'')}" placeholder="Ej. Listas para servicio"></label></div></details></div>`).join('') : `<div class="empty-groups"><img src="./assets/${UI_ASSETS.register}" alt=""><div><strong>Sin categorías</strong><p>Agregá una categoría o guardá el lote vacío si elegís una condición.</p></div></div>`
   const contextSurvey = directSurvey || (state.draft ? draftAsSurvey(state.draft) : selectedSurvey())
-  const suggestion = model.lotId ? resolveLotCondition(contextSurvey, model.lotId) : null
+  const suggestion = model.lotId ? resolveLotCondition(contextSurvey,model.lotId) : null
   const isHistorical = directSurvey && directSurvey.id !== latestSurvey()?.id
-  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit ? 'Editar lote' : 'Registrar lote'}</h2>${isHistorical ? `<div class="historical-edit-warning">${icon('alert',17)} Estás editando el relevamiento histórico del ${compactDateLabel(directSurvey.date)}. Esto puede cambiar comparaciones posteriores.</div>` : ''}<label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit || modal.context === 'direct' ? 'disabled' : ''}><option value="">Elegir lote</option>${available.map((lot) => `<option value="${lot.id}" ${model.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Categorías de animales <small>(opcional)</small></h3><p>Las cuatro más frecuentes aparecen primero. Podés dejarlas en 0, cambiarlas o agregar otras.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar categoría</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Condición del lote</h3><p>Elegí una condición para registrarla como observada. También podés dejarla sin información.</p></div></div>${suggestion && suggestion.source !== 'observed' && suggestion.source !== 'none' ? `<div class="condition-suggestion"><span>≈ Sugerencia automática</span><strong>${suggestion.label}</strong><p>${esc(suggestion.explanation)}</p></div>` : ''}<div class="field-state-options">${FIELD_STATES.map((item) => `<button class="field-state-option ${normalizeFieldState(model.fieldState)===item.id?'selected':''}" data-field-state="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions">${modal.context === 'direct' && modal.isEdit ? `<button class="btn danger-outline push-left" data-remove-direct-lot="${model.lotId}">Quitar del relevamiento</button>` : ''}<button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-lot>Guardar lote</button></div></div></div>`
+  return `<div class="modal-backdrop"><div class="modal lot-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro por lote</span><h2>${modal.isEdit?'Editar lote':'Registrar lote'}</h2>${isHistorical?`<div class="historical-edit-warning">${icon('alert',17)} Estás editando el relevamiento histórico del ${compactDateLabel(directSurvey.date)}.</div>`:''}<label class="field"><span>Lote</span><select id="modal-lot-select" ${modal.isEdit||modal.context==='direct'?'disabled':''}><option value="">Elegir lote</option>${available.map((lot)=>`<option value="${lot.id}" ${model.lotId===lot.id?'selected':''}>${lot.name} · ${lot.hectares} ha</option>`).join('')}</select></label><div class="modal-section-head"><div><h3>Categorías de animales <small>(opcional)</small></h3><p>Las sugeridas aparecen en cero. Podés cambiarlas, eliminarlas o agregar otras.</p></div><button class="btn secondary small" data-add-group>${icon('plus',17)} Agregar categoría</button></div><div class="animal-groups">${groups}</div><div class="modal-section-head field-head"><div><h3>Condición del lote</h3><p>Podés registrar un lote sin animales solamente para informar su condición.</p></div></div>${suggestion&&suggestion.source!=='observed'&&suggestion.source!=='none'?`<div class="condition-suggestion"><span>≈ Sugerencia automática</span><strong>${suggestion.label}</strong><p>${esc(suggestion.explanation)}</p></div>`:''}<div class="field-state-options">${FIELD_STATES.map((item)=>`<button class="field-state-option ${normalizeFieldState(model.fieldState)===item.id?'selected':''}" data-field-state="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><div class="modal-actions">${modal.context==='direct'&&modal.isEdit?`<button class="btn danger-outline push-left" data-remove-direct-lot="${model.lotId}">Quitar del relevamiento</button>`:''}<button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-lot>Guardar lote</button></div></div></div>`
 }
 
 function renderSurveyHistoryModal() {
@@ -1109,32 +1756,142 @@ function renderRainModal() {
   const period = ui.modal.period || monthKey(selectedSurvey()?.date || todayISO())
   const summary = monthlyRainSummary(period)
   const analysis = rainAnalysis(period)
+  const mode = ui.modal.rainMode || (summary.source === 'daily' ? 'daily' : 'monthly')
   const editing = summary.entries.find((entry) => entry.id === ui.modal.entryId) || null
   const defaultDate = editing?.date || (period === monthKey(todayISO()) ? todayISO() : `${period}-01`)
-  return `<div class="modal-backdrop"><div class="modal rain-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Lluvia diaria</span><h2>${monthLabel(period)}</h2><label class="field compact-month"><span>Cambiar mes</span><input type="month" id="rain-period-select" value="${period}"></label><div class="rain-modal-total"><img src="./assets/${KPI_ASSETS.rain}" alt=""><div><small>Total del mes</small><strong>${summary.millimeters == null ? 'Sin información' : `${fmt(summary.millimeters)} mm`}</strong><span>${analysis.status} · ${analysis.detail}</span></div></div>${summary.source === 'monthly' ? '<div class="legacy-rain-note">Este total proviene del registro mensual de una versión anterior. Al agregar una fecha diaria, será reemplazado.</div>' : ''}<div class="rain-entry-list">${summary.entries.length ? summary.entries.map((entry) => `<div><span><strong>${compactDateLabel(entry.date)}</strong><small>${esc(entry.note || 'Sin nota')}</small></span><b>${decimal(entry.millimeters,1)} mm</b><button data-edit-rain-entry="${entry.id}">${icon('edit',16)}</button><button data-delete-rain-entry="${entry.id}">${icon('trash',16)}</button></div>`).join('') : '<div class="empty-inline">No hay registros diarios. Podés dejar el mes en blanco.</div>'}</div><div class="rain-entry-form"><h3>${editing ? 'Editar registro' : 'Agregar lluvia'}</h3><div class="rain-form-grid"><label><span>Fecha</span><input type="date" id="rain-entry-date" value="${defaultDate}"></label><label><span>Milímetros</span><input type="number" min="0" step="0.1" inputmode="decimal" id="rain-entry-mm" value="${editing?.millimeters ?? ''}" placeholder="0"></label></div><label><span>Nota opcional</span><input type="text" id="rain-entry-note" value="${esc(editing?.note || '')}" placeholder="Ej. Lluvia fuerte durante la noche"></label><button class="btn primary" data-save-rain-entry>${editing ? 'Guardar cambios' : 'Agregar registro'}</button></div><div class="modal-actions"><button class="btn danger-outline push-left" data-clear-rain-month>Dejar el mes sin información</button><button class="btn ghost" data-close-modal>Cerrar</button></div></div></div>`
+  const monthlyValue = summary.source === 'monthly' ? summary.millimeters : ''
+  const daily = `<div class="rain-entry-list">${summary.entries.length ? summary.entries.map((entry) => `<div><span><strong>${compactDateLabel(entry.date)}</strong><small>${esc(entry.note || 'Sin nota')}</small></span><b>${decimal(entry.millimeters,1)} mm</b><button data-edit-rain-entry="${entry.id}">${icon('edit',16)}</button><button data-delete-rain-entry="${entry.id}">${icon('trash',16)}</button></div>`).join('') : '<div class="empty-inline">No hay registros por fecha.</div>'}</div><div class="rain-entry-form"><h3>${editing ? 'Editar registro' : 'Agregar lluvia por fecha'}</h3><div class="rain-form-grid"><label><span>Fecha</span><input type="date" id="rain-entry-date" value="${defaultDate}"></label><label><span>Milímetros</span><input type="number" min="0" step="0.1" inputmode="decimal" id="rain-entry-mm" value="${editing?.millimeters ?? ''}" placeholder="0"></label></div><label><span>Nota opcional</span><input type="text" id="rain-entry-note" value="${esc(editing?.note || '')}" placeholder="Ej. Lluvia fuerte durante la noche"></label><button class="btn primary" data-save-rain-entry>${editing ? 'Guardar cambios' : 'Agregar registro'}</button></div>`
+  const monthly = `<div class="monthly-rain-form"><div><small>Total actual</small><strong>${summary.millimeters == null ? 'Sin información' : `${fmt(summary.millimeters)} mm`}</strong><p>${analysis.status}${analysis.index==null?'':` · Índice hídrico ${Math.round(analysis.index)}%`}</p></div><label><span>Total mensual (mm)</span><input id="rain-monthly-mm" type="number" min="0" step="0.1" inputmode="decimal" value="${monthlyValue}" placeholder="Dejar en blanco = sin información"></label><button class="btn primary" data-save-rain-monthly>Guardar total mensual</button><p class="form-help">Si cargás un total mensual, reemplazará cualquier detalle por fecha de este mes.</p></div>`
+  return `<div class="modal-backdrop"><div class="modal rain-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Registro de lluvia · ${RAIN_STATION}</span><h2>${monthLabel(period)}</h2><label class="field compact-month"><span>Cambiar mes</span><input type="month" id="rain-period-select" value="${period}"></label><div class="rain-input-tabs"><button class="${mode==='monthly'?'active':''}" data-rain-input-mode="monthly">Total mensual</button><button class="${mode==='daily'?'active':''}" data-rain-input-mode="daily">Detalle por fecha</button></div>${mode==='monthly'?monthly:daily}<div class="modal-actions"><button class="btn danger-outline push-left" data-clear-rain-month>Dejar sin información</button><button class="btn ghost" data-close-modal>Cerrar</button></div></div></div>`
+}
+
+
+function historicalFortnight(month, half) {
+  return RAIN_HISTORICAL_FORTNIGHTS.find((item) => item.month === Number(month) && item.half === Number(half))
+}
+function historicalMonth(month) {
+  const rows = RAIN_HISTORICAL_FORTNIGHTS.filter((item) => item.month === Number(month))
+  return { average: rows.reduce((sum, item) => sum + item.average, 0), p10: rows.reduce((sum, item) => sum + item.p10, 0), p90: rows.reduce((sum, item) => sum + item.p90, 0) }
+}
+function hydricIndex(actual, average) { return actual == null || !average ? null : actual / average * 100 }
+function hydricState(index) { if (index == null) return 'Sin información'; if (index < 70) return 'Muy seco'; if (index < 90) return 'Seco'; if (index < 110) return 'Normal'; if (index < 130) return 'Húmedo'; return 'Muy húmedo' }
+function hydricClass(index) { if (index == null) return 'no-data'; if (index < 70) return 'very-dry'; if (index < 90) return 'dry'; if (index < 110) return 'normal'; if (index < 130) return 'wet'; return 'very-wet' }
+function periodFor(year, month) { return `${year}-${String(month).padStart(2, '0')}` }
+function addMonths(period, offset) { const d = new Date(`${period}-01T12:00:00`); d.setMonth(d.getMonth() + offset); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` }
+function lastPeriods(endPeriod, count = 12) { return Array.from({ length: count }, (_, index) => addMonths(endPeriod, index - count + 1)) }
+function fortnightActual(year, month, half) {
+  const period = periodFor(year, month)
+  const entries = rainEntriesForPeriod(period).filter((entry) => half === 1 ? Number(entry.date.slice(8,10)) <= 15 : Number(entry.date.slice(8,10)) > 15)
+  return entries.length ? entries.reduce((sum, entry) => sum + Number(entry.millimeters || 0), 0) : null
+}
+function rainCoverage(endPeriod) {
+  const periods = lastPeriods(endPeriod)
+  const rows = periods.map((period) => ({ period, actual: monthlyRainSummary(period).millimeters, historical: historicalMonth(Number(period.slice(5,7))) }))
+  let actualCumulative = 0, averageCumulative = 0, p10Cumulative = 0, p90Cumulative = 0, coverage = 0
+  return { rows: rows.map((row) => { if (row.actual != null) { actualCumulative += row.actual; coverage++ } averageCumulative += row.historical.average; p10Cumulative += row.historical.p10; p90Cumulative += row.historical.p90; return { ...row, actualCumulative: row.actual == null ? null : actualCumulative, averageCumulative, p10Cumulative, p90Cumulative, index: hydricIndex(actualCumulative, averageCumulative) } }), coverage, actual: actualCumulative, average: averageCumulative, p10: p10Cumulative, p90: p90Cumulative, index: coverage ? hydricIndex(actualCumulative, rows.filter((row) => row.actual != null).reduce((sum, row) => sum + row.historical.average, 0)) : null }
+}
+function rainRangeBar(actual, average, p10, p90) {
+  const max = Math.max(p90, average, actual || 0, 1) * 1.08
+  const pct = (value) => Math.max(0, Math.min(100, value / max * 100))
+  return `<div class="rain-range"><i class="rain-range-band" style="left:${pct(p10)}%;width:${Math.max(2,pct(p90)-pct(p10))}%"></i><i class="rain-range-average" style="left:${pct(average)}%"></i>${actual == null ? '' : `<b class="rain-range-current" style="left:${pct(actual)}%"></b>`}</div>`
+}
+function renderRainPeriodTable(year, granularity) {
+  if (granularity === 'fortnight') {
+    const rows = RAIN_HISTORICAL_FORTNIGHTS.map((item) => { const actual=fortnightActual(year,item.month,item.half);const index=hydricIndex(actual,item.average);return `<tr><th>${item.monthName} · Q${item.half}</th><td>${decimal(item.average,1)}</td><td>${decimal(item.p10,1)}</td><td>${decimal(item.p90,1)}</td><td class="rain-current">${actual == null ? '—' : decimal(actual,1)}</td><td>${index == null ? '—' : `${Math.round(index)}%`}</td><td><span class="hydric-state ${hydricClass(index)}">${hydricState(index)}</span>${rainRangeBar(actual,item.average,item.p10,item.p90)}</td></tr>` }).join('')
+    return `<div class="rain-table-wrap"><table class="rain-data-table"><thead><tr><th>Quincena</th><th>Prom.</th><th>P10</th><th>P90</th><th>Actual</th><th>IH</th><th>Estado / banda</th></tr></thead><tbody>${rows}</tbody></table></div>`
+  }
+  const rows = MONTH_NAMES.map((name,index) => { const month=index+1;const hist=historicalMonth(month);const actual=monthlyRainSummary(periodFor(year,month)).millimeters;const ih=hydricIndex(actual,hist.average);return `<tr><th>${name}</th><td>${decimal(hist.average,1)}</td><td>${decimal(hist.p10,1)}</td><td>${decimal(hist.p90,1)}</td><td class="rain-current">${actual == null ? '—' : decimal(actual,1)}</td><td>${ih == null ? '—' : `${Math.round(ih)}%`}</td><td><span class="hydric-state ${hydricClass(ih)}">${hydricState(ih)}</span>${rainRangeBar(actual,hist.average,hist.p10,hist.p90)}</td></tr>` }).join('')
+  return `<div class="rain-table-wrap"><table class="rain-data-table"><thead><tr><th>Mes</th><th>Prom.</th><th>P10</th><th>P90</th><th>Actual</th><th>IH</th><th>Estado / banda</th></tr></thead><tbody>${rows}</tbody></table></div>`
+}
+function renderRainColumns(year, granularity) {
+  const items = granularity === 'fortnight' ? RAIN_HISTORICAL_FORTNIGHTS.map((item)=>({label:`${item.monthName.slice(0,3)} Q${item.half}`,average:item.average,p10:item.p10,p90:item.p90,actual:fortnightActual(year,item.month,item.half)})) : MONTH_NAMES.map((name,index)=>{const h=historicalMonth(index+1);return {label:name.slice(0,3),...h,actual:monthlyRainSummary(periodFor(year,index+1)).millimeters}})
+  const max=Math.max(1,...items.flatMap((item)=>[item.p90,item.average,item.actual||0]))
+  return `<div class="rain-columns ${granularity}">${items.map((item)=>{const h=(value)=>Math.max(1,value/max*100);return `<div class="rain-column"><div class="rain-column-plot"><i class="rain-column-band" style="bottom:${h(item.p10)}%;height:${Math.max(3,h(item.p90)-h(item.p10))}%"></i><i class="rain-column-average" style="bottom:${h(item.average)}%"></i>${item.actual==null?'<b class="rain-column-empty"></b>':`<b class="rain-column-current" style="height:${h(item.actual)}%"></b>`}</div><span>${item.label}</span></div>`}).join('')}</div>`
+}
+function renderCumulativeChart(coverage) {
+  const rows=coverage.rows;const width=900,height=260,pad=30;const max=Math.max(1,...rows.map((row)=>Math.max(row.p90Cumulative,row.actualCumulative||0)))
+  const x=(index)=>pad+index*(width-pad*2)/(rows.length-1);const y=(value)=>height-pad-value/max*(height-pad*2)
+  const upper=rows.map((row,index)=>`${x(index)},${y(row.p90Cumulative)}`).join(' ');const lower=[...rows].reverse().map((row,index)=>`${x(rows.length-1-index)},${y(row.p10Cumulative)}`).join(' ')
+  const avg=rows.map((row,index)=>`${x(index)},${y(row.averageCumulative)}`).join(' ');const actual=rows.filter((row)=>row.actualCumulative!=null).map((row)=>{const index=rows.indexOf(row);return `${x(index)},${y(row.actualCumulative)}`}).join(' ')
+  return `<svg class="cumulative-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Lluvia acumulada últimos doce meses"><polygon points="${upper} ${lower}" class="cum-band"/><polyline points="${avg}" class="cum-average"/>${actual?`<polyline points="${actual}" class="cum-actual"/>`:''}${rows.map((row,index)=>`<text x="${x(index)}" y="${height-8}" text-anchor="middle">${row.period.slice(5,7)}/${row.period.slice(2,4)}</text>`).join('')}</svg>`
+}
+function renderCumulativeTable(coverage) {
+  const rows=coverage.rows.map((row)=>`<tr><th>${monthLabel(row.period)}</th><td>${decimal(row.averageCumulative,0)}</td><td>${decimal(row.p10Cumulative,0)}</td><td>${decimal(row.p90Cumulative,0)}</td><td class="rain-current">${row.actualCumulative==null?'—':decimal(row.actualCumulative,0)}</td><td>${row.index==null?'—':`${Math.round(row.index)}%`}</td><td><span class="hydric-state ${hydricClass(row.index)}">${hydricState(row.index)}</span></td></tr>`).join('')
+  return `<div class="rain-table-wrap"><table class="rain-data-table"><thead><tr><th>Mes (últimos 12)</th><th>Prom. acum.</th><th>P10</th><th>P90</th><th>Actual acum.</th><th>IH</th><th>Estado</th></tr></thead><tbody>${rows}</tbody></table></div>`
+}
+function renderUpcomingSection() {
+  return `<section class="upcoming-section"><div class="panel-head"><div><span class="eyebrow">Hoja de ruta</span><h3>Próximamente en Campo</h3></div><span>Ideas futuras, todavía sin funciones operativas.</span></div><div class="upcoming-grid"><article><span>💉</span><div><h4>Calendario sanitario</h4><p>Vacunaciones, desparasitaciones y tratamientos.</p><b>En desarrollo</b></div></article><article><span>🌱</span><div><h4>Calendario pastoril</h4><p>Siembras, descansos, rotaciones y objetivos de pastoreo.</p><b>En desarrollo</b></div></article><article><span>↗</span><div><h4>Calendario comercial</h4><p>Compras, ventas y momentos comerciales del rodeo.</p><b>En desarrollo</b></div></article></div></section>`
+}
+
+function renderEventCard(event) {
+  const type = eventTypeLookup[event.type] || { label: event.type, icon: '•' }
+  const category = categoryLookup[event.categoryId]
+  const destination = categoryLookup[event.toCategoryId]
+  const lot = lotLookup[event.lotId]
+  return `<article class="event-card type-${event.type}"><span class="event-type-icon">${type.icon}</span><div class="event-card-main"><div><small>${eventGroupLabel(event.type)} · ${compactDateLabel(event.date)}</small><strong>${type.label} · ${fmt(event.quantity)} ${category?.short || ''}</strong><p>${lot?.name || 'Sin lote'}${destination?` · ${category?.short || ''} → ${destination.short}`:''}</p>${event.notes?`<em>${esc(event.notes)}</em>`:''}</div><div class="event-card-actions"><button data-edit-event="${event.id}" aria-label="Editar">${icon('edit',16)}</button><button data-delete-event="${event.id}" aria-label="Eliminar">${icon('trash',16)}</button></div></div></article>`
+}
+
+function renderEventsPage() {
+  const survey = selectedSurvey()
+  const balance = herdBalanceForSurvey(survey)
+  const all = activeAnimalEvents()
+  const filtered = ui.eventFilter === 'all' ? all : all.filter((event) => event.type === ui.eventFilter)
+  const totals = eventTotals(eventsForSurveyInterval(survey))
+  const actionButtons = EVENT_TYPES.map((type)=>`<button class="event-action type-${type.id}" data-add-event="${type.id}"><span>${type.icon}</span><strong>${type.label}</strong><small>${type.group==='commercial'?'Comercial':'Cambio del rodeo'}</small></button>`).join('')
+  const filters = `<div class="event-filters"><button class="${ui.eventFilter==='all'?'active':''}" data-event-filter="all">Todos</button>${EVENT_TYPES.map((type)=>`<button class="${ui.eventFilter===type.id?'active':''}" data-event-filter="${type.id}">${type.label}</button>`).join('')}</div>`
+  const content = `${renderSurveyNavigator()}<section class="events-hero"><div><span class="eyebrow">Entre fotografías del campo</span><h2>Eventos del rodeo</h2><p>Los eventos preparan el stock esperado del siguiente relevamiento sin modificar una fotografía ya cerrada.</p></div><button class="btn primary" data-add-event="sale">${icon('plus',17)} Registrar evento</button></section><section class="event-summary-grid"><article><small>Nacimientos</small><strong>+${fmt(totals.birth)}</strong></article><article><small>Compras</small><strong>+${fmt(totals.purchase)}</strong></article><article><small>Ventas</small><strong>-${fmt(totals.sale)}</strong></article><article><small>Mortandad</small><strong>-${fmt(totals.death)}</strong></article><article><small>Recateg.</small><strong>${fmt(totals.reclassification)}</strong></article></section><section class="events-layout"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Acciones rápidas</span><h3>Registrar cambios</h3></div></div><div class="event-action-grid">${actionButtons}</div></article><article class="panel balance-main-panel"><div class="panel-head"><div><span class="eyebrow">Mes sobre mes</span><h3>Balance del rodeo</h3></div><span>${balance?`${compactDateLabel(balance.previous.date)} → ${compactDateLabel(balance.survey.date)}`:'Sin período anterior'}</span></div>${renderBalancePanel(balance,false)}</article></section><section class="panel event-log-panel"><div class="panel-head"><div><span class="eyebrow">Registro transaccional</span><h3>Historial de eventos</h3></div><span>${filtered.length} registros</span></div>${filters}<div class="event-list">${filtered.length?filtered.map(renderEventCard).join(''):'<div class="empty-inline">No hay eventos para este filtro.</div>'}</div></section>`
+  return renderShell(content,'Eventos y balance','Ventas, compras, nacimientos, mortandad y recategorizaciones',`<button class="btn primary" data-start-survey>${icon('clipboard',17)} Siguiente relevamiento</button>`)
+}
+
+function renderEventModal() {
+  const modal = ui.modal
+  const event = modal.event || {}
+  const type = event.type || modal.eventType || 'sale'
+  const isReclassification = type === 'reclassification'
+  const isCommercial = ['sale','purchase'].includes(type)
+  const isBirth = type === 'birth'
+  const allowedBirth = ['ternero-macho','ternera-hembra','ternero-sin-definir']
+  const categoryOptions = categoryOptionsHtml(event.categoryId || '', isBirth ? allowedBirth : null)
+  const available = event.lotId && event.categoryId && ['sale','death','reclassification'].includes(type) ? availableCategoryQuantity(event.date || todayISO(), event.lotId, event.categoryId, event.id) : null
+  return `<div class="modal-backdrop"><div class="modal event-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">${modal.isEdit?'Editar evento':'Nuevo evento'}</span><h2>${eventTypeLabel(type)}</h2><div class="event-form-grid"><label><span>Tipo</span><select id="event-type">${EVENT_TYPES.map((item)=>`<option value="${item.id}" ${type===item.id?'selected':''}>${item.label}</option>`).join('')}</select></label><label><span>Fecha</span><input type="date" id="event-date" value="${event.date || todayISO()}"></label><label><span>Lote</span><select id="event-lot"><option value="">Elegir lote</option>${LOTS.map((lot)=>`<option value="${lot.id}" ${event.lotId===lot.id?'selected':''}>${lot.name}</option>`).join('')}</select></label><label><span>${isReclassification?'Categoría de origen':'Categoría'}</span><select id="event-category"><option value="">Elegir categoría</option>${categoryOptions}</select></label>${isReclassification?`<label><span>Categoría de destino</span><select id="event-to-category"><option value="">Elegir destino</option>${categoryOptionsHtml(event.toCategoryId || '')}</select></label>`:''}<label><span>Cantidad</span><input type="number" min="1" inputmode="numeric" id="event-quantity" value="${event.quantity || ''}" placeholder="0">${available!=null?`<small>Disponible proyectado: ${fmt(available)}</small>`:''}</label></div>${isCommercial?`<details class="commercial-details" ${event.pricePerHead||event.counterparty?'open':''}><summary>Agregar datos comerciales</summary><div class="event-form-grid"><label><span>Precio por cabeza</span><input type="number" min="0" step="0.01" id="event-price" value="${event.pricePerHead || ''}"></label><label><span>${type==='sale'?'Comprador':'Vendedor'}</span><input type="text" id="event-counterparty" value="${esc(event.counterparty || '')}"></label></div></details>`:''}<label class="field"><span>Nota opcional</span><textarea id="event-notes" rows="3">${esc(event.notes || '')}</textarea></label><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn primary" data-save-event>${modal.isEdit?'Guardar cambios':'Registrar evento'}</button></div></div></div>`
+}
+
+function renderIntroductionPage() {
+  const quickLinks = `<div class="intro-quick-links"><button data-nav="eventos">${icon('event',20)} Eventos</button><button data-nav="mapa">${icon('map',20)} Mapa</button><button data-nav="lluvias">${icon('rain',20)} Lluvias</button><button data-nav="historico">${icon('history',20)} Histórico</button><button data-nav="datos">${icon('download',20)} Respaldo</button></div>`
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v7.01</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v7.01</h3><ul><li>Registro detallado de eventos.</li><li>Balance del rodeo mes sobre mes.</li><li>Categorías jerárquicas sin “Otros”.</li><li>Zoom del mapa centrado por lote.</li><li>Historia de carga y condición por lote.</li><li>Archivar y eliminar relevamientos.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
+  return renderShell(content,'Introducción','Cómo usar Campo y qué mejoras están por venir')
+}
+
+function renderRainPage() {
+  const survey=selectedSurvey();const selectedPeriod=ui.rainEndPeriod||monthKey(survey?.date||todayISO());const year=Number(ui.rainYear||selectedPeriod.slice(0,4));const coverage=rainCoverage(selectedPeriod);const last=allRainPeriods().sort().at(-1);const lastSummary=last?monthlyRainSummary(last):null
+  const top=`<section class="rain-kpi-grid"><article><span>☔</span><div><small>Acumulado informado</small><strong>${coverage.coverage?`${fmt(coverage.actual)} mm`:'Sin dato'}</strong><p>${coverage.coverage}/12 meses informados</p></div></article><article><span>◉</span><div><small>Índice hídrico</small><strong>${coverage.index==null?'—':`${Math.round(coverage.index)}%`}</strong><p>${hydricState(coverage.index)}</p></div></article><article><span>▣</span><div><small>Último registro</small><strong>${last?monthLabel(last):'Sin dato'}</strong><p>${lastSummary?.millimeters==null?'—':`${fmt(lastSummary.millimeters)} mm`}</p></div></article></section>`
+  const tabs=`<div class="rain-main-tabs"><button class="${ui.rainTab==='period'?'active':''}" data-rain-tab="period">Lluvia del período</button><button class="${ui.rainTab==='cumulative'?'active':''}" data-rain-tab="cumulative">Acumulado 12 meses</button></div>`
+  const periodView=`<section class="rain-workspace"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Comparación histórica</span><h3>${ui.rainGranularity==='monthly'?'Registro mensual':'Detalle quincenal'} · ${year}</h3></div><div class="rain-controls"><select data-rain-year>${[year-2,year-1,year,year+1].map((item)=>`<option ${item===year?'selected':''}>${item}</option>`).join('')}</select><div class="mini-toggle"><button class="${ui.rainGranularity==='monthly'?'active':''}" data-rain-granularity="monthly">Mensual</button><button class="${ui.rainGranularity==='fortnight'?'active':''}" data-rain-granularity="fortnight">Quincenal</button></div><button class="btn primary small" data-open-rain="${periodFor(year,Number(selectedPeriod.slice(5,7)))}">Cargar / editar</button></div></div>${renderRainPeriodTable(year,ui.rainGranularity)}</article><article class="panel rain-chart-panel"><div class="panel-head"><div><h3>Banda histórica y registro actual</h3><p>P10–P90, promedio y lluvia actual en milímetros.</p></div></div>${renderRainColumns(year,ui.rainGranularity)}</article></section>`
+  const cumulativeView=`<section class="rain-workspace"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Últimos doce meses</span><h3>Acumulado hasta ${monthLabel(selectedPeriod)}</h3></div><label class="inline-control">Finaliza en <input type="month" data-rain-end-period value="${selectedPeriod}"></label></div>${renderCumulativeTable(coverage)}</article><article class="panel rain-chart-panel"><div class="panel-head"><div><h3>Curva acumulada</h3><p>Actual frente al promedio y la banda histórica aproximada.</p></div></div>${renderCumulativeChart(coverage)}</article></section>`
+  return renderShell(`${top}${tabs}${ui.rainTab==='period'?periodView:cumulativeView}${renderUpcomingSection()}`,'Lluvias — Estación Laprida','Comparación histórica, índice hídrico y acumulado de los últimos doce meses',`<button class="btn primary" data-open-rain="${selectedPeriod}">${icon('plus',17)} Registrar lluvia</button>`)
 }
 
 function renderHistory() {
-  const surveys = sortedSurveys()
-  const rainRows = allRainPeriods().sort((a, b) => b.localeCompare(a)).map(monthlyRainSummary)
-  const maxAnimals = Math.max(...surveys.map((survey) => surveyMetrics(survey).animals), 1)
-  const content = `<section class="history-header"><div><span class="eyebrow">Fotografías del campo</span><h2>Historial de relevamientos</h2><p>Compará fechas exactas, aunque no tengan una frecuencia mensual fija.</p></div><button class="btn primary" data-start-survey>${icon('plus',18)} Nuevo relevamiento</button></section><section class="history-grid"><article class="panel"><div class="panel-head"><h3>Evolución de animales</h3><span>${surveys.length} relevamientos</span></div><div class="survey-chart">${[...surveys].reverse().map((survey) => { const m=surveyMetrics(survey); return `<button data-detail-survey="${survey.id}" title="${dateLabel(survey.date)}"><i style="height:${Math.max(8,m.animals/maxAnimals*100)}%"></i><span>${fmt(m.animals)}</span><small>${survey.date.slice(5)}</small></button>` }).join('')}</div></article><article class="panel"><div class="panel-head"><h3>Lluvia por mes</h3><button class="btn secondary small" data-open-rain="${monthKey(todayISO())}">${icon('plus',16)} Cargar / editar</button></div><div class="rain-table">${rainRows.length ? rainRows.map((item) => { const analysis=rainAnalysis(item.period); return `<div><span><strong>${monthLabel(item.period)}</strong><small>${analysis.status} · ${item.source === 'daily' ? `${item.entries.length} registros` : 'total mensual'}</small></span><b>${item.millimeters == null ? '—' : `${fmt(item.millimeters)} mm`}</b><button data-open-rain="${item.period}">${icon('edit',16)}</button></div>` }).join('') : '<div class="empty-inline">Todavía no hay lluvia registrada.</div>'}</div></article></section><section class="panel survey-list-panel"><div class="panel-head"><h3>Todos los relevamientos</h3><button class="text-link" data-open-survey-history>Selector por fecha</button></div><div class="survey-list">${surveys.map((survey,index)=>{ const m=surveyMetrics(survey); const prior=previousSurvey(survey); const diff=prior?m.animals-surveyMetrics(prior).animals:null; return `<button class="survey-row" data-detail-survey="${survey.id}"><span class="survey-index">${surveys.length-index}</span><div><strong>${dateLabel(survey.date)}</strong><p>${survey.lots.length} lotes observados · ${decimal(m.load)} EV/ha</p></div><div class="survey-total"><strong>${fmt(m.animals)}</strong><small>${diff==null?'Inicial':`${diff>=0?'+':''}${fmt(diff)} vs. anterior`}</small></div>${icon('chevron',18)}</button>` }).join('')}</div></section>`
-  return renderShell(content, 'Histórico', 'Relevamientos por fecha y evolución del campo')
+  const surveys = sortedSurveys(ui.historyShowArchived)
+  const active = surveys.filter((survey)=>!survey.archived)
+  const maxAnimals = Math.max(...active.map((survey)=>surveyMetrics(survey).animals),1)
+  const rows = surveys.map((survey,index)=>{const m=surveyMetrics(survey);const prior=previousSurvey(survey);const diff=prior?m.animals-surveyMetrics(prior).animals:null;return `<article class="survey-row-card ${survey.archived?'archived':''}"><button class="survey-row-main" data-detail-survey="${survey.id}"><span class="survey-index">${surveys.length-index}</span><div><strong>${dateLabel(survey.date)}${survey.archived?' · Archivado':''}</strong><p>${survey.lots.length} lotes · ${decimal(m.load)} EV/ha</p></div><div class="survey-total"><strong>${fmt(m.animals)}</strong><small>${diff==null?'Inicial':`${diff>=0?'+':''}${fmt(diff)} vs. anterior`}</small></div></button><div class="survey-row-actions"><button data-edit-survey="${survey.id}">${icon('edit',16)} Editar</button><button data-archive-survey="${survey.id}">${icon(survey.archived?'restore':'archive',16)} ${survey.archived?'Restaurar':'Archivar'}</button><button class="danger" data-delete-survey="${survey.id}">${icon('trash',16)} Eliminar</button></div></article>`}).join('')
+  const content = `<section class="history-header"><div><span class="eyebrow">Fotografías del campo</span><h2>Historial de relevamientos</h2><p>Archivar es reversible; eliminar es permanente.</p></div><div class="button-row"><label class="history-archive-toggle"><input type="checkbox" data-show-archived ${ui.historyShowArchived?'checked':''}> Mostrar archivados</label><button class="btn primary" data-start-survey>${icon('plus',18)} Nuevo relevamiento</button></div></section><section class="history-grid"><article class="panel"><div class="panel-head"><h3>Evolución de animales</h3><span>${active.length} activos</span></div><div class="survey-chart">${[...active].reverse().map((survey)=>{const m=surveyMetrics(survey);return `<button data-detail-survey="${survey.id}" title="${dateLabel(survey.date)}"><i style="height:${Math.max(8,m.animals/maxAnimals*100)}%"></i><span>${fmt(m.animals)}</span><small>${survey.date.slice(5)}</small></button>`}).join('')}</div></article><article class="panel"><div class="panel-head"><h3>Balance más reciente</h3><button class="text-link" data-nav="eventos">Abrir eventos</button></div>${renderBalancePanel(herdBalanceForSurvey(latestSurvey()),true)}</article></section><section class="panel survey-list-panel"><div class="panel-head"><h3>${ui.historyShowArchived?'Todos los registros':'Relevamientos activos'}</h3><button class="text-link" data-open-survey-history>Selector por fecha</button></div><div class="survey-list v7">${rows||'<div class="empty-inline">No hay relevamientos.</div>'}</div></section>`
+  return renderShell(content,'Histórico','Editar, archivar o eliminar fotografías del campo')
 }
 
 function renderSurveyDetailModal() {
   const survey = state.surveys.find((item) => item.id === ui.modal.surveyId)
   if (!survey) return ''
   const m = surveyMetrics(survey)
-  const alerts = discrepancyAlerts(survey)
-  return `<div class="modal-backdrop"><div class="modal detail-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Relevamiento guardado</span><h2>${dateLabel(survey.date)}</h2>${survey.editedAt ? `<p class="edited-note">Última edición: ${new Intl.DateTimeFormat('es-AR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(survey.editedAt))}</p>` : ''}<div class="review-hero"><div><small>Animales</small><strong>${fmt(m.animals)}</strong></div><div><small>Carga</small><strong>${decimal(m.load)} EV/ha</strong></div><div><small>Lotes</small><strong>${survey.lots.length}</strong></div></div>${renderCategoryBars(m.categories,m.animals)}${alerts.length?`<h3>Diferencias detectadas</h3><div class="alert-list">${alerts.map(renderAlert).join('')}</div>`:''}<div class="modal-actions"><button class="btn secondary" data-export-survey="${survey.id}">Exportar CSV</button><button class="btn secondary" data-edit-survey="${survey.id}">${icon('edit',16)} Editar</button><button class="btn primary" data-select-survey="${survey.id}" data-close-after>Ver en el mapa</button></div></div></div>`
+  const balance = herdBalanceForSurvey(survey)
+  return `<div class="modal-backdrop"><div class="modal detail-modal"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Relevamiento ${survey.archived?'archivado':'guardado'}</span><h2>${dateLabel(survey.date)}</h2>${survey.editedAt?`<p class="edited-note">Última edición: ${new Intl.DateTimeFormat('es-AR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(survey.editedAt))}</p>`:''}<div class="review-hero"><div><small>Animales</small><strong>${fmt(m.animals)}</strong></div><div><small>Carga</small><strong>${decimal(m.load)} EV/ha</strong></div><div><small>Lotes</small><strong>${survey.lots.length}</strong></div></div>${renderCategoryBars(m.categories,m.animals)}<h3>Balance</h3>${renderBalancePanel(balance,true)}<div class="modal-actions wrap"><button class="btn secondary" data-export-survey="${survey.id}">Exportar CSV</button><button class="btn secondary" data-edit-survey="${survey.id}">${icon('edit',16)} Editar</button><button class="btn secondary" data-archive-survey="${survey.id}">${icon(survey.archived?'restore':'archive',16)} ${survey.archived?'Restaurar':'Archivar'}</button><button class="btn danger-outline" data-delete-survey="${survey.id}">${icon('trash',16)} Eliminar</button><button class="btn primary" data-select-survey="${survey.id}" data-close-after>Ver en mapa</button></div></div></div>`
 }
 
 function renderDataPage() {
-  const survey = selectedSurvey()
-  const latest = latestSurvey()
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá el relevamiento seleccionado o el historial completo en formato CSV.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El respaldo JSON conserva relevamientos, lluvia diaria y configuración local.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Datos más recientes: ${latest ? dateLabel(latest.date) : 'Sin datos'}<br>Relevamiento seleccionado: ${survey ? dateLabel(survey.date) : 'Sin datos'}</p><small>Los datos siguen almacenados localmente hasta incorporar Supabase.</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos locales</h2><p>La URL comparte la aplicación, pero cada dispositivo conserva su propia información hasta implementar Supabase.</p><button class="btn danger-outline" data-reset-demo>Restablecer demo</button></article></section>`
-  return renderShell(content, 'Exportar y respaldo', 'Protegé los datos guardados en este dispositivo')
+  const survey = selectedSurvey(), latest = latestSurvey()
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial completo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>${state.sampleMode?'Datos sintéticos identificados como Muestra.':'Datos locales del usuario.'}</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos de muestra</h2><p>Podés restablecer los 16 meses sintéticos para probar todas las funciones de v7.01.</p><button class="btn danger-outline" data-reset-demo>Restablecer Muestra</button></article></section>`
+  return renderShell(content,'Exportar y respaldo','Protegé relevamientos, eventos y lluvia')
 }
 
 function renderLotFormModalEventUpdate(target) {
@@ -1167,6 +1924,14 @@ function surveyCsv(survey) {
   return rows.map((row) => row.map((cell) => `"${String(cell ?? '').replaceAll('"','""')}"`).join(',')).join('\n')
 }
 
+function eventsCsv() {
+  const rows = [['fecha','tipo','lote','categoria_origen','categoria_destino','cantidad','precio_por_cabeza','contraparte','nota','nombre']]
+  for (const event of activeAnimalEvents().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')))) {
+    rows.push([event.date,eventTypeLabel(event.type),lotLookup[event.lotId]?.name||event.lotId,categoryLookup[event.categoryId]?.name||event.categoryId,categoryLookup[event.toCategoryId]?.name||event.toCategoryId||'',event.quantity,event.pricePerHead||'',event.counterparty||'',event.notes||'',event.nombre||state.nombre||'Muestra'])
+  }
+  return rows.map((row)=>row.map((cell)=>`"${String(cell ?? '').replaceAll('"','""')}"`).join(',')).join('\n')
+}
+
 function allCsv() {
   const rows = [['fecha','lote','hectareas','condicion_observada','condicion_efectiva','origen_condicion','categoria','cantidad','anio_nacimiento','nota']]
   for (const survey of sortedSurveys().reverse()) {
@@ -1181,12 +1946,15 @@ function allCsv() {
 }
 
 function render() {
-  if (!['resumen','relevamiento','mapa','historico','datos'].includes(ui.view)) ui.view='resumen'
+  if (!['resumen','relevamiento','eventos','mapa','lluvias','historico','intro','datos'].includes(ui.view)) ui.view='resumen'
   let html = ''
   if (ui.view === 'resumen') html = renderDashboard()
   if (ui.view === 'relevamiento') html = renderSurveyWizard()
+  if (ui.view === 'eventos') html = renderEventsPage()
   if (ui.view === 'mapa') html = renderMapPage()
+  if (ui.view === 'lluvias') html = renderRainPage()
   if (ui.view === 'historico') html = renderHistory()
+  if (ui.view === 'intro') html = renderIntroductionPage()
   if (ui.view === 'datos') html = renderDataPage()
   document.getElementById('app').innerHTML = html
   bindEvents()
@@ -1194,16 +1962,26 @@ function render() {
 
 function bindEvents() {
   document.querySelectorAll('[data-nav]').forEach((button) => button.addEventListener('click', () => navigate(button.dataset.nav)))
+  document.querySelectorAll('[data-map-mode]').forEach((button) => button.addEventListener('click', () => { ui.mapMode=button.dataset.mapMode; if(ui.mapMode==='map' && ui.selectedLotId) ui.mapViewBox=viewBoxForLot(ui.selectedLotId); render() }))
+  document.querySelectorAll('[data-open-map-table]').forEach((button) => button.addEventListener('click', () => { ui.mapMode='table'; navigate('mapa') }))
+  document.querySelectorAll('[data-table-lot]').forEach((button) => button.addEventListener('click', (event) => { if (event.target.closest('[data-edit-table-lot]')) return; focusMapLot(button.dataset.tableLot); ui.mapMode='map'; navigate('mapa') }))
+  document.querySelectorAll('[data-select-map-lot]').forEach((button) => button.addEventListener('click', () => { focusMapLot(button.dataset.selectMapLot); render() }))
+  document.querySelectorAll('[data-edit-table-lot]').forEach((button) => button.addEventListener('click', (event) => { event.stopPropagation(); const survey=selectedSurvey(); const lotId=button.dataset.editTableLot; const existing=(survey.lots||[]).find((item)=>item.lotId===lotId); ui.modal={type:'lot-form',context:'direct',surveyId:survey.id,isEdit:Boolean(existing),originalLotId:lotId,lot:existing?lotFormModel(existing,true):lotFormModel({lotId,fieldState:'no-observado',conditionSource:'unobserved',groups:[]},true)}; render() }))
+  document.querySelectorAll('[data-alert-lots]').forEach((button) => button.addEventListener('click', () => { focusMapLot(button.dataset.alertLots.split(',')[0]); ui.mapMode='map'; navigate('mapa') }))
+  document.querySelectorAll('[data-rain-tab]').forEach((button) => button.addEventListener('click', () => { ui.rainTab=button.dataset.rainTab; render() }))
+  document.querySelectorAll('[data-rain-granularity]').forEach((button) => button.addEventListener('click', () => { ui.rainGranularity=button.dataset.rainGranularity; render() }))
+  document.querySelectorAll('[data-rain-year]').forEach((select) => select.addEventListener('change', () => { ui.rainYear=Number(select.value); render() }))
+  document.querySelectorAll('[data-rain-end-period]').forEach((input) => input.addEventListener('change', () => { ui.rainEndPeriod=input.value; render() }))
   document.querySelectorAll('[data-start-survey]').forEach((button) => button.addEventListener('click', startSurvey))
   document.querySelectorAll('[data-edit-selected-survey]').forEach((button) => button.addEventListener('click', () => editSurvey(selectedSurvey()?.id)))
   document.querySelectorAll('[data-edit-survey]').forEach((button) => button.addEventListener('click', () => { ui.modal = null; editSurvey(button.dataset.editSurvey) }))
   document.querySelectorAll('[data-open-survey-history]').forEach((button) => button.addEventListener('click', (event) => { event.stopPropagation(); ui.modal = { type: 'survey-history' }; render() }))
-  document.querySelectorAll('[data-survey-older]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().older; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;saveState();render()} }))
-  document.querySelectorAll('[data-survey-newer]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().newer; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;saveState();render()} }))
-  document.querySelectorAll('[data-view-latest]').forEach((button) => button.addEventListener('click', () => { const target=latestSurvey(); if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;saveState();render()} }))
-  document.querySelectorAll('[data-map-lot]').forEach((element) => element.addEventListener('click', () => { ui.selectedLotId = element.dataset.mapLot; if (ui.view !== 'mapa') navigate('mapa'); else render() }))
-  document.querySelectorAll('[data-lot]').forEach((element) => element.addEventListener('click', () => { ui.selectedLotId=element.dataset.lot; navigate('mapa') }))
-  document.querySelectorAll('[data-close-lot]').forEach((button) => button.addEventListener('click', () => { ui.selectedLotId=null; render() }))
+  document.querySelectorAll('[data-survey-older]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().older; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
+  document.querySelectorAll('[data-survey-newer]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().newer; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
+  document.querySelectorAll('[data-view-latest]').forEach((button) => button.addEventListener('click', () => { const target=latestSurvey(); if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
+  document.querySelectorAll('[data-map-lot]').forEach((element) => element.addEventListener('click', () => { focusMapLot(element.dataset.mapLot); ui.mapMode='map'; if (ui.view !== 'mapa') navigate('mapa'); else render() }))
+  document.querySelectorAll('[data-lot]').forEach((element) => element.addEventListener('click', () => { focusMapLot(element.dataset.lot); ui.mapMode='map'; navigate('mapa') }))
+  document.querySelectorAll('[data-close-lot]').forEach((button) => button.addEventListener('click', () => { ui.selectedLotId=null; ui.mapInspectorTab='actual'; render() }))
   document.querySelectorAll('[data-edit-map-lot]').forEach((button) => button.addEventListener('click', () => {
     const survey = selectedSurvey()
     const lotId = button.dataset.editMapLot
@@ -1211,13 +1989,18 @@ function bindEvents() {
     ui.modal = { type:'lot-form', context:'direct', surveyId:survey.id, isEdit:Boolean(existing), originalLotId:lotId, lot:existing ? lotFormModel(existing, true) : lotFormModel({ lotId, fieldState:'no-observado', conditionSource:'unobserved', groups:[] }, true) }
     render()
   }))
-  document.querySelectorAll('[data-select-survey]').forEach((button) => button.addEventListener('click', () => { state.selectedSurveyId=button.dataset.selectSurvey; ui.selectedLotId=null; saveState(); if (button.dataset.closeAfter !== undefined) ui.modal=null; render() }))
+  document.querySelectorAll('[data-select-survey]').forEach((button) => button.addEventListener('click', () => { state.selectedSurveyId=button.dataset.selectSurvey; ui.selectedLotId=null; ui.mapViewBox=null; saveState(); if (button.dataset.closeAfter !== undefined) ui.modal=null; render() }))
   document.querySelectorAll('[data-detail-survey]').forEach((button) => button.addEventListener('click', () => { ui.modal={type:'survey-detail',surveyId:button.dataset.detailSurvey}; render() }))
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => { ui.modal=null; render() }))
   document.querySelectorAll('[data-cancel-survey]').forEach((button) => button.addEventListener('click', () => { if(confirm('¿Cancelar este relevamiento? Se perderá el borrador.')) { state.draft=null; saveState(); navigate('resumen') } }))
 
   const dateInput = document.getElementById('survey-date')
-  if (dateInput) dateInput.addEventListener('change', (event) => { state.draft.date=event.target.value; state.draft.rainPeriod=monthKey(event.target.value); state.draft.lastSavedAt=new Date().toISOString(); saveState(); render() })
+  if (dateInput) dateInput.addEventListener('change', (event) => {
+    const nextDate=event.target.value
+    state.draft.date=nextDate; state.draft.rainPeriod=monthKey(nextDate)
+    if(state.draft.mode==='new') { const projection=projectedLotsForDate(nextDate); state.draft.basedOnSurveyId=projection.base?.id||null; state.draft.projectionEventIds=projection.events.map((item)=>item.id); state.draft.lots=projection.lots }
+    state.draft.lastSavedAt=new Date().toISOString(); saveState(); render()
+  })
   document.querySelectorAll('[data-step-one-next]').forEach((button) => button.addEventListener('click', () => { if(!state.draft.date) return alert('Elegí una fecha.'); state.draft.step=2; saveState(); render() }))
   document.querySelectorAll('[data-wizard-back]').forEach((button) => button.addEventListener('click', () => { state.draft.step=Math.max(1,(state.draft.step||1)-1); saveState(); render() }))
   document.querySelectorAll('[data-step-two-next]').forEach((button) => button.addEventListener('click', () => { state.draft.step=3; saveState(); render() }))
@@ -1273,8 +2056,12 @@ function bindEvents() {
     state.draft=null; saveState(); showToast(draft.mode === 'edit' ? 'Relevamiento actualizado' : 'Relevamiento guardado'); setTimeout(()=>navigate('resumen'),400)
   }))
 
-  document.querySelectorAll('[data-open-rain]').forEach((button)=>button.addEventListener('click',(event)=>{event.stopPropagation();ui.modal={type:'rain-manager',period:button.dataset.openRain||monthKey(selectedSurvey()?.date||todayISO()),entryId:null};render()}))
+  document.querySelectorAll('[data-open-rain]').forEach((button)=>button.addEventListener('click',(event)=>{event.stopPropagation();ui.modal={type:'rain-manager',period:button.dataset.openRain||monthKey(selectedSurvey()?.date||todayISO()),entryId:null,rainMode:'monthly'};render()}))
   const rainPeriod=document.getElementById('rain-period-select');if(rainPeriod)rainPeriod.addEventListener('change',(event)=>{ui.modal.period=event.target.value;ui.modal.entryId=null;render()})
+  document.querySelectorAll('[data-rain-input-mode]').forEach((button)=>button.addEventListener('click',()=>{ui.modal.rainMode=button.dataset.rainInputMode;ui.modal.entryId=null;render()}))
+  document.querySelectorAll('[data-save-rain-monthly]').forEach((button)=>button.addEventListener('click',()=>{const raw=document.getElementById('rain-monthly-mm')?.value;const period=ui.modal.period;if(raw===''){state.rain=(state.rain||[]).filter((item)=>item.period!==period);state.rainEntries=(state.rainEntries||[]).filter((entry)=>monthKey(entry.date)!==period);saveState();ui.modal=null;showToast('Mes dejado sin información');render();return}const mm=Number(raw);if(!Number.isFinite(mm)||mm<0)return alert('Ingresá un valor válido.');if(mm===0){ui.modal={type:'zero-rain-confirm',period,value:0};render();return}state.rainEntries=(state.rainEntries||[]).filter((entry)=>monthKey(entry.date)!==period);const record={period,millimeters:mm};state.rain=(state.rain||[]).some((item)=>item.period===period)?state.rain.map((item)=>item.period===period?record:item):[...(state.rain||[]),record];saveState();ui.modal=null;showToast('Lluvia mensual actualizada');render()}))
+  document.querySelectorAll('[data-confirm-zero-rain]').forEach((button)=>button.addEventListener('click',()=>{const period=ui.modal.period;state.rainEntries=(state.rainEntries||[]).filter((entry)=>monthKey(entry.date)!==period);const record={period,millimeters:0};state.rain=(state.rain||[]).some((item)=>item.period===period)?state.rain.map((item)=>item.period===period?record:item):[...(state.rain||[]),record];saveState();ui.modal=null;showToast('0 mm confirmado');render()}))
+  document.querySelectorAll('[data-zero-rain-no-info]').forEach((button)=>button.addEventListener('click',()=>{const period=ui.modal.period;state.rain=(state.rain||[]).filter((item)=>item.period!==period);state.rainEntries=(state.rainEntries||[]).filter((entry)=>monthKey(entry.date)!==period);saveState();ui.modal=null;showToast('Mes marcado sin información');render()}))
   document.querySelectorAll('[data-edit-rain-entry]').forEach((button)=>button.addEventListener('click',()=>{ui.modal.entryId=button.dataset.editRainEntry;render()}))
   document.querySelectorAll('[data-delete-rain-entry]').forEach((button)=>button.addEventListener('click',()=>{if(!confirm('¿Eliminar este registro de lluvia?'))return;state.rainEntries=(state.rainEntries||[]).filter((entry)=>entry.id!==button.dataset.deleteRainEntry);saveState();render()}))
   document.querySelectorAll('[data-save-rain-entry]').forEach((button)=>button.addEventListener('click',()=>{
@@ -1298,570 +2085,81 @@ function bindEvents() {
   const importInput=document.getElementById('import-backup'); if(importInput) importInput.addEventListener('change', async(event)=>{const file=event.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());const migrated=migrateState(imported);if(!migrated)throw new Error('Formato no válido');state=migrated;saveState();showToast('Respaldo restaurado');setTimeout(()=>navigate('resumen'),400)}catch(error){alert(`No se pudo importar: ${error.message}`)}})
   document.querySelectorAll('[data-reset-demo]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'confirm-reset'};render()}))
   document.querySelectorAll('[data-confirm-reset]').forEach((button)=>button.addEventListener('click',()=>{state=createInitialState();saveState();ui.modal=null;showToast('Datos restablecidos');setTimeout(()=>navigate('resumen'),300)}))
+  bindV7Interactions()
+}
+
+
+function eventFormValue(id) { return document.getElementById(id)?.value ?? '' }
+
+function collectEventForm() {
+  const type=eventFormValue('event-type') || ui.modal?.eventType || 'sale'
+  return {
+    id: ui.modal?.event?.id || uid(), nombre: state.nombre || 'Muestra', type,
+    date: eventFormValue('event-date'), lotId: eventFormValue('event-lot'), categoryId: eventFormValue('event-category'),
+    toCategoryId: type==='reclassification' ? eventFormValue('event-to-category') : '',
+    quantity: Math.max(0,Math.round(Number(eventFormValue('event-quantity'))||0)),
+    pricePerHead: ['sale','purchase'].includes(type) && eventFormValue('event-price')!=='' ? Number(eventFormValue('event-price')) : '',
+    counterparty: ['sale','purchase'].includes(type) ? String(eventFormValue('event-counterparty')||'').trim() : '',
+    notes: String(eventFormValue('event-notes')||'').trim(), createdAt: ui.modal?.event?.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString(), archived:false,
+  }
+}
+
+function validateEventRecord(event) {
+  if(!event.date) return 'Elegí una fecha.'
+  if(!event.lotId) return 'Elegí un lote.'
+  if(!event.categoryId) return 'Elegí una categoría.'
+  if(!event.quantity || event.quantity < 1) return 'Ingresá una cantidad mayor que cero.'
+  if(event.type==='reclassification' && (!event.toCategoryId || event.toCategoryId===event.categoryId)) return 'Elegí una categoría de destino diferente.'
+  if(['sale','death','reclassification'].includes(event.type)) {
+    const available=availableCategoryQuantity(event.date,event.lotId,event.categoryId,event.id)
+    if(event.quantity>available) return `La cantidad supera el stock proyectado disponible (${fmt(available)}).`
+  }
+  return ''
+}
+
+function bindMapPanAndZoom() {
+  const svg=document.querySelector('[data-map-svg="full"]')
+  if(!svg) return
+  document.querySelectorAll('[data-map-zoom-in]').forEach((button)=>button.addEventListener('click',()=>{zoomMap(.78);render()}))
+  document.querySelectorAll('[data-map-zoom-out]').forEach((button)=>button.addEventListener('click',()=>{zoomMap(1.28);render()}))
+  document.querySelectorAll('[data-map-view-all]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=fullMapViewBox();render()}))
+  document.querySelectorAll('[data-map-focus-selected]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=viewBoxForLot(ui.selectedLotId||'ER-08-09');render()}))
+  svg.addEventListener('wheel',(event)=>{
+    event.preventDefault()
+    const rect=svg.getBoundingClientRect(), ax=(event.clientX-rect.left)/rect.width, ay=(event.clientY-rect.top)/rect.height
+    zoomMap(event.deltaY<0?.82:1.22,ax,ay); render()
+  },{passive:false})
+  let drag=null
+  svg.addEventListener('pointerdown',(event)=>{ if(event.button!==0)return; const box=currentMapViewBox(); drag={x:event.clientX,y:event.clientY,box}; svg.setPointerCapture(event.pointerId); svg.classList.add('dragging') })
+  svg.addEventListener('pointermove',(event)=>{ if(!drag)return; const rect=svg.getBoundingClientRect(); ui.mapViewBox=clampViewBox({x:drag.box.x-(event.clientX-drag.x)*drag.box.width/rect.width,y:drag.box.y-(event.clientY-drag.y)*drag.box.height/rect.height,width:drag.box.width,height:drag.box.height}); svg.setAttribute('viewBox',`${ui.mapViewBox.x} ${ui.mapViewBox.y} ${ui.mapViewBox.width} ${ui.mapViewBox.height}`) })
+  const stop=(event)=>{ if(!drag)return; drag=null; svg.classList.remove('dragging'); try{svg.releasePointerCapture(event.pointerId)}catch{} }
+  svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop)
+}
+
+function bindV7Interactions() {
+  document.querySelectorAll('[data-map-inspector-tab],[data-inspector-tab]').forEach((button)=>button.addEventListener('click',()=>{ui.mapInspectorTab=button.dataset.mapInspectorTab||button.dataset.inspectorTab;render()}))
+  bindMapPanAndZoom()
+
+  document.querySelectorAll('[data-event-filter]').forEach((button)=>button.addEventListener('click',()=>{ui.eventFilter=button.dataset.eventFilter;render()}))
+  document.querySelectorAll('[data-add-event]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'event-form',eventType:button.dataset.addEvent||'sale',isEdit:false,event:{type:button.dataset.addEvent||'sale',date:todayISO(),lotId:button.dataset.eventLot||ui.selectedLotId||'',categoryId:'',toCategoryId:'',quantity:'',pricePerHead:'',counterparty:'',notes:''}};render()}))
+  document.querySelectorAll('[data-edit-event]').forEach((button)=>button.addEventListener('click',()=>{const event=(state.animalEvents||[]).find((item)=>item.id===button.dataset.editEvent);if(!event)return;ui.modal={type:'event-form',eventType:event.type,isEdit:true,event:{...event}};render()}))
+  document.querySelectorAll('[data-delete-event]').forEach((button)=>button.addEventListener('click',()=>{if(!confirm('¿Eliminar este evento? El balance se recalculará.'))return;state.animalEvents=(state.animalEvents||[]).filter((item)=>item.id!==button.dataset.deleteEvent);saveState();showToast('Evento eliminado');render()}))
+  const eventType=document.getElementById('event-type')
+  if(eventType) eventType.addEventListener('change',()=>{const current=collectEventForm();current.type=eventType.value;ui.modal.eventType=eventType.value;ui.modal.event=current;render()})
+  document.querySelectorAll('[data-save-event]').forEach((button)=>button.addEventListener('click',()=>{const event=collectEventForm();const error=validateEventRecord(event);if(error)return alert(error);const exists=(state.animalEvents||[]).some((item)=>item.id===event.id);state.animalEvents=exists?(state.animalEvents||[]).map((item)=>item.id===event.id?event:item):[...(state.animalEvents||[]),event];ui.modal=null;saveState();showToast(exists?'Evento actualizado':'Evento registrado');render()}))
+
+  document.querySelectorAll('[data-archive-survey]').forEach((button)=>button.addEventListener('click',(e)=>{e.stopPropagation();const survey=state.surveys.find((item)=>item.id===button.dataset.archiveSurvey);if(!survey)return;survey.archived=!survey.archived;survey.editedAt=new Date().toISOString();if(survey.archived&&state.selectedSurveyId===survey.id)state.selectedSurveyId=latestSurvey()?.id||null;ui.modal=null;saveState();showToast(survey.archived?'Relevamiento archivado':'Relevamiento restaurado');render()}))
+  document.querySelectorAll('[data-delete-survey]').forEach((button)=>button.addEventListener('click',(e)=>{e.stopPropagation();const survey=state.surveys.find((item)=>item.id===button.dataset.deleteSurvey);if(!survey)return;ui.modal={type:'confirm-delete-survey',survey};render()}))
+  document.querySelectorAll('[data-confirm-delete-survey]').forEach((button)=>button.addEventListener('click',()=>{if(String(document.getElementById('delete-survey-confirm')?.value||'').trim().toUpperCase()!=='ELIMINAR')return alert('Escribí ELIMINAR para confirmar.');const id=button.dataset.confirmDeleteSurvey;state.surveys=state.surveys.filter((item)=>item.id!==id);if(state.selectedSurveyId===id)state.selectedSurveyId=latestSurvey()?.id||null;ui.modal=null;saveState();showToast('Relevamiento eliminado');render()}))
+  const showArchived=document.querySelector('[data-show-archived]');if(showArchived)showArchived.addEventListener('change',()=>{ui.historyShowArchived=showArchived.checked;render()})
+
+  document.querySelectorAll('[data-export-events]').forEach((button)=>button.addEventListener('click',()=>download('campo-eventos.csv',eventsCsv(),'text/csv;charset=utf-8')))
 }
 
 function editRain(existingPeriod='') {
-  ui.modal = { type: 'rain-manager', period: existingPeriod || monthKey(todayISO()), entryId: null }
+  ui.modal = { type: 'rain-manager', period: existingPeriod || monthKey(todayISO()), entryId: null, rainMode: monthlyRainSummary(existingPeriod || monthKey(todayISO())).source === 'daily' ? 'daily' : 'monthly' }
   render()
 }
-
-
-/* --------------------------------------------------------------------------
-   Campo v6.01 extensions
-   Major visual redesign, aerial cattle assets and Laprida rainfall module.
-   -------------------------------------------------------------------------- */
-
-const LAPRIDA_FORTNIGHTS = [
-  { month: 1, half: 1, period: '1–15', average: 43.0, p10: 19.8, p90: 69.4 },
-  { month: 1, half: 2, period: '16–fin', average: 45.8, p10: 21.2, p90: 74.1 },
-  { month: 2, half: 1, period: '1–15', average: 52.5, p10: 21.3, p90: 75.5 },
-  { month: 2, half: 2, period: '16–fin', average: 46.4, p10: 18.8, p90: 66.8 },
-  { month: 3, half: 1, period: '1–15', average: 44.3, p10: 17.8, p90: 73.7 },
-  { month: 3, half: 2, period: '16–fin', average: 47.3, p10: 19.0, p90: 78.7 },
-  { month: 4, half: 1, period: '1–15', average: 39.2, p10: 9.9, p90: 72.3 },
-  { month: 4, half: 2, period: '16–fin', average: 39.2, p10: 9.9, p90: 72.3 },
-  { month: 5, half: 1, period: '1–15', average: 25.7, p10: 3.4, p90: 58.3 },
-  { month: 5, half: 2, period: '16–fin', average: 27.5, p10: 3.6, p90: 62.2 },
-  { month: 6, half: 1, period: '1–15', average: 14.5, p10: 1.2, p90: 36.0 },
-  { month: 6, half: 2, period: '16–fin', average: 14.5, p10: 1.2, p90: 36.0 },
-  { month: 7, half: 1, period: '1–15', average: 13.9, p10: 0.5, p90: 37.3 },
-  { month: 7, half: 2, period: '16–fin', average: 14.9, p10: 0.5, p90: 39.7 },
-  { month: 8, half: 1, period: '1–15', average: 19.3, p10: 1.9, p90: 44.5 },
-  { month: 8, half: 2, period: '16–fin', average: 20.6, p10: 2.1, p90: 47.5 },
-  { month: 9, half: 1, period: '1–15', average: 28.1, p10: 8.7, p90: 55.2 },
-  { month: 9, half: 2, period: '16–fin', average: 28.1, p10: 8.7, p90: 55.2 },
-  { month: 10, half: 1, period: '1–15', average: 40.2, p10: 16.7, p90: 65.1 },
-  { month: 10, half: 2, period: '16–fin', average: 42.8, p10: 17.8, p90: 69.4 },
-  { month: 11, half: 1, period: '1–15', average: 41.5, p10: 16.7, p90: 67.5 },
-  { month: 11, half: 2, period: '16–fin', average: 41.5, p10: 16.7, p90: 67.5 },
-  { month: 12, half: 1, period: '1–15', average: 36.9, p10: 14.0, p90: 64.4 },
-  { month: 12, half: 2, period: '16–fin', average: 39.3, p10: 15.0, p90: 68.6 },
-]
-
-const MONTH_NAMES_SHORT = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-const MONTH_NAMES_LONG = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-const AERIAL_DIRECTIONS = ['north', 'east', 'south', 'west']
-
-ui.mapMode = ui.mapMode || 'map'
-ui.rainGranularity = ui.rainGranularity || 'monthly'
-ui.rainYear = ui.rainYear || Number((selectedSurvey()?.date || todayISO()).slice(0, 4))
-
-function periodShift(period, delta) {
-  const [year, month] = period.split('-').map(Number)
-  const date = new Date(year, month - 1 + delta, 1)
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-}
-
-function monthlyHistorical(monthNumber) {
-  const rows = LAPRIDA_FORTNIGHTS.filter((item) => item.month === monthNumber)
-  return {
-    average: rows.reduce((sum, item) => sum + item.average, 0),
-    p10: rows.reduce((sum, item) => sum + item.p10, 0),
-    p90: rows.reduce((sum, item) => sum + item.p90, 0),
-  }
-}
-
-function hydricIndex(current, average) {
-  if (current == null || !Number.isFinite(current) || !average) return null
-  return current / average * 100
-}
-
-function hydricStatus(index) {
-  if (index == null) return { label: 'Sin información', className: 'none' }
-  if (index < 70) return { label: 'Muy seco', className: 'very-dry' }
-  if (index < 90) return { label: 'Seco', className: 'dry' }
-  if (index < 110) return { label: 'Normal', className: 'normal' }
-  if (index < 130) return { label: 'Húmedo', className: 'wet' }
-  return { label: 'Muy húmedo', className: 'very-wet' }
-}
-
-function rainYearOptions() {
-  const years = new Set([Number(todayISO().slice(0, 4)), Number(selectedSurvey()?.date?.slice(0, 4) || todayISO().slice(0, 4))])
-  for (const period of allRainPeriods()) years.add(Number(period.slice(0, 4)))
-  return [...years].filter(Boolean).sort((a, b) => b - a)
-}
-
-function fortnightActual(year, monthNumber, half) {
-  const period = `${year}-${String(monthNumber).padStart(2, '0')}`
-  const entries = rainEntriesForPeriod(period)
-  if (!entries.length) return null
-  const filtered = entries.filter((entry) => half === 1 ? Number(entry.date.slice(8, 10)) <= 15 : Number(entry.date.slice(8, 10)) > 15)
-  return filtered.length ? filtered.reduce((sum, entry) => sum + Number(entry.millimeters || 0), 0) : 0
-}
-
-function rainComparisonRows(year, granularity = 'monthly') {
-  if (granularity === 'fortnight') {
-    return LAPRIDA_FORTNIGHTS.map((row) => {
-      const current = fortnightActual(year, row.month, row.half)
-      const index = hydricIndex(current, row.average)
-      return {
-        key: `${year}-${String(row.month).padStart(2, '0')}-${row.half}`,
-        label: `${MONTH_NAMES_SHORT[row.month - 1]} Q${row.half}`,
-        average: row.average,
-        p10: row.p10,
-        p90: row.p90,
-        current,
-        index,
-        status: hydricStatus(index),
-        period: `${year}-${String(row.month).padStart(2, '0')}`,
-      }
-    })
-  }
-  return Array.from({ length: 12 }, (_, index) => {
-    const monthNumber = index + 1
-    const period = `${year}-${String(monthNumber).padStart(2, '0')}`
-    const history = monthlyHistorical(monthNumber)
-    const current = monthlyRainSummary(period).millimeters
-    const indexValue = hydricIndex(current, history.average)
-    return {
-      key: period,
-      label: MONTH_NAMES_SHORT[index],
-      average: history.average,
-      p10: history.p10,
-      p90: history.p90,
-      current,
-      index: indexValue,
-      status: hydricStatus(indexValue),
-      period,
-    }
-  })
-}
-
-function cumulativeRainRows(endPeriod) {
-  const periods = Array.from({ length: 12 }, (_, index) => periodShift(endPeriod, index - 11))
-  let historical = 0
-  let p10 = 0
-  let p90 = 0
-  let current = 0
-  let informed = 0
-  return periods.map((period) => {
-    const monthNumber = Number(period.slice(5, 7))
-    const history = monthlyHistorical(monthNumber)
-    historical += history.average
-    p10 += history.p10
-    p90 += history.p90
-    const value = monthlyRainSummary(period).millimeters
-    if (value != null) {
-      current += value
-      informed += 1
-    }
-    const index = informed ? hydricIndex(current, historical) : null
-    return {
-      period,
-      label: `${MONTH_NAMES_SHORT[monthNumber - 1]} ${period.slice(2, 4)}`,
-      average: historical,
-      p10,
-      p90,
-      current: informed ? current : null,
-      informed,
-      index,
-      status: hydricStatus(index),
-    }
-  })
-}
-
-function rainBandPosition(value, min, max) {
-  if (value == null || max <= min) return null
-  return Math.max(0, Math.min(100, (value - min) / (max - min) * 100))
-}
-
-function renderRainBand(value, average, p10, p90) {
-  const scaleMax = Math.max(p90 * 1.15, value || 0, average || 0, 1)
-  const left = p10 / scaleMax * 100
-  const width = Math.max(2, (p90 - p10) / scaleMax * 100)
-  const averagePos = average / scaleMax * 100
-  const currentPos = value == null ? null : value / scaleMax * 100
-  return `<div class="rain-band" aria-label="Rango histórico ${decimal(p10, 1)} a ${decimal(p90, 1)} milímetros">
-    <i class="rain-band-range" style="left:${left}%;width:${width}%"></i>
-    <i class="rain-band-average" style="left:${averagePos}%"></i>
-    ${currentPos == null ? '' : `<b class="rain-band-current" style="left:${Math.min(100, currentPos)}%"></b>`}
-  </div>`
-}
-
-function renderRainTable(rows, cumulative = false) {
-  const body = rows.map((row) => `<tr>
-    <th>${esc(row.label)}</th>
-    <td class="numeric">${decimal(row.average, 1)}</td>
-    <td class="numeric">${decimal(row.p10, 1)}</td>
-    <td class="numeric">${decimal(row.p90, 1)}</td>
-    <td class="rain-band-cell">${renderRainBand(row.current, row.average, row.p10, row.p90)}</td>
-    <td class="numeric rain-current-value">${row.current == null ? '—' : decimal(row.current, 1)}</td>
-    <td class="numeric">${row.index == null ? '—' : `${Math.round(row.index)}%`}</td>
-    <td><span class="hydric-state ${row.status.className}">${row.status.label}</span></td>
-    ${cumulative ? `<td class="numeric muted-cell">${row.informed}/12</td>` : ''}
-  </tr>`).join('')
-  return `<div class="rain-table-scroll"><table class="rain-comparison-table ${cumulative ? 'cumulative' : ''}">
-    <thead><tr><th>Período</th><th>Prom.</th><th>P10</th><th>P90</th><th>Ubicación actual</th><th>Actual</th><th>Índice</th><th>Estado</th>${cumulative ? '<th>Datos</th>' : ''}</tr></thead>
-    <tbody>${body}</tbody>
-  </table></div>`
-}
-
-function renderRainChart(rows, cumulative = false) {
-  const width = 980
-  const height = 260
-  const pad = { left: 48, right: 24, top: 18, bottom: 38 }
-  const chartW = width - pad.left - pad.right
-  const chartH = height - pad.top - pad.bottom
-  const maxValue = Math.max(1, ...rows.flatMap((row) => [row.p90, row.average, row.current || 0])) * 1.08
-  const x = (index) => pad.left + (rows.length === 1 ? chartW / 2 : index / (rows.length - 1) * chartW)
-  const y = (value) => pad.top + chartH - value / maxValue * chartH
-  const p90 = rows.map((row, index) => `${x(index)},${y(row.p90)}`).join(' ')
-  const p10 = [...rows].reverse().map((row, reverseIndex) => {
-    const index = rows.length - 1 - reverseIndex
-    return `${x(index)},${y(row.p10)}`
-  }).join(' ')
-  const average = rows.map((row, index) => `${x(index)},${y(row.average)}`).join(' ')
-  const actualSegments = []
-  let segment = []
-  rows.forEach((row, index) => {
-    if (row.current == null) {
-      if (segment.length) actualSegments.push(segment)
-      segment = []
-    } else segment.push(`${x(index)},${y(row.current)}`)
-  })
-  if (segment.length) actualSegments.push(segment)
-  const dots = rows.map((row, index) => row.current == null ? '' : `<circle cx="${x(index)}" cy="${y(row.current)}" r="4.5" />`).join('')
-  const labels = rows.map((row, index) => `<text x="${x(index)}" y="${height - 12}" text-anchor="middle">${esc(row.label)}</text>`).join('')
-  return `<div class="rain-chart-wrap"><svg class="rain-chart ${cumulative ? 'cumulative' : ''}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Comparación de lluvia actual con banda histórica">
-    <polygon class="rain-chart-band" points="${p90} ${p10}"></polygon>
-    <polyline class="rain-chart-average" points="${average}"></polyline>
-    ${actualSegments.map((points) => `<polyline class="rain-chart-actual" points="${points.join(' ')}"></polyline>`).join('')}
-    <g class="rain-chart-dots">${dots}</g>
-    <g class="rain-chart-labels">${labels}</g>
-  </svg></div>`
-}
-
-function aggregatedOperationalAlerts(survey) {
-  if (!survey) return []
-  const metrics = surveyMetrics(survey)
-  const high = []
-  const risk = []
-  for (const lot of LOTS) {
-    const entry = (survey.lots || []).find((item) => item.lotId === lot.id)
-    if (!entry) continue
-    const metric = metrics.byLot[lot.id]
-    const condition = resolveLotCondition(survey, lot.id)
-    if (['high', 'over', 'critical'].includes(capacityClass(metric.load))) high.push({ lot, metric })
-    if (['malo', 'anegado'].includes(condition.stateId) && metric.load >= 0.5) risk.push({ lot, metric, condition })
-  }
-  const alerts = []
-  if (high.length) alerts.push({
-    severity: high.some((item) => capacityClass(item.metric.load) === 'critical') ? 'danger' : 'warning',
-    lotId: high[0].lot.id,
-    title: `Carga alta en ${high.length} ${high.length === 1 ? 'lote' : 'lotes'}`,
-    text: `${high.map((item) => item.lot.name).join(', ')}. Rango ${decimal(Math.min(...high.map((item) => item.metric.load)))}–${decimal(Math.max(...high.map((item) => item.metric.load)))} EV/ha.`,
-  })
-  if (risk.length) alerts.push({
-    severity: 'danger',
-    lotId: risk[0].lot.id,
-    title: 'Condición comprometida con carga relevante',
-    text: `${risk.map((item) => item.lot.name).join(', ')}: condición mala o anegada y al menos 0,50 EV/ha.`,
-  })
-  return alerts
-}
-
-operationalAlerts = aggregatedOperationalAlerts
-
-renderCategoryBars = function renderCategoryBarsV601(categories, total) {
-  const rows = CATEGORIES.map((category) => ({ ...category, quantity: categories[category.id] || 0 }))
-    .filter((item) => item.quantity > 0)
-    .sort((a, b) => b.quantity - a.quantity)
-    .slice(0, 7)
-  const maxQuantity = Math.max(1, ...rows.map((item) => item.quantity))
-  return `<div class="category-bars v601">${rows.map((item) => {
-    const share = total ? item.quantity / total * 100 : 0
-    const relative = item.quantity / maxQuantity * 100
-    return `<div class="category-row">
-      <div class="category-row-head"><span>${esc(item.short)}</span><strong>${fmt(item.quantity)} <em>${Math.round(share)}%</em></strong></div>
-      <div class="bar"><i style="width:${relative}%"></i></div>
-    </div>`
-  }).join('')}</div>`
-}
-
-function aerialAsset(kind, lotId, index) {
-  const folder = kind === 'cowCalf' ? 'cow-calf' : kind
-  const direction = AERIAL_DIRECTIONS[Math.floor(seededNumber(`${lotId}-${index}-direction-v601`) * AERIAL_DIRECTIONS.length) % AERIAL_DIRECTIONS.length]
-  const variant = 1 + Math.floor(seededNumber(`${lotId}-${index}-variant-v601`) * 4)
-  return `animals/aerial/${folder}/${direction}-${variant}.png`
-}
-
-renderHerdSpritesHtml = function renderHerdSpritesHtmlV601(lotEntry, lot, compact, metric, condition) {
-  if (compact) return ''
-  const count = spriteCountForLot(lot, metric, false)
-  const positions = spritePositions(lot, count, 28)
-  const kinds = allocateVisualKinds(lotEntry, positions.length)
-  return positions.map((position, index) => {
-    const kind = kinds[index] || 'cow'
-    const asset = aerialAsset(kind, lot.id, index)
-    const left = (position.x / 1154 * 100).toFixed(3)
-    const top = (position.y / 1363 * 100).toFixed(3)
-    return `<img class="map-animal-html aerial ${kind} state-${condition?.stateId || 'no-observado'}" src="./assets/${asset}" alt="" style="left:${left}%;top:${top}%" />`
-  }).join('')
-}
-
-renderMapLabelHtml = function renderMapLabelHtmlV601(lot, metric, entry, condition, compact) {
-  const observed = Boolean(entry)
-  const status = observed ? capacityClass(metric.load) : 'empty'
-  const count = observed ? fmt(metric.animals) : '—'
-  const left = (lot.label[0] / 1154 * 100).toFixed(3)
-  const top = (lot.label[1] / 1363 * 100).toFixed(3)
-  if (compact) {
-    return `<button class="map-label-html v601-summary source-${condition.source}" data-map-lot="${lot.id}" style="left:${left}%;top:${top}%" aria-label="${lot.name}: ${count} animales">
-      <strong>${count}</strong>${conditionIsAssumed(condition.source) ? '<sup>≈</sup>' : ''}
-    </button>`
-  }
-  return `<button class="map-label-html v601-full source-${condition.source}" data-map-lot="${lot.id}" style="left:${left}%;top:${top}%" aria-label="${lot.name}: ${count} animales, ${decimal(metric.load)} EV por hectárea">
-    <span>${esc(lot.name)}</span><strong>${count}</strong><small><i class="load-dot ${status}"></i>${observed ? `${decimal(metric.load)} EV/ha` : 'Sin registro'}</small>
-  </button>`
-}
-
-renderMap = function renderMapV601(survey, compact = false) {
-  const metrics = surveyMetrics(survey)
-  const selected = ui.selectedLotId
-  const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
-  const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
-  const patternDefs = LOTS.flatMap((lot) => FIELD_STATES.filter((item) => item.pattern).map((item) => {
-    const baseSize = compact ? 31 : 40
-    const tileSize = baseSize + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v601`) * 8)
-    const offsetX = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-x-v601`) * tileSize)
-    const offsetY = -Math.floor(seededNumber(`${lot.id}-${item.id}-tile-y-v601`) * tileSize)
-    return `<pattern id="condition-${item.id}-${lot.id}" patternUnits="userSpaceOnUse" x="${offsetX}" y="${offsetY}" width="${tileSize}" height="${tileSize}"><image href="./assets/conditions/${item.pattern}" x="0" y="0" width="${tileSize}" height="${tileSize}" preserveAspectRatio="xMidYMid slice" /></pattern>`
-  })).join('') + `<pattern id="condition-assumed-hatch" patternUnits="userSpaceOnUse" width="22" height="22" patternTransform="rotate(32)"><rect width="22" height="22" fill="transparent"/><rect width="1.5" height="22" fill="rgba(255,255,255,.24)"/></pattern><pattern id="condition-no-info" patternUnits="userSpaceOnUse" width="24" height="24" patternTransform="rotate(35)"><rect width="24" height="24" fill="rgba(232,232,222,.05)"/><rect width="1.5" height="24" fill="rgba(255,255,255,.22)"/></pattern>`
-  const conditionLayer = LOTS.map((lot) => {
-    const condition = conditions[lot.id]
-    if (condition.source === 'none') return `<polygon class="lot-condition source-none state-no-observado" points="${lot.points}" fill="url(#condition-no-info)" />`
-    return `<polygon class="lot-condition source-${condition.source} state-${condition.stateId}" points="${lot.points}" fill="url(#condition-${condition.stateId}-${lot.id})" />${conditionIsAssumed(condition.source) ? `<polygon class="condition-assumption-hatch" points="${lot.points}" fill="url(#condition-assumed-hatch)" />` : ''}`
-  }).join('')
-  const loadHalos = LOTS.map((lot) => `<polygon class="lot-load-halo ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
-  const loadBorders = LOTS.map((lot) => `<polygon class="lot-load-border ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
-  const hits = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
-  const animals = compact ? '' : (survey.lots || []).filter((entry) => metrics.byLot[entry.lotId]?.animals > 0).map((entry) => renderHerdSpritesHtml(entry, lotLookup[entry.lotId], false, metrics.byLot[entry.lotId], conditions[entry.lotId])).join('')
-  const labels = LOTS.map((lot) => renderMapLabelHtml(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], compact)).join('')
-  return `<div class="ranch-map ${compact ? 'compact summary-map v601' : 'full full-map v601'}">
-    <svg class="map-canvas" viewBox="0 0 1154 1363" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario">
-      <defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none" />
-      <g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="interaction-layer">${hits}</g>
-    </svg>
-    <div class="map-ui-overlay ${compact ? 'compact' : 'full'}"><div class="map-animal-overlay">${animals}</div><div class="map-house-overlay">${renderMapHousesHtml(compact)}</div><div class="map-label-overlay">${labels}</div></div>
-    <div class="map-load-badge"><span>Carga del campo</span><strong>${decimal(metrics.load)} EV/ha</strong></div>
-  </div>`
-}
-
-function renderMapLotsTable(survey) {
-  const metrics = surveyMetrics(survey)
-  const observed = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
-  const rows = LOTS.map((lot) => {
-    const entry = observed[lot.id]
-    const metric = metrics.byLot[lot.id]
-    const condition = resolveLotCondition(survey, lot.id)
-    const rollup = lotCategoryRollup(entry?.groups || [])
-    const others = entry ? Math.max(0, metric.animals - rollup.cows - rollup.calves - rollup.bulls) : 0
-    return `<tr class="${ui.selectedLotId === lot.id ? 'selected' : ''}" data-lot="${lot.id}">
-      <th>${lot.name}</th>
-      <td><span class="table-condition state-${condition.stateId}">${conditionIsAssumed(condition.source) ? '≈' : ''}${conditionShortCode(condition.stateId)}</span></td>
-      <td class="numeric"><span class="table-load ${entry ? capacityClass(metric.load) : 'empty'}"><i></i>${entry ? decimal(metric.load) : '—'}</span></td>
-      <td class="numeric total-cell">${entry ? fmt(metric.animals) : '—'}</td>
-      <td class="numeric">${entry ? fmt(rollup.cows) : '—'}</td>
-      <td class="numeric">${entry ? fmt(rollup.calves) : '—'}</td>
-      <td class="numeric">${entry ? fmt(rollup.bulls) : '—'}</td>
-      <td class="numeric">${entry ? fmt(others) : '—'}</td>
-      <td class="action-cell"><button class="table-edit-button" data-lot-table-edit="${lot.id}" aria-label="Editar ${lot.name}">${icon('edit', 15)}</button></td>
-    </tr>`
-  }).join('')
-  return `<article class="panel map-table-panel"><div class="panel-head"><div><span class="eyebrow">Comparar y gestionar</span><h3>Datos de todos los lotes</h3></div><span>${LOTS.length} lotes</span></div>
-    <div class="map-table-wrap"><table class="map-lots-table"><thead><tr><th>Lote</th><th>Cond.</th><th>Carga EV/ha</th><th>Total</th><th>Vaca</th><th>Tern.</th><th>Toro</th><th>Otras</th><th>Editar</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <p class="table-note">MB: Muy bueno · B: Bueno · R: Regular · M: Malo · AN: Anegado · ≈ condición estimada.</p>
-  </article>`
-}
-
-function renderLotInspectorV601(survey, lotId) {
-  const lot = lotId ? lotLookup[lotId] : null
-  if (!lot) return `<aside class="lot-inspector empty-inspector"><img src="./assets/${UI_ASSETS.home}"><h2>Elegí un lote</h2><p>Tocá el mapa o una fila de la tabla para consultar y editar sus datos.</p></aside>`
-  const metrics = surveyMetrics(survey)
-  const entry = (survey.lots || []).find((item) => item.lotId === lot.id)
-  const metric = metrics.byLot[lot.id]
-  const condition = resolveLotCondition(survey, lot.id)
-  const rollup = lotCategoryRollup(entry?.groups || [])
-  const other = entry ? Math.max(0, metric.animals - rollup.cows - rollup.calves - rollup.bulls) : 0
-  const loadClass = entry ? capacityClass(metric.load) : 'empty'
-  return `<aside class="lot-inspector v601">
-    <button class="inspector-close" data-close-lot>${icon('close', 20)}</button><span class="eyebrow">Lote seleccionado</span><h2>${lot.name}</h2><p>${lot.hectares} ha · ${entry ? 'Registrado' : 'No observado'}</p>
-    <div class="lot-concept-grid"><div class="concept-card condition state-${condition.stateId}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${conditionSourceLabel(condition.source)}</span></div></div><div class="concept-card load ${loadClass}"><span class="concept-dot"></span><div><small>Carga</small><strong>${entry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${entry ? `${decimal(metric.load)} EV/ha` : 'No registrada'}</span></div></div></div>
-    <div class="inspector-total"><small>Total de animales</small><strong>${entry ? fmt(metric.animals) : '—'}</strong></div>
-    <div class="inspector-composition"><div><span>Vaca</span><strong>${entry ? fmt(rollup.cows) : '—'}</strong></div><div><span>Tern.</span><strong>${entry ? fmt(rollup.calves) : '—'}</strong></div><div><span>Toro</span><strong>${entry ? fmt(rollup.bulls) : '—'}</strong></div><div><span>Otras</span><strong>${entry ? fmt(other) : '—'}</strong></div></div>
-    <div class="lot-inspector-actions"><button class="btn primary" data-edit-map-lot="${lot.id}">${icon('edit', 16)} ${entry ? 'Editar lote' : 'Registrar lote'}</button><button class="btn secondary" data-open-survey-history>${icon('history', 16)} Cambiar fecha</button></div>
-  </aside>`
-}
-
-renderMapPage = function renderMapPageV601() {
-  const survey = selectedSurvey()
-  const tabs = `<div class="view-switcher"><button class="${ui.mapMode === 'map' ? 'active' : ''}" data-map-mode="map">${icon('map', 17)} Mapa</button><button class="${ui.mapMode === 'table' ? 'active' : ''}" data-map-mode="table">${icon('clipboard', 17)} Tabla</button></div>`
-  const body = ui.mapMode === 'table'
-    ? `<div class="map-table-layout">${renderMapLotsTable(survey)}${renderLotInspectorV601(survey, ui.selectedLotId)}</div>`
-    : `<div class="map-page-layout"><article class="panel full-map-panel">${renderMap(survey, false)}</article>${renderLotInspectorV601(survey, ui.selectedLotId)}</div>`
-  const content = `${renderSurveyNavigator()}<section class="map-toolbar"><div><span class="eyebrow">Dos formas de trabajar</span><h2>Mapa y tabla sincronizados</h2></div>${tabs}</section>${body}`
-  return renderShell(content, 'Mapa del campo', `Relevamiento del ${dateLabel(survey.date)}`, `<button class="btn primary" data-start-survey>${icon('plus', 17)} Nuevo</button>`)
-}
-
-function renderDashboardV601() {
-  const survey = selectedSurvey()
-  if (!survey) return renderShell('<div class="empty-state"><h2>No hay relevamientos</h2><button class="btn primary" data-start-survey>Crear el primero</button></div>', 'Resumen del campo', 'El Rosario')
-  const metrics = surveyMetrics(survey)
-  const previous = previousSurvey(survey)
-  const previousMetrics = previous ? surveyMetrics(previous) : null
-  const period = survey.rainPeriod || monthKey(survey.date)
-  const rainSummary = monthlyRainSummary(period)
-  const history = monthlyHistorical(Number(period.slice(5, 7)))
-  const index = hydricIndex(rainSummary.millimeters, history.average)
-  const rainState = hydricStatus(index)
-  const events = survey.events || { births: 0, deaths: 0, purchases: 0, sales: 0 }
-  const alerts = aggregatedOperationalAlerts(survey)
-  const delta = previousMetrics ? metrics.animals - previousMetrics.animals : null
-  const content = `${renderSurveyNavigator()}
-    <section class="welcome-strip"><div><span class="eyebrow">Relevamiento seleccionado</span><h2>${dateLabel(survey.date)}</h2><p>Resumen visual: cantidad de cabezas, condición del terreno y carga por borde.</p></div><div class="welcome-actions"><button class="btn secondary large" data-edit-selected-survey>${icon('edit', 18)} Editar relevamiento</button><button class="btn primary large" data-start-survey>${icon('plus', 19)} Nuevo relevamiento</button></div></section>
-    <section class="kpi-grid v2 v601">
-      ${kpiCard('Ganado total', fmt(metrics.animals), delta == null ? 'Primer relevamiento' : `${delta >= 0 ? '+' : ''}${fmt(delta)} vs. anterior`, KPI_ASSETS.animals, 'brown')}
-      ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, KPI_ASSETS.load, capacityClass(metrics.load))}
-      ${kpiCard('Nacimientos', fmt(events.births), 'Desde el relevamiento anterior', KPI_ASSETS.births, 'gold')}
-      ${kpiCard('Mortandad', fmt(events.deaths), 'Registro opcional', KPI_ASSETS.deaths, events.deaths ? 'red' : 'neutral')}
-      ${kpiCard('Compras / ventas', `${fmt(events.purchases)} / ${fmt(events.sales)}`, 'Movimientos del período', KPI_ASSETS.trade, 'blue')}
-      ${kpiCard('Lluvia del mes', rainSummary.millimeters == null ? 'Sin dato' : `${fmt(rainSummary.millimeters)} mm`, index == null ? 'Sin comparación' : `${Math.round(index)}% del promedio · ${rainState.label}`, KPI_ASSETS.rain, 'blue', 'data-nav="lluvias" role="button" tabindex="0"')}
-    </section>
-    <section class="dashboard-grid v601"><article class="panel map-panel"><div class="panel-head"><div><span class="eyebrow">Mapa vivo · vista limpia</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>${renderMap(survey, true)}<p class="summary-map-note">Número = cabezas · fondo = condición · borde = carga · ≈ condición estimada · — no observado.</p></article>
-      <aside class="dashboard-side"><article class="panel alerts-panel"><div class="panel-head"><h3>Alertas resumidas</h3><span class="count-pill">${alerts.length}</span></div>${alerts.length ? `<div class="alert-list">${alerts.map(renderAlert).join('')}</div>` : '<div class="empty-inline">No hay alertas operativas.</div>'}</article><article class="panel"><div class="panel-head"><h3>Composición del rodeo</h3><span>% de cabezas</span></div>${renderCategoryBars(metrics.categories, metrics.animals)}</article><article class="panel rain-card v601"><div class="panel-head"><h3>Lluvias · Laprida</h3><button class="text-link" data-nav="lluvias">Abrir módulo</button></div><div class="rain-hero"><strong>${rainSummary.millimeters == null ? '—' : fmt(rainSummary.millimeters)}</strong><span>mm · ${monthLabel(period)}</span><b class="rain-state ${rainState.className}">${rainState.label}</b></div><p>${index == null ? 'Cargá la lluvia para compararla con el patrón histórico.' : `Índice hídrico: ${Math.round(index)}% del promedio histórico.`}</p></article></aside>
-    </section>
-    <section class="bottom-grid"><article class="panel adoption-card"><div class="adoption-visual single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div><div><span class="eyebrow">Gestión por lote</span><h3>Mapa y tabla llevan al mismo editor</h3><p>Seleccioná un lote desde cualquiera de las dos vistas y modificá sus cantidades ya pobladas.</p><button class="btn primary" data-nav="mapa">Abrir gestión de lotes</button></div></article><article class="panel recent-panel"><div class="panel-head"><h3>Últimos relevamientos</h3><button class="text-link" data-open-survey-history>Ver todos</button></div>${renderRecentSurveys()}</article></section>`
-  return renderShell(content, 'Resumen del campo', 'Animales, carga y condición del relevamiento seleccionado')
-}
-
-renderDashboard = renderDashboardV601
-
-function renderRainPage() {
-  const years = rainYearOptions()
-  if (!years.includes(ui.rainYear)) ui.rainYear = years[0]
-  const rows = rainComparisonRows(ui.rainYear, ui.rainGranularity)
-  const availablePeriods = allRainPeriods().sort()
-  const endPeriod = availablePeriods.at(-1) || monthKey(selectedSurvey()?.date || todayISO())
-  const cumulative = cumulativeRainRows(endPeriod)
-  const last = cumulative.at(-1)
-  const complete = last?.informed === 12
-  const latestPeriod = `${ui.rainYear}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
-  const content = `<section class="rain-page-hero"><div><span class="eyebrow blue">Estación Laprida</span><h2>Lluvias</h2><p>Compará los registros actuales con el promedio y la banda histórica P10–P90.</p></div><div class="rain-page-kpis"><article><small>Acumulado 12 meses</small><strong>${last?.current == null ? '—' : `${fmt(last.current)} mm`}</strong><span>${last?.informed || 0}/12 meses informados</span></article><article><small>Índice hídrico</small><strong>${last?.index == null ? '—' : `${Math.round(last.index)}%`}</strong><span>${complete ? last.status.label : 'Lectura parcial'}</span></article><article><small>Promedio histórico</small><strong>${last ? `${fmt(last.average)} mm` : '—'}</strong><span>Últimos 12 meses</span></article></div></section>
-    <section class="rain-control-bar"><div class="view-switcher rain"><button class="${ui.rainGranularity === 'monthly' ? 'active' : ''}" data-rain-granularity="monthly">Mensual</button><button class="${ui.rainGranularity === 'fortnight' ? 'active' : ''}" data-rain-granularity="fortnight">Quincenal</button></div><label>Año <select id="rain-year-select">${years.map((year) => `<option value="${year}" ${year === ui.rainYear ? 'selected' : ''}>${year}</option>`).join('')}</select></label><button class="btn primary" data-open-rain="${latestPeriod}">${icon('plus', 17)} Cargar o editar lluvia</button></section>
-    <section class="rain-module-grid"><article class="panel rain-analysis-panel"><div class="panel-head"><div><span class="eyebrow blue">Lluvia del período</span><h3>${ui.rainGranularity === 'monthly' ? `Comparación mensual ${ui.rainYear}` : `Comparación quincenal ${ui.rainYear}`}</h3></div><span>mm</span></div>${renderRainChart(rows)}${renderRainTable(rows)}</article>
-      <article class="panel rain-analysis-panel"><div class="panel-head"><div><span class="eyebrow blue">Lluvia acumulada</span><h3>Últimos 12 meses hasta ${monthLabel(endPeriod)}</h3></div><span>${complete ? 'Serie completa' : `${last?.informed || 0}/12 meses`}</span></div>${renderRainChart(cumulative, true)}${renderRainTable(cumulative, true)}</article></section>
-    <section class="rain-method-note"><strong>Cómo leerlo</strong><span><i class="legend-band"></i>Banda histórica aproximada P10–P90</span><span><i class="legend-average"></i>Promedio histórico</span><span><i class="legend-current"></i>Registro actual</span><p>Los valores mensuales y acumulados de P10–P90 son referencias aproximadas obtenidas sumando las dos quincenas de cada mes.</p></section>
-    <section class="coming-soon"><div class="section-heading"><span class="eyebrow">Nuevas ideas</span><h2>Próximamente en Campo</h2><p>Hoja de ruta informativa. Estas funciones todavía no registran datos ni generan recordatorios.</p></div><div class="coming-grid"><article><span>💉</span><h3>Calendario sanitario</h3><p>Vacunaciones, tratamientos y recordatorios del rodeo.</p><b>En desarrollo</b></article><article><span>🌱</span><h3>Calendario pastoril</h3><p>Rotaciones, descansos y objetivos de pastoreo por lote.</p><b>En desarrollo</b></article><article><span>↗</span><h3>Calendario comercial</h3><p>Compras, ventas y momentos comerciales del establecimiento.</p><b>En desarrollo</b></article></div></section>`
-  return renderShell(content, 'Lluvias', 'Estación Laprida · comparación histórica e índice hídrico', `<button class="btn secondary" data-open-rain="${latestPeriod}">${icon('edit', 16)} Editar</button>`)
-}
-
-renderRainModal = function renderRainModalV601() {
-  const period = ui.modal.period || monthKey(selectedSurvey()?.date || todayISO())
-  const summary = monthlyRainSummary(period)
-  const detailMode = ui.modal.rainMode || (summary.entries.length ? 'detail' : 'monthly')
-  ui.modal.rainMode = detailMode
-  const analysisHistory = monthlyHistorical(Number(period.slice(5, 7)))
-  const index = hydricIndex(summary.millimeters, analysisHistory.average)
-  const status = hydricStatus(index)
-  const editing = summary.entries.find((entry) => entry.id === ui.modal.entryId) || null
-  const defaultDate = editing?.date || (period === monthKey(todayISO()) ? todayISO() : `${period}-01`)
-  const zeroPrompt = ui.modal.pendingZero ? `<div class="zero-rain-confirm"><span>${icon('alert', 22)}</span><div><strong>Ingresaste 0 mm para ${monthLabel(period)}</strong><p>Confirmá si realmente no llovió o si querés dejar el mes sin información.</p><div><button class="btn primary" data-confirm-zero-rain>Fue 0 mm</button><button class="btn secondary" data-zero-rain-no-info>No hay información</button><button class="btn ghost" data-cancel-zero-rain>Cancelar</button></div></div></div>` : ''
-  const monthlyForm = `<div class="rain-entry-form monthly-mode"><h3>Total mensual</h3><p>Usá esta opción cuando solo conocés el total del mes.</p><label><span>Milímetros</span><input type="number" min="0" step="0.1" inputmode="decimal" id="rain-monthly-mm" value="${summary.source === 'monthly' ? summary.millimeters : ''}" placeholder="Dejar vacío = sin información"></label><button class="btn primary" data-save-rain-monthly>Guardar total mensual</button></div>`
-  const detailForm = `<div class="rain-entry-list">${summary.entries.length ? summary.entries.map((entry) => `<div><span><strong>${compactDateLabel(entry.date)}</strong><small>${esc(entry.note || 'Sin nota')}</small></span><b>${decimal(entry.millimeters, 1)} mm</b><button data-edit-rain-entry="${entry.id}">${icon('edit', 16)}</button><button data-delete-rain-entry="${entry.id}">${icon('trash', 16)}</button></div>`).join('') : '<div class="empty-inline">No hay registros detallados.</div>'}</div><div class="rain-entry-form"><h3>${editing ? 'Editar registro' : 'Agregar lluvia por fecha'}</h3><div class="rain-form-grid"><label><span>Fecha</span><input type="date" id="rain-entry-date" value="${defaultDate}"></label><label><span>Milímetros</span><input type="number" min="0" step="0.1" inputmode="decimal" id="rain-entry-mm" value="${editing?.millimeters ?? ''}" placeholder="0"></label></div><label><span>Nota opcional</span><input type="text" id="rain-entry-note" value="${esc(editing?.note || '')}" placeholder="Ej. Lluvia fuerte durante la noche"></label><button class="btn primary" data-save-rain-entry>${editing ? 'Guardar cambios' : 'Agregar registro'}</button></div>`
-  return `<div class="modal-backdrop"><div class="modal rain-modal v601"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow blue">Lluvia · Laprida</span><h2>${monthLabel(period)}</h2><label class="field compact-month"><span>Cambiar mes</span><input type="month" id="rain-period-select" value="${period}"></label><div class="rain-modal-total"><img src="./assets/${KPI_ASSETS.rain}" alt=""><div><small>Total del mes</small><strong>${summary.millimeters == null ? 'Sin información' : `${fmt(summary.millimeters)} mm`}</strong><span>${index == null ? 'Sin índice' : `${Math.round(index)}% · ${status.label}`}</span></div></div>${zeroPrompt}<div class="view-switcher rain-modal-switch"><button class="${detailMode === 'monthly' ? 'active' : ''}" data-rain-entry-mode="monthly">Total mensual</button><button class="${detailMode === 'detail' ? 'active' : ''}" data-rain-entry-mode="detail">Detalle por fecha</button></div>${detailMode === 'monthly' ? monthlyForm : detailForm}<div class="modal-actions"><button class="btn danger-outline push-left" data-clear-rain-month>Dejar sin información</button><button class="btn ghost" data-close-modal>Cerrar</button></div></div></div>`
-}
-
-renderShell = function renderShellV601(content, title, subtitle, action = '') {
-  const latest = latestSurvey()
-  const dataDate = latest ? compactDateLabel(latest.date) : 'Sin datos'
-  return `<div class="app-shell ${ui.view === 'relevamiento' ? 'survey-mode' : ''}">
-    <aside class="sidebar"><div class="brand"><img src="./assets/${UI_ASSETS.home}" alt="Casa principal de El Rosario"><div><strong>CAMPO</strong><span>El Rosario</span></div></div><nav>${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}${navItem('mapa', 'Mapa y lotes', 'map')}${navItem('lluvias', 'Lluvias', 'rain')}${navItem('historico', 'Histórico', 'history')}${navItem('datos', 'Exportar', 'download')}</nav><div class="sidebar-card"><small>Datos más recientes</small><strong>${latest ? dateLabel(latest.date) : 'Sin datos'}</strong><span>Los datos se guardan en este dispositivo.</span></div><div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Datos: ${dataDate}</span></div></aside>
-    <div class="content-shell"><header class="topbar"><button class="mobile-menu" data-toggle-nav aria-label="Menú">${icon('menu', 24)}</button><div><h1>${title}</h1><p>${subtitle}</p></div><div class="topbar-actions"><span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos ${dataDate}</small></span>${action}</div></header><main class="page">${content}</main></div>
-    <nav class="mobile-nav five-items">${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}${navItem('mapa', 'Mapa', 'map')}${navItem('lluvias', 'Lluvia', 'rain')}${navItem('historico', 'Histórico', 'history')}</nav>${ui.modal ? renderModal() : ''}${ui.toast ? `<div class="toast">${icon('check', 18)} ${esc(ui.toast)}</div>` : ''}</div>`
-}
-
-render = function renderV601() {
-  if (!['resumen', 'relevamiento', 'mapa', 'lluvias', 'historico', 'datos'].includes(ui.view)) ui.view = 'resumen'
-  let html = ''
-  if (ui.view === 'resumen') html = renderDashboard()
-  if (ui.view === 'relevamiento') html = renderSurveyWizard()
-  if (ui.view === 'mapa') html = renderMapPage()
-  if (ui.view === 'lluvias') html = renderRainPage()
-  if (ui.view === 'historico') html = renderHistory()
-  if (ui.view === 'datos') html = renderDataPage()
-  document.getElementById('app').innerHTML = html
-  bindEvents()
-}
-
-const bindEventsV505 = bindEvents
-bindEvents = function bindEventsV601() {
-  bindEventsV505()
-  document.querySelectorAll('[data-map-mode]').forEach((button) => button.addEventListener('click', () => { ui.mapMode = button.dataset.mapMode; render() }))
-  document.querySelectorAll('[data-lot-table-edit]').forEach((button) => button.addEventListener('click', (event) => {
-    event.stopPropagation()
-    const survey = selectedSurvey()
-    const lotId = button.dataset.lotTableEdit
-    const existing = (survey.lots || []).find((item) => item.lotId === lotId)
-    ui.selectedLotId = lotId
-    ui.modal = { type: 'lot-form', context: 'direct', surveyId: survey.id, isEdit: Boolean(existing), originalLotId: lotId, lot: existing ? lotFormModel(existing, true) : lotFormModel({ lotId, fieldState: 'no-observado', conditionSource: 'unobserved', groups: [] }, true) }
-    render()
-  }))
-  document.querySelectorAll('[data-rain-granularity]').forEach((button) => button.addEventListener('click', () => { ui.rainGranularity = button.dataset.rainGranularity; render() }))
-  const rainYear = document.getElementById('rain-year-select')
-  if (rainYear) rainYear.addEventListener('change', (event) => { ui.rainYear = Number(event.target.value); render() })
-  document.querySelectorAll('[data-rain-entry-mode]').forEach((button) => button.addEventListener('click', () => { ui.modal.rainMode = button.dataset.rainEntryMode; ui.modal.entryId = null; ui.modal.pendingZero = null; render() }))
-  document.querySelectorAll('[data-save-rain-monthly]').forEach((button) => button.addEventListener('click', () => {
-    const raw = document.getElementById('rain-monthly-mm')?.value ?? ''
-    const period = ui.modal.period
-    if (raw === '') {
-      state.rainEntries = (state.rainEntries || []).filter((entry) => monthKey(entry.date) !== period)
-      state.rain = (state.rain || []).filter((item) => item.period !== period)
-      saveState(); showToast('Mes dejado sin información'); render(); return
-    }
-    const millimeters = Number(raw)
-    if (!Number.isFinite(millimeters) || millimeters < 0) return alert('Ingresá un valor válido.')
-    if (millimeters === 0) { ui.modal.pendingZero = { mode: 'monthly', millimeters: 0 }; render(); return }
-    state.rainEntries = (state.rainEntries || []).filter((entry) => monthKey(entry.date) !== period)
-    state.rain = [...(state.rain || []).filter((item) => item.period !== period), { period, millimeters }]
-    saveState(); showToast('Lluvia mensual actualizada'); render()
-  }))
-  document.querySelectorAll('[data-confirm-zero-rain]').forEach((button) => button.addEventListener('click', () => {
-    const period = ui.modal.period
-    if (ui.modal.pendingZero?.mode === 'detail') {
-      const pending = ui.modal.pendingZero
-      const entry = { id: pending.entryId || uid(), date: pending.date, millimeters: 0, note: pending.note || '' }
-      state.rainEntries = pending.entryId ? (state.rainEntries || []).map((item) => item.id === pending.entryId ? entry : item) : [...(state.rainEntries || []), entry]
-      state.rain = (state.rain || []).filter((item) => item.period !== monthKey(pending.date))
-      ui.modal.period = monthKey(pending.date); ui.modal.entryId = null
-    } else {
-      state.rainEntries = (state.rainEntries || []).filter((entry) => monthKey(entry.date) !== period)
-      state.rain = [...(state.rain || []).filter((item) => item.period !== period), { period, millimeters: 0 }]
-    }
-    ui.modal.pendingZero = null; saveState(); showToast('Se confirmó 0 mm'); render()
-  }))
-  document.querySelectorAll('[data-zero-rain-no-info]').forEach((button) => button.addEventListener('click', () => {
-    const period = ui.modal.pendingZero?.date ? monthKey(ui.modal.pendingZero.date) : ui.modal.period
-    state.rainEntries = (state.rainEntries || []).filter((entry) => monthKey(entry.date) !== period)
-    state.rain = (state.rain || []).filter((item) => item.period !== period)
-    ui.modal.pendingZero = null; saveState(); showToast('Mes marcado sin información'); render()
-  }))
-  document.querySelectorAll('[data-cancel-zero-rain]').forEach((button) => button.addEventListener('click', () => { ui.modal.pendingZero = null; render() }))
-}
-
-/* Intercept the legacy detailed-rain handler only for zero values. */
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-save-rain-entry]')
-  if (!button || !ui.modal || ui.modal.type !== 'rain-manager') return
-  const raw = document.getElementById('rain-entry-mm')?.value
-  if (raw !== '0' && raw !== '0.0' && raw !== '0,0') return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-  const date = document.getElementById('rain-entry-date')?.value
-  if (!date) return alert('Elegí una fecha.')
-  ui.modal.pendingZero = { mode: 'detail', entryId: ui.modal.entryId || null, date, note: document.getElementById('rain-entry-note')?.value?.trim() || '' }
-  render()
-}, true)
-
 
 window.addEventListener('hashchange',()=>{ui.view=location.hash.replace('#/','')||'resumen';render()})
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))

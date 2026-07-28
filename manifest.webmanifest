@@ -1,13 +1,24 @@
 {
-  "name": "Campo El Rosario v6.01",
-  "short_name": "Campo 6.01",
-  "description": "Gestión de relevamientos, carga animal, condición del campo y lluvias de Laprida.",
+  "name": "Campo El Rosario v7.01",
+  "short_name": "Campo 7.01",
+  "description": "Gestión visual del rodeo, eventos, relevamientos, lotes y lluvias de Laprida.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f4efe4",
   "theme_color": "#173d2b",
   "icons": [
-    {"src":"./assets/icons/icon-home-house.png","sizes":"256x256","type":"image/png","purpose":"any"},
-    {"src":"./assets/icons/icon-home-house.png","sizes":"256x256","type":"image/png","purpose":"maskable"}
+    {
+      "src": "./assets/icons/icon-home-house.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-home-house.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

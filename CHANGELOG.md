@@ -1,42 +1,44 @@
-# Changelog
+# Changelog — Campo v7.01
 
-## Campo v6.01 — 2026-07-27
+## Gestión del rodeo
 
-### Mapa y lotes
+- Nuevo módulo Eventos con ventas, compras, nacimientos, mortandad y recategorizaciones.
+- Registro transaccional por fecha, lote, categoría y cantidad.
+- Campos comerciales opcionales para compras y ventas.
+- Controles de stock disponible para ventas, mortandad y recategorizaciones.
+- CSV independiente de eventos.
 
-- Se simplificó el mapa del resumen: muestra únicamente cabezas, textura de condición y borde de carga.
-- Se eliminan nombres y condición escrita de la vista resumen.
-- Se incorporó un selector visible entre Mapa y Tabla.
-- La tabla utiliza encabezados explícitos y alineados: Lote, Cond., Carga EV/ha, Total, Vaca, Tern., Toro, Otras y Editar.
-- Cada fila permite abrir o editar un lote con sus datos ya poblados.
-- Se incorporaron 64 sprites aéreos transparentes recortados del archivo compartido: vaca, toro, ternero/a y vaca con ternero, en cuatro direcciones y cuatro variantes.
-- Se redujo la escala visual del patrón de pasto y se suavizaron los bordes de carga.
+## Balance y relevamientos
 
-### Dashboard
+- Balance del rodeo entre fotografías: anterior + eventos = esperado vs. observado.
+- Discrepancia total y por categoría.
+- El siguiente relevamiento se precarga usando el último relevamiento y los eventos posteriores.
+- La discrepancia se informa, pero no bloquea el guardado.
 
-- Se corrigió el desbordamiento del KPI Carga del campo.
-- Los KPI se adaptan a escritorio, tableta y teléfono.
-- La composición del rodeo muestra cantidad y porcentaje; la categoría mayor define el ancho de referencia.
-- Las alertas se consolidan en carga alta y riesgo de condición mala/anegada con al menos 0,50 EV/ha.
+## Mapa
 
-### Lluvias
+- Un sprite por aproximadamente 10 cabezas, sin máximo artificial.
+- Composición visual proporcional entre vacas, terneros/as y toros.
+- Zoom, desplazamiento, Ver todo y Volver al lote.
+- Centrado inicial en el lote seleccionado o ER-08/09.
+- Píldoras dependientes del nivel de zoom y siempre por encima de los sprites.
+- Inspector con pestañas Actual, Evolución y Eventos.
+- Serie temporal de EV/ha y franja histórica de condición.
 
-- Nuevo módulo visual azul para Estación Laprida.
-- Comparación mensual y quincenal contra promedio, P10 y P90.
-- Vista acumulada de los últimos 12 meses.
-- Índice hídrico y clasificación muy seco, seco, normal, húmedo y muy húmedo.
-- Carga como total mensual o detalle por fecha.
-- Confirmación obligatoria al guardar 0 mm: realmente cero o sin información.
-- La lluvia puede editarse y los meses vacíos no se interpretan como cero.
+## Categorías
 
-### Próximamente
+- Taxonomía jerárquica sin categoría Otros.
+- Migración de categorías antiguas a Vacas de descarte o Novillitos.
+- Novillitos y Toritos disponibles para retención de machos.
 
-- Calendario sanitario.
-- Calendario pastoril.
-- Calendario comercial.
+## Histórico e introducción
 
-### Compatibilidad
+- Archivar y restaurar relevamientos.
+- Eliminar con confirmación reforzada.
+- Nueva sección Introducción con guía, conceptos, novedades y próximos módulos.
 
-- Se mantiene `campo-el-rosario-v2`.
-- Nueva caché PWA: `campo-v601-assets-1`.
-- Workflow de GitHub Pages con Node 24.
+## Muestra
+
+- 16 relevamientos mensuales.
+- 52 eventos detallados.
+- Todas las entidades sintéticas usan `nombre: Muestra`.

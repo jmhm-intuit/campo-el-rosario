@@ -1,0 +1,390 @@
+{
+  "source": "98.png",
+  "count": 64,
+  "sprites": [
+    {
+      "kind": "cow",
+      "direction": "north",
+      "variant": 1,
+      "path": "animals/v601/cow/cow-north-1.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "north",
+      "variant": 2,
+      "path": "animals/v601/cow/cow-north-2.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "north",
+      "variant": 3,
+      "path": "animals/v601/cow/cow-north-3.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "north",
+      "variant": 4,
+      "path": "animals/v601/cow/cow-north-4.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "east",
+      "variant": 1,
+      "path": "animals/v601/cow/cow-east-1.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "west",
+      "variant": 1,
+      "path": "animals/v601/cow/cow-west-1.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "east",
+      "variant": 2,
+      "path": "animals/v601/cow/cow-east-2.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "west",
+      "variant": 2,
+      "path": "animals/v601/cow/cow-west-2.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "east",
+      "variant": 3,
+      "path": "animals/v601/cow/cow-east-3.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "west",
+      "variant": 3,
+      "path": "animals/v601/cow/cow-west-3.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "east",
+      "variant": 4,
+      "path": "animals/v601/cow/cow-east-4.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "west",
+      "variant": 4,
+      "path": "animals/v601/cow/cow-west-4.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "south",
+      "variant": 1,
+      "path": "animals/v601/cow/cow-south-1.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "south",
+      "variant": 2,
+      "path": "animals/v601/cow/cow-south-2.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "south",
+      "variant": 3,
+      "path": "animals/v601/cow/cow-south-3.png"
+    },
+    {
+      "kind": "cow",
+      "direction": "south",
+      "variant": 4,
+      "path": "animals/v601/cow/cow-south-4.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "north",
+      "variant": 1,
+      "path": "animals/v601/bull/bull-north-1.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "north",
+      "variant": 2,
+      "path": "animals/v601/bull/bull-north-2.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "north",
+      "variant": 3,
+      "path": "animals/v601/bull/bull-north-3.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "north",
+      "variant": 4,
+      "path": "animals/v601/bull/bull-north-4.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "east",
+      "variant": 1,
+      "path": "animals/v601/bull/bull-east-1.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "west",
+      "variant": 1,
+      "path": "animals/v601/bull/bull-west-1.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "east",
+      "variant": 2,
+      "path": "animals/v601/bull/bull-east-2.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "west",
+      "variant": 2,
+      "path": "animals/v601/bull/bull-west-2.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "east",
+      "variant": 3,
+      "path": "animals/v601/bull/bull-east-3.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "west",
+      "variant": 3,
+      "path": "animals/v601/bull/bull-west-3.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "east",
+      "variant": 4,
+      "path": "animals/v601/bull/bull-east-4.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "west",
+      "variant": 4,
+      "path": "animals/v601/bull/bull-west-4.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "south",
+      "variant": 1,
+      "path": "animals/v601/bull/bull-south-1.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "south",
+      "variant": 2,
+      "path": "animals/v601/bull/bull-south-2.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "south",
+      "variant": 3,
+      "path": "animals/v601/bull/bull-south-3.png"
+    },
+    {
+      "kind": "bull",
+      "direction": "south",
+      "variant": 4,
+      "path": "animals/v601/bull/bull-south-4.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "north",
+      "variant": 1,
+      "path": "animals/v601/calf/calf-north-1.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "north",
+      "variant": 2,
+      "path": "animals/v601/calf/calf-north-2.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "north",
+      "variant": 3,
+      "path": "animals/v601/calf/calf-north-3.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "north",
+      "variant": 4,
+      "path": "animals/v601/calf/calf-north-4.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "east",
+      "variant": 1,
+      "path": "animals/v601/calf/calf-east-1.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "west",
+      "variant": 1,
+      "path": "animals/v601/calf/calf-west-1.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "east",
+      "variant": 2,
+      "path": "animals/v601/calf/calf-east-2.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "west",
+      "variant": 2,
+      "path": "animals/v601/calf/calf-west-2.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "east",
+      "variant": 3,
+      "path": "animals/v601/calf/calf-east-3.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "west",
+      "variant": 3,
+      "path": "animals/v601/calf/calf-west-3.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "east",
+      "variant": 4,
+      "path": "animals/v601/calf/calf-east-4.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "west",
+      "variant": 4,
+      "path": "animals/v601/calf/calf-west-4.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "south",
+      "variant": 1,
+      "path": "animals/v601/calf/calf-south-1.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "south",
+      "variant": 2,
+      "path": "animals/v601/calf/calf-south-2.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "south",
+      "variant": 3,
+      "path": "animals/v601/calf/calf-south-3.png"
+    },
+    {
+      "kind": "calf",
+      "direction": "south",
+      "variant": 4,
+      "path": "animals/v601/calf/calf-south-4.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "north",
+      "variant": 1,
+      "path": "animals/v601/cow-calf/cow-calf-north-1.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "north",
+      "variant": 2,
+      "path": "animals/v601/cow-calf/cow-calf-north-2.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "north",
+      "variant": 3,
+      "path": "animals/v601/cow-calf/cow-calf-north-3.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "north",
+      "variant": 4,
+      "path": "animals/v601/cow-calf/cow-calf-north-4.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "east",
+      "variant": 1,
+      "path": "animals/v601/cow-calf/cow-calf-east-1.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "west",
+      "variant": 1,
+      "path": "animals/v601/cow-calf/cow-calf-west-1.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "east",
+      "variant": 2,
+      "path": "animals/v601/cow-calf/cow-calf-east-2.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "west",
+      "variant": 2,
+      "path": "animals/v601/cow-calf/cow-calf-west-2.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "east",
+      "variant": 3,
+      "path": "animals/v601/cow-calf/cow-calf-east-3.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "west",
+      "variant": 3,
+      "path": "animals/v601/cow-calf/cow-calf-west-3.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "east",
+      "variant": 4,
+      "path": "animals/v601/cow-calf/cow-calf-east-4.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "west",
+      "variant": 4,
+      "path": "animals/v601/cow-calf/cow-calf-west-4.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "south",
+      "variant": 1,
+      "path": "animals/v601/cow-calf/cow-calf-south-1.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "south",
+      "variant": 2,
+      "path": "animals/v601/cow-calf/cow-calf-south-2.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "south",
+      "variant": 3,
+      "path": "animals/v601/cow-calf/cow-calf-south-3.png"
+    },
+    {
+      "kind": "cow-calf",
+      "direction": "south",
+      "variant": 4,
+      "path": "animals/v601/cow-calf/cow-calf-south-4.png"
+    }
+  ]
+}

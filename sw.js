@@ -1,151 +1,139 @@
-const CACHE = 'campo-v601-assets-1'
-const ASSETS = [
+const CACHE = 'campo-v701-assets-1'
+const CORE_ASSETS = [
   './',
   './index.html',
   './app.js',
   './styles.css',
   './manifest.webmanifest',
   './VERSION.json',
-  './assets/animals/aerial/bull/east-1.png',
-  './assets/animals/aerial/bull/east-2.png',
-  './assets/animals/aerial/bull/east-3.png',
-  './assets/animals/aerial/bull/east-4.png',
-  './assets/animals/aerial/bull/north-1.png',
-  './assets/animals/aerial/bull/north-2.png',
-  './assets/animals/aerial/bull/north-3.png',
-  './assets/animals/aerial/bull/north-4.png',
-  './assets/animals/aerial/bull/south-1.png',
-  './assets/animals/aerial/bull/south-2.png',
-  './assets/animals/aerial/bull/south-3.png',
-  './assets/animals/aerial/bull/south-4.png',
-  './assets/animals/aerial/bull/west-1.png',
-  './assets/animals/aerial/bull/west-2.png',
-  './assets/animals/aerial/bull/west-3.png',
-  './assets/animals/aerial/bull/west-4.png',
-  './assets/animals/aerial/calf/east-1.png',
-  './assets/animals/aerial/calf/east-2.png',
-  './assets/animals/aerial/calf/east-3.png',
-  './assets/animals/aerial/calf/east-4.png',
-  './assets/animals/aerial/calf/north-1.png',
-  './assets/animals/aerial/calf/north-2.png',
-  './assets/animals/aerial/calf/north-3.png',
-  './assets/animals/aerial/calf/north-4.png',
-  './assets/animals/aerial/calf/south-1.png',
-  './assets/animals/aerial/calf/south-2.png',
-  './assets/animals/aerial/calf/south-3.png',
-  './assets/animals/aerial/calf/south-4.png',
-  './assets/animals/aerial/calf/west-1.png',
-  './assets/animals/aerial/calf/west-2.png',
-  './assets/animals/aerial/calf/west-3.png',
-  './assets/animals/aerial/calf/west-4.png',
-  './assets/animals/aerial/cow/east-1.png',
-  './assets/animals/aerial/cow/east-2.png',
-  './assets/animals/aerial/cow/east-3.png',
-  './assets/animals/aerial/cow/east-4.png',
-  './assets/animals/aerial/cow/north-1.png',
-  './assets/animals/aerial/cow/north-2.png',
-  './assets/animals/aerial/cow/north-3.png',
-  './assets/animals/aerial/cow/north-4.png',
-  './assets/animals/aerial/cow/south-1.png',
-  './assets/animals/aerial/cow/south-2.png',
-  './assets/animals/aerial/cow/south-3.png',
-  './assets/animals/aerial/cow/south-4.png',
-  './assets/animals/aerial/cow/west-1.png',
-  './assets/animals/aerial/cow/west-2.png',
-  './assets/animals/aerial/cow/west-3.png',
-  './assets/animals/aerial/cow/west-4.png',
-  './assets/animals/aerial/cow-calf/east-1.png',
-  './assets/animals/aerial/cow-calf/east-2.png',
-  './assets/animals/aerial/cow-calf/east-3.png',
-  './assets/animals/aerial/cow-calf/east-4.png',
-  './assets/animals/aerial/cow-calf/north-1.png',
-  './assets/animals/aerial/cow-calf/north-2.png',
-  './assets/animals/aerial/cow-calf/north-3.png',
-  './assets/animals/aerial/cow-calf/north-4.png',
-  './assets/animals/aerial/cow-calf/south-1.png',
-  './assets/animals/aerial/cow-calf/south-2.png',
-  './assets/animals/aerial/cow-calf/south-3.png',
-  './assets/animals/aerial/cow-calf/south-4.png',
-  './assets/animals/aerial/cow-calf/west-1.png',
-  './assets/animals/aerial/cow-calf/west-2.png',
-  './assets/animals/aerial/cow-calf/west-3.png',
-  './assets/animals/aerial/cow-calf/west-4.png',
-  './assets/animals/aerial/manifest.json',
-  './assets/animals/v505/bull-red-angus-left.png',
-  './assets/animals/v505/bull-red-angus.png',
-  './assets/animals/v505/calf-red-angus-left.png',
-  './assets/animals/v505/calf-red-angus.png',
-  './assets/animals/v505/cow-calf-red-angus-left.png',
-  './assets/animals/v505/cow-calf-red-angus.png',
-  './assets/animals/v505/cow-red-angus-left.png',
-  './assets/animals/v505/cow-red-angus.png',
-  './assets/asset-manifest.json',
-  './assets/buildings/building-house-main-er08-09.png',
-  './assets/buildings/building-house-secondary-er13.png',
-  './assets/conditions/condition-excellent-tile.png',
-  './assets/conditions/condition-good-tile.png',
-  './assets/conditions/condition-indicator-excellent.png',
-  './assets/conditions/condition-indicator-flooded.png',
-  './assets/conditions/condition-indicator-good.png',
-  './assets/conditions/condition-indicator-poor.png',
-  './assets/conditions/condition-indicator-regular.png',
-  './assets/conditions/condition-indicator-unobserved.png',
-  './assets/conditions/condition-poor-tile.png',
-  './assets/conditions/condition-regular-tile.png',
-  './assets/conditions/condition-waterlogged-tile.png',
-  './assets/conditions/decor-water-hole.png',
-  './assets/conditions/grass-dense-01.png',
-  './assets/conditions/grass-dense-02.png',
-  './assets/conditions/grass-dry-01.png',
-  './assets/conditions/grass-dry-02.png',
-  './assets/conditions/grass-dry-03.png',
-  './assets/conditions/grass-flowers.png',
-  './assets/conditions/v505/pasture-excellent.png',
-  './assets/conditions/v505/pasture-good.png',
-  './assets/conditions/v505/pasture-poor.png',
-  './assets/conditions/v505/pasture-regular.png',
-  './assets/conditions/v505/pasture-waterlogged.png',
-  './assets/data/lluvia-laprida-curva-quincenal.csv',
+  './data/sample-v7.js',
+  './data/campo-muestra-16-meses-v7.json',
+  './assets/map/el-rosario-map.png',
   './assets/geometry/polygons-reviewed-final.json',
+  './assets/asset-manifest.json',
   './assets/icons/icon-home-house.png',
-  './assets/icons/icon-register-animals-24.png',
-  './assets/icons/icon-register-animals-32.png',
-  './assets/icons/icon-register-animals-48.png',
   './assets/icons/icon-register-animals.png',
-  './assets/kpi/kpi-animals-red-angus.png',
-  './assets/kpi/kpi-cow-calf-red-angus.png',
+  './assets/ui/register-animals.png',
   './assets/kpi/kpi-cow-red-angus.png',
+  './assets/kpi/kpi-cow-calf-red-angus.png',
+  './assets/kpi/kpi-pasture.png',
+  './assets/kpi/kpi-weather-rain.png',
   './assets/kpi/kpi-growth.png',
   './assets/kpi/kpi-health.png',
-  './assets/kpi/kpi-hectares.png',
-  './assets/kpi/kpi-pasture.png',
-  './assets/kpi/kpi-water.png',
-  './assets/kpi/kpi-weather-rain.png',
-  './assets/map/el-rosario-map.png',
-  './assets/ui/register-animals.png',
+  './assets/conditions/v505/pasture-excellent.png',
+  './assets/conditions/v505/pasture-good.png',
+  './assets/conditions/v505/pasture-regular.png',
+  './assets/conditions/v505/pasture-poor.png',
+  './assets/conditions/v505/pasture-waterlogged.png',
+  './assets/buildings/building-house-main-er08-09.png',
+  './assets/buildings/building-house-secondary-er13.png',
+  './assets/animals/v601/bull/bull-east-1.png',
+  './assets/animals/v601/bull/bull-east-2.png',
+  './assets/animals/v601/bull/bull-east-3.png',
+  './assets/animals/v601/bull/bull-east-4.png',
+  './assets/animals/v601/bull/bull-north-1.png',
+  './assets/animals/v601/bull/bull-north-2.png',
+  './assets/animals/v601/bull/bull-north-3.png',
+  './assets/animals/v601/bull/bull-north-4.png',
+  './assets/animals/v601/bull/bull-south-1.png',
+  './assets/animals/v601/bull/bull-south-2.png',
+  './assets/animals/v601/bull/bull-south-3.png',
+  './assets/animals/v601/bull/bull-south-4.png',
+  './assets/animals/v601/bull/bull-west-1.png',
+  './assets/animals/v601/bull/bull-west-2.png',
+  './assets/animals/v601/bull/bull-west-3.png',
+  './assets/animals/v601/bull/bull-west-4.png',
+  './assets/animals/v601/calf/calf-east-1.png',
+  './assets/animals/v601/calf/calf-east-2.png',
+  './assets/animals/v601/calf/calf-east-3.png',
+  './assets/animals/v601/calf/calf-east-4.png',
+  './assets/animals/v601/calf/calf-north-1.png',
+  './assets/animals/v601/calf/calf-north-2.png',
+  './assets/animals/v601/calf/calf-north-3.png',
+  './assets/animals/v601/calf/calf-north-4.png',
+  './assets/animals/v601/calf/calf-south-1.png',
+  './assets/animals/v601/calf/calf-south-2.png',
+  './assets/animals/v601/calf/calf-south-3.png',
+  './assets/animals/v601/calf/calf-south-4.png',
+  './assets/animals/v601/calf/calf-west-1.png',
+  './assets/animals/v601/calf/calf-west-2.png',
+  './assets/animals/v601/calf/calf-west-3.png',
+  './assets/animals/v601/calf/calf-west-4.png',
+  './assets/animals/v601/cow/cow-east-1.png',
+  './assets/animals/v601/cow/cow-east-2.png',
+  './assets/animals/v601/cow/cow-east-3.png',
+  './assets/animals/v601/cow/cow-east-4.png',
+  './assets/animals/v601/cow/cow-north-1.png',
+  './assets/animals/v601/cow/cow-north-2.png',
+  './assets/animals/v601/cow/cow-north-3.png',
+  './assets/animals/v601/cow/cow-north-4.png',
+  './assets/animals/v601/cow/cow-south-1.png',
+  './assets/animals/v601/cow/cow-south-2.png',
+  './assets/animals/v601/cow/cow-south-3.png',
+  './assets/animals/v601/cow/cow-south-4.png',
+  './assets/animals/v601/cow/cow-west-1.png',
+  './assets/animals/v601/cow/cow-west-2.png',
+  './assets/animals/v601/cow/cow-west-3.png',
+  './assets/animals/v601/cow/cow-west-4.png',
+  './assets/animals/v601/cow-calf/cow-calf-east-1.png',
+  './assets/animals/v601/cow-calf/cow-calf-east-2.png',
+  './assets/animals/v601/cow-calf/cow-calf-east-3.png',
+  './assets/animals/v601/cow-calf/cow-calf-east-4.png',
+  './assets/animals/v601/cow-calf/cow-calf-north-1.png',
+  './assets/animals/v601/cow-calf/cow-calf-north-2.png',
+  './assets/animals/v601/cow-calf/cow-calf-north-3.png',
+  './assets/animals/v601/cow-calf/cow-calf-north-4.png',
+  './assets/animals/v601/cow-calf/cow-calf-south-1.png',
+  './assets/animals/v601/cow-calf/cow-calf-south-2.png',
+  './assets/animals/v601/cow-calf/cow-calf-south-3.png',
+  './assets/animals/v601/cow-calf/cow-calf-south-4.png',
+  './assets/animals/v601/cow-calf/cow-calf-west-1.png',
+  './assets/animals/v601/cow-calf/cow-calf-west-2.png',
+  './assets/animals/v601/cow-calf/cow-calf-west-3.png',
+  './assets/animals/v601/cow-calf/cow-calf-west-4.png'
 ]
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   self.skipWaiting()
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)))
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE_ASSETS)))
 })
 
-self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim()))
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      .then(() => self.clients.claim())
+  )
 })
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
-  const isDocument = event.request.mode === 'navigate' || event.request.destination === 'document'
-  if (isDocument) {
-    event.respondWith(fetch(event.request).then(response => {
-      if (response.ok) caches.open(CACHE).then(cache => cache.put('./index.html', response.clone()))
-      return response
-    }).catch(() => caches.match('./index.html')))
+
+  const request = event.request
+  const url = new URL(request.url)
+  const isNavigation = request.mode === 'navigate' || url.pathname.endsWith('/index.html')
+
+  if (isNavigation) {
+    event.respondWith(
+      fetch(request, { cache: 'no-store' })
+        .then((response) => {
+          if (response.ok) caches.open(CACHE).then((cache) => cache.put('./index.html', response.clone()))
+          return response
+        })
+        .catch(() => caches.match('./index.html'))
+    )
     return
   }
-  event.respondWith(caches.match(event.request).then(hit => hit || fetch(event.request).then(response => {
-    if (response.ok) caches.open(CACHE).then(cache => cache.put(event.request,response.clone()))
-    return response
-  })))
+
+  event.respondWith(
+    caches.match(request).then((cached) => {
+      const network = fetch(request).then((response) => {
+        if (response.ok && url.origin === self.location.origin) {
+          caches.open(CACHE).then((cache) => cache.put(request, response.clone()))
+        }
+        return response
+      }).catch(() => cached)
+      return cached || network
+    })
+  )
 })

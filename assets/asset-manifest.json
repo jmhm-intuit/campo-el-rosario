@@ -1,488 +1,699 @@
 {
   "version": "6.01",
-  "generated": "2026-07-27",
-  "storageKey": "campo-el-rosario-v2",
-  "map": {
-    "path": "assets/map/el-rosario-map.png",
-    "width": 1154,
-    "height": 1363
+  "build": 601,
+  "description": "Assets activos de Campo El Rosario v6.01",
+  "counts": {
+    "total": 115,
+    "aerialAnimalSprites": 64
   },
-  "aerialSprites": {
-    "count": 64,
-    "source": "user-provided sprite sheet 98.png",
-    "manifest": "assets/animals/aerial/manifest.json"
-  },
-  "rainHistory": {
-    "location": "Laprida",
-    "periods": 24,
-    "source": "assets/data/lluvia-laprida-curva-quincenal.csv"
-  },
-  "files": [
+  "assets": [
     {
-      "path": "assets/animals/aerial/bull/east-1.png",
-      "bytes": 18267
-    },
-    {
-      "path": "assets/animals/aerial/bull/east-2.png",
-      "bytes": 18592
-    },
-    {
-      "path": "assets/animals/aerial/bull/east-3.png",
-      "bytes": 18648
-    },
-    {
-      "path": "assets/animals/aerial/bull/east-4.png",
-      "bytes": 18957
-    },
-    {
-      "path": "assets/animals/aerial/bull/north-1.png",
-      "bytes": 16399
-    },
-    {
-      "path": "assets/animals/aerial/bull/north-2.png",
-      "bytes": 16632
-    },
-    {
-      "path": "assets/animals/aerial/bull/north-3.png",
-      "bytes": 16944
-    },
-    {
-      "path": "assets/animals/aerial/bull/north-4.png",
-      "bytes": 16834
-    },
-    {
-      "path": "assets/animals/aerial/bull/south-1.png",
-      "bytes": 15637
-    },
-    {
-      "path": "assets/animals/aerial/bull/south-2.png",
-      "bytes": 16031
-    },
-    {
-      "path": "assets/animals/aerial/bull/south-3.png",
-      "bytes": 16365
-    },
-    {
-      "path": "assets/animals/aerial/bull/south-4.png",
-      "bytes": 16022
-    },
-    {
-      "path": "assets/animals/aerial/bull/west-1.png",
-      "bytes": 18239
-    },
-    {
-      "path": "assets/animals/aerial/bull/west-2.png",
-      "bytes": 18681
-    },
-    {
-      "path": "assets/animals/aerial/bull/west-3.png",
-      "bytes": 18619
-    },
-    {
-      "path": "assets/animals/aerial/bull/west-4.png",
-      "bytes": 19035
-    },
-    {
-      "path": "assets/animals/aerial/calf/east-1.png",
-      "bytes": 19733
-    },
-    {
-      "path": "assets/animals/aerial/calf/east-2.png",
-      "bytes": 19373
-    },
-    {
-      "path": "assets/animals/aerial/calf/east-3.png",
-      "bytes": 19921
-    },
-    {
-      "path": "assets/animals/aerial/calf/east-4.png",
-      "bytes": 19233
-    },
-    {
-      "path": "assets/animals/aerial/calf/north-1.png",
-      "bytes": 13062
-    },
-    {
-      "path": "assets/animals/aerial/calf/north-2.png",
-      "bytes": 12915
-    },
-    {
-      "path": "assets/animals/aerial/calf/north-3.png",
-      "bytes": 12842
-    },
-    {
-      "path": "assets/animals/aerial/calf/north-4.png",
-      "bytes": 13130
-    },
-    {
-      "path": "assets/animals/aerial/calf/south-1.png",
-      "bytes": 11869
-    },
-    {
-      "path": "assets/animals/aerial/calf/south-2.png",
-      "bytes": 11797
-    },
-    {
-      "path": "assets/animals/aerial/calf/south-3.png",
-      "bytes": 11598
-    },
-    {
-      "path": "assets/animals/aerial/calf/south-4.png",
-      "bytes": 11872
-    },
-    {
-      "path": "assets/animals/aerial/calf/west-1.png",
-      "bytes": 19834
-    },
-    {
-      "path": "assets/animals/aerial/calf/west-2.png",
-      "bytes": 19339
-    },
-    {
-      "path": "assets/animals/aerial/calf/west-3.png",
-      "bytes": 19978
-    },
-    {
-      "path": "assets/animals/aerial/calf/west-4.png",
-      "bytes": 19367
-    },
-    {
-      "path": "assets/animals/aerial/cow/east-1.png",
-      "bytes": 21341
-    },
-    {
-      "path": "assets/animals/aerial/cow/east-2.png",
-      "bytes": 19103
-    },
-    {
-      "path": "assets/animals/aerial/cow/east-3.png",
-      "bytes": 19658
-    },
-    {
-      "path": "assets/animals/aerial/cow/east-4.png",
-      "bytes": 20317
-    },
-    {
-      "path": "assets/animals/aerial/cow/north-1.png",
-      "bytes": 15776
-    },
-    {
-      "path": "assets/animals/aerial/cow/north-2.png",
-      "bytes": 14941
-    },
-    {
-      "path": "assets/animals/aerial/cow/north-3.png",
-      "bytes": 15060
-    },
-    {
-      "path": "assets/animals/aerial/cow/north-4.png",
-      "bytes": 15093
-    },
-    {
-      "path": "assets/animals/aerial/cow/south-1.png",
-      "bytes": 14414
-    },
-    {
-      "path": "assets/animals/aerial/cow/south-2.png",
-      "bytes": 13476
-    },
-    {
-      "path": "assets/animals/aerial/cow/south-3.png",
-      "bytes": 13610
-    },
-    {
-      "path": "assets/animals/aerial/cow/south-4.png",
-      "bytes": 13964
-    },
-    {
-      "path": "assets/animals/aerial/cow/west-1.png",
-      "bytes": 21364
-    },
-    {
-      "path": "assets/animals/aerial/cow/west-2.png",
-      "bytes": 19158
-    },
-    {
-      "path": "assets/animals/aerial/cow/west-3.png",
-      "bytes": 19672
-    },
-    {
-      "path": "assets/animals/aerial/cow/west-4.png",
-      "bytes": 20301
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/east-1.png",
-      "bytes": 16412
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/east-2.png",
-      "bytes": 14902
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/east-3.png",
-      "bytes": 15208
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/east-4.png",
-      "bytes": 15485
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/north-1.png",
-      "bytes": 16424
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/north-2.png",
-      "bytes": 16195
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/north-3.png",
-      "bytes": 16314
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/north-4.png",
-      "bytes": 16471
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/south-1.png",
-      "bytes": 15347
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/south-2.png",
-      "bytes": 14944
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/south-3.png",
-      "bytes": 14447
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/south-4.png",
-      "bytes": 15038
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/west-1.png",
-      "bytes": 16434
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/west-2.png",
-      "bytes": 14934
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/west-3.png",
-      "bytes": 15299
-    },
-    {
-      "path": "assets/animals/aerial/cow-calf/west-4.png",
-      "bytes": 15560
-    },
-    {
-      "path": "assets/animals/aerial/manifest.json",
-      "bytes": 7650
-    },
-    {
+      "id": "bull-red-angus-left",
+      "type": "asset",
       "path": "assets/animals/v505/bull-red-angus-left.png",
       "bytes": 67205
     },
     {
+      "id": "bull-red-angus",
+      "type": "asset",
       "path": "assets/animals/v505/bull-red-angus.png",
       "bytes": 67209
     },
     {
+      "id": "calf-red-angus-left",
+      "type": "asset",
       "path": "assets/animals/v505/calf-red-angus-left.png",
       "bytes": 61519
     },
     {
+      "id": "calf-red-angus",
+      "type": "asset",
       "path": "assets/animals/v505/calf-red-angus.png",
       "bytes": 61544
     },
     {
+      "id": "cow-calf-red-angus-left",
+      "type": "asset",
       "path": "assets/animals/v505/cow-calf-red-angus-left.png",
       "bytes": 75185
     },
     {
+      "id": "cow-calf-red-angus",
+      "type": "asset",
       "path": "assets/animals/v505/cow-calf-red-angus.png",
       "bytes": 74923
     },
     {
+      "id": "cow-red-angus-left",
+      "type": "asset",
       "path": "assets/animals/v505/cow-red-angus-left.png",
       "bytes": 65177
     },
     {
+      "id": "cow-red-angus",
+      "type": "asset",
       "path": "assets/animals/v505/cow-red-angus.png",
       "bytes": 65092
     },
     {
-      "path": "assets/asset-manifest.json",
-      "bytes": 7325
+      "id": "bull-east-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-east-1.png",
+      "bytes": 12031
     },
     {
+      "id": "bull-east-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-east-2.png",
+      "bytes": 12131
+    },
+    {
+      "id": "bull-east-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-east-3.png",
+      "bytes": 11875
+    },
+    {
+      "id": "bull-east-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-east-4.png",
+      "bytes": 12361
+    },
+    {
+      "id": "bull-north-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-north-1.png",
+      "bytes": 12115
+    },
+    {
+      "id": "bull-north-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-north-2.png",
+      "bytes": 11748
+    },
+    {
+      "id": "bull-north-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-north-3.png",
+      "bytes": 11698
+    },
+    {
+      "id": "bull-north-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-north-4.png",
+      "bytes": 11722
+    },
+    {
+      "id": "bull-south-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-south-1.png",
+      "bytes": 11591
+    },
+    {
+      "id": "bull-south-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-south-2.png",
+      "bytes": 12085
+    },
+    {
+      "id": "bull-south-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-south-3.png",
+      "bytes": 11913
+    },
+    {
+      "id": "bull-south-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-south-4.png",
+      "bytes": 11825
+    },
+    {
+      "id": "bull-west-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-west-1.png",
+      "bytes": 11962
+    },
+    {
+      "id": "bull-west-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-west-2.png",
+      "bytes": 12092
+    },
+    {
+      "id": "bull-west-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-west-3.png",
+      "bytes": 11870
+    },
+    {
+      "id": "bull-west-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/bull/bull-west-4.png",
+      "bytes": 12292
+    },
+    {
+      "id": "calf-east-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-east-1.png",
+      "bytes": 13573
+    },
+    {
+      "id": "calf-east-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-east-2.png",
+      "bytes": 13482
+    },
+    {
+      "id": "calf-east-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-east-3.png",
+      "bytes": 13063
+    },
+    {
+      "id": "calf-east-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-east-4.png",
+      "bytes": 14044
+    },
+    {
+      "id": "calf-north-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-north-1.png",
+      "bytes": 11662
+    },
+    {
+      "id": "calf-north-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-north-2.png",
+      "bytes": 10162
+    },
+    {
+      "id": "calf-north-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-north-3.png",
+      "bytes": 10024
+    },
+    {
+      "id": "calf-north-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-north-4.png",
+      "bytes": 9972
+    },
+    {
+      "id": "calf-south-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-south-1.png",
+      "bytes": 9147
+    },
+    {
+      "id": "calf-south-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-south-2.png",
+      "bytes": 9170
+    },
+    {
+      "id": "calf-south-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-south-3.png",
+      "bytes": 9273
+    },
+    {
+      "id": "calf-south-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-south-4.png",
+      "bytes": 9411
+    },
+    {
+      "id": "calf-west-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-west-1.png",
+      "bytes": 13586
+    },
+    {
+      "id": "calf-west-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-west-2.png",
+      "bytes": 13454
+    },
+    {
+      "id": "calf-west-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-west-3.png",
+      "bytes": 13006
+    },
+    {
+      "id": "calf-west-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/calf/calf-west-4.png",
+      "bytes": 13996
+    },
+    {
+      "id": "cow-east-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-east-1.png",
+      "bytes": 14268
+    },
+    {
+      "id": "cow-east-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-east-2.png",
+      "bytes": 13287
+    },
+    {
+      "id": "cow-east-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-east-3.png",
+      "bytes": 12733
+    },
+    {
+      "id": "cow-east-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-east-4.png",
+      "bytes": 14124
+    },
+    {
+      "id": "cow-north-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-north-1.png",
+      "bytes": 10813
+    },
+    {
+      "id": "cow-north-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-north-2.png",
+      "bytes": 10352
+    },
+    {
+      "id": "cow-north-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-north-3.png",
+      "bytes": 10963
+    },
+    {
+      "id": "cow-north-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-north-4.png",
+      "bytes": 10595
+    },
+    {
+      "id": "cow-south-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-south-1.png",
+      "bytes": 10356
+    },
+    {
+      "id": "cow-south-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-south-2.png",
+      "bytes": 9965
+    },
+    {
+      "id": "cow-south-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-south-3.png",
+      "bytes": 10138
+    },
+    {
+      "id": "cow-south-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-south-4.png",
+      "bytes": 10134
+    },
+    {
+      "id": "cow-west-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-west-1.png",
+      "bytes": 14304
+    },
+    {
+      "id": "cow-west-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-west-2.png",
+      "bytes": 13211
+    },
+    {
+      "id": "cow-west-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-west-3.png",
+      "bytes": 12656
+    },
+    {
+      "id": "cow-west-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow/cow-west-4.png",
+      "bytes": 14069
+    },
+    {
+      "id": "cow-calf-east-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-east-1.png",
+      "bytes": 11693
+    },
+    {
+      "id": "cow-calf-east-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-east-2.png",
+      "bytes": 11369
+    },
+    {
+      "id": "cow-calf-east-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-east-3.png",
+      "bytes": 11416
+    },
+    {
+      "id": "cow-calf-east-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-east-4.png",
+      "bytes": 10523
+    },
+    {
+      "id": "cow-calf-north-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-north-1.png",
+      "bytes": 15365
+    },
+    {
+      "id": "cow-calf-north-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-north-2.png",
+      "bytes": 15658
+    },
+    {
+      "id": "cow-calf-north-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-north-3.png",
+      "bytes": 15933
+    },
+    {
+      "id": "cow-calf-north-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-north-4.png",
+      "bytes": 15796
+    },
+    {
+      "id": "cow-calf-south-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-south-1.png",
+      "bytes": 14102
+    },
+    {
+      "id": "cow-calf-south-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-south-2.png",
+      "bytes": 13865
+    },
+    {
+      "id": "cow-calf-south-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-south-3.png",
+      "bytes": 13820
+    },
+    {
+      "id": "cow-calf-south-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-south-4.png",
+      "bytes": 13940
+    },
+    {
+      "id": "cow-calf-west-1",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-west-1.png",
+      "bytes": 11645
+    },
+    {
+      "id": "cow-calf-west-2",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-west-2.png",
+      "bytes": 11365
+    },
+    {
+      "id": "cow-calf-west-3",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-west-3.png",
+      "bytes": 11445
+    },
+    {
+      "id": "cow-calf-west-4",
+      "type": "animal-sprite-v601",
+      "path": "assets/animals/v601/cow-calf/cow-calf-west-4.png",
+      "bytes": 10496
+    },
+    {
+      "id": "manifest",
+      "type": "animal-sprite-manifest",
+      "path": "assets/animals/v601/manifest.json",
+      "bytes": 8714
+    },
+    {
+      "id": "building-house-main-er08-09",
+      "type": "building",
       "path": "assets/buildings/building-house-main-er08-09.png",
       "bytes": 369256
     },
     {
+      "id": "building-house-secondary-er13",
+      "type": "building",
       "path": "assets/buildings/building-house-secondary-er13.png",
       "bytes": 315058
     },
     {
+      "id": "condition-excellent-tile",
+      "type": "condition",
       "path": "assets/conditions/condition-excellent-tile.png",
       "bytes": 127135
     },
     {
+      "id": "condition-good-tile",
+      "type": "condition",
       "path": "assets/conditions/condition-good-tile.png",
       "bytes": 128338
     },
     {
+      "id": "condition-indicator-excellent",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-excellent.png",
       "bytes": 15706
     },
     {
+      "id": "condition-indicator-flooded",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-flooded.png",
       "bytes": 45803
     },
     {
+      "id": "condition-indicator-good",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-good.png",
       "bytes": 23397
     },
     {
+      "id": "condition-indicator-poor",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-poor.png",
       "bytes": 15187
     },
     {
+      "id": "condition-indicator-regular",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-regular.png",
       "bytes": 15156
     },
     {
+      "id": "condition-indicator-unobserved",
+      "type": "condition",
       "path": "assets/conditions/condition-indicator-unobserved.png",
       "bytes": 13374
     },
     {
+      "id": "condition-poor-tile",
+      "type": "condition",
       "path": "assets/conditions/condition-poor-tile.png",
       "bytes": 124805
     },
     {
+      "id": "condition-regular-tile",
+      "type": "condition",
       "path": "assets/conditions/condition-regular-tile.png",
       "bytes": 126994
     },
     {
+      "id": "condition-waterlogged-tile",
+      "type": "condition",
       "path": "assets/conditions/condition-waterlogged-tile.png",
       "bytes": 141510
     },
     {
+      "id": "decor-water-hole",
+      "type": "condition",
       "path": "assets/conditions/decor-water-hole.png",
       "bytes": 20416
     },
     {
+      "id": "grass-dense-01",
+      "type": "condition",
       "path": "assets/conditions/grass-dense-01.png",
       "bytes": 38688
     },
     {
+      "id": "grass-dense-02",
+      "type": "condition",
       "path": "assets/conditions/grass-dense-02.png",
       "bytes": 36753
     },
     {
+      "id": "grass-dry-01",
+      "type": "condition",
       "path": "assets/conditions/grass-dry-01.png",
       "bytes": 30023
     },
     {
+      "id": "grass-dry-02",
+      "type": "condition",
       "path": "assets/conditions/grass-dry-02.png",
       "bytes": 27066
     },
     {
+      "id": "grass-dry-03",
+      "type": "condition",
       "path": "assets/conditions/grass-dry-03.png",
       "bytes": 28244
     },
     {
+      "id": "grass-flowers",
+      "type": "condition",
       "path": "assets/conditions/grass-flowers.png",
       "bytes": 36156
     },
     {
+      "id": "pasture-excellent",
+      "type": "condition",
       "path": "assets/conditions/v505/pasture-excellent.png",
       "bytes": 326466
     },
     {
+      "id": "pasture-good",
+      "type": "condition",
       "path": "assets/conditions/v505/pasture-good.png",
       "bytes": 563991
     },
     {
+      "id": "pasture-poor",
+      "type": "condition",
       "path": "assets/conditions/v505/pasture-poor.png",
       "bytes": 645904
     },
     {
+      "id": "pasture-regular",
+      "type": "condition",
       "path": "assets/conditions/v505/pasture-regular.png",
       "bytes": 631766
     },
     {
+      "id": "pasture-waterlogged",
+      "type": "condition",
       "path": "assets/conditions/v505/pasture-waterlogged.png",
       "bytes": 596906
     },
     {
-      "path": "assets/data/lluvia-laprida-curva-quincenal.csv",
-      "bytes": 1198
-    },
-    {
+      "id": "polygons-reviewed-final",
+      "type": "geometry",
       "path": "assets/geometry/polygons-reviewed-final.json",
       "bytes": 7303
     },
     {
+      "id": "icon-home-house",
+      "type": "interface",
       "path": "assets/icons/icon-home-house.png",
       "bytes": 88205
     },
     {
+      "id": "icon-register-animals-24",
+      "type": "interface",
       "path": "assets/icons/icon-register-animals-24.png",
       "bytes": 1140
     },
     {
+      "id": "icon-register-animals-32",
+      "type": "interface",
       "path": "assets/icons/icon-register-animals-32.png",
       "bytes": 1742
     },
     {
+      "id": "icon-register-animals-48",
+      "type": "interface",
       "path": "assets/icons/icon-register-animals-48.png",
       "bytes": 3180
     },
     {
+      "id": "icon-register-animals",
+      "type": "interface",
       "path": "assets/icons/icon-register-animals.png",
       "bytes": 37921
     },
     {
+      "id": "kpi-animals-red-angus",
+      "type": "kpi",
       "path": "assets/kpi/kpi-animals-red-angus.png",
       "bytes": 37370
     },
     {
+      "id": "kpi-cow-calf-red-angus",
+      "type": "kpi",
       "path": "assets/kpi/kpi-cow-calf-red-angus.png",
       "bytes": 48992
     },
     {
+      "id": "kpi-cow-red-angus",
+      "type": "kpi",
       "path": "assets/kpi/kpi-cow-red-angus.png",
       "bytes": 41664
     },
     {
+      "id": "kpi-growth",
+      "type": "kpi",
       "path": "assets/kpi/kpi-growth.png",
       "bytes": 40586
     },
     {
+      "id": "kpi-health",
+      "type": "kpi",
       "path": "assets/kpi/kpi-health.png",
       "bytes": 61263
     },
     {
+      "id": "kpi-hectares",
+      "type": "kpi",
       "path": "assets/kpi/kpi-hectares.png",
       "bytes": 45640
     },
     {
+      "id": "kpi-pasture",
+      "type": "kpi",
       "path": "assets/kpi/kpi-pasture.png",
       "bytes": 52777
     },
     {
+      "id": "kpi-water",
+      "type": "kpi",
       "path": "assets/kpi/kpi-water.png",
       "bytes": 45803
     },
     {
+      "id": "kpi-weather-rain",
+      "type": "kpi",
       "path": "assets/kpi/kpi-weather-rain.png",
       "bytes": 50854
     },
     {
+      "id": "el-rosario-map",
+      "type": "map",
       "path": "assets/map/el-rosario-map.png",
       "bytes": 2860709
     },
     {
+      "id": "register-animals",
+      "type": "interface",
       "path": "assets/ui/register-animals.png",
       "bytes": 145856
     }

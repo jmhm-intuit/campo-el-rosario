@@ -1,4 +1,4 @@
-name: Deploy Campo v6.01 to GitHub Pages
+name: Deploy Campo v7.01 to GitHub Pages
 
 on:
   push:
@@ -23,22 +23,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
+
       - name: Validate JavaScript
         run: node --check app.js
+
       - name: Product preflight
         run: node scripts/preflight.mjs
+
       - name: Smoke test
         run: node scripts/smoke.mjs
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
