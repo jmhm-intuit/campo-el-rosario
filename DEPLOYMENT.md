@@ -1,44 +1,38 @@
-# Desplegar Campo v5.05 desde GitHub Codespaces
+# Despliegue de Campo v6.01
 
-Sube `campo-el-rosario-v5-05-deploy.zip` a la raíz del repositorio y confírmalo en `main`.
+## Archivo requerido
 
-Después ejecuta en la terminal:
+Subir `campo-el-rosario-v6-01-deploy.zip` a la raíz del repositorio.
+
+## Codespaces
 
 ```bash
 git pull --rebase origin main
 
-rm -rf /tmp/campo-v5-05
-mkdir -p /tmp/campo-v5-05
+rm -rf /tmp/campo-v6-01
+mkdir -p /tmp/campo-v6-01
 
-unzip -q campo-el-rosario-v5-05-deploy.zip -d /tmp/campo-v5-05
+unzip -q campo-el-rosario-v6-01-deploy.zip -d /tmp/campo-v6-01
 
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v5-05-deploy.zip' \
+  ! -name 'campo-el-rosario-v6-01-deploy.zip' \
   -exec rm -rf {} +
 
-cp -a /tmp/campo-v5-05/. .
+cp -a /tmp/campo-v6-01/. .
 
-rm -rf /tmp/campo-v5-05
-rm -f campo-el-rosario-v5-05-deploy.zip
+rm -rf /tmp/campo-v6-01
+rm -f campo-el-rosario-v6-01-deploy.zip
 
 git add -A
-git commit -m "Deploy Campo v5.05"
+git commit -m "Deploy Campo v6.01"
 git push origin main
 ```
 
-Si Git responde `nothing to commit`, ejecuta solamente:
+Después, revisar GitHub → Actions y esperar el check verde del workflow **Deploy Campo v6.01 to GitHub Pages**.
 
-```bash
-git push origin main
-```
+## Importante
 
-Después revisa **GitHub → Actions** y espera que `Deploy Campo v5.05 to GitHub Pages` tenga un check verde.
-
-La aplicación seguirá disponible en:
-
-```text
-https://jmhm-intuit.github.io/campo-el-rosario/
-```
-
-Confirma que la interfaz muestre `Campo v5.05`. No borres los datos del sitio: allí se guardan los relevamientos locales.
+- No borrar los datos del sitio en el navegador.
+- Se recomienda exportar un respaldo JSON antes del despliegue.
+- La banda mensual y acumulada P10–P90 es una referencia aproximada obtenida sumando las quincenas históricas.
