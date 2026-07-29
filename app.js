@@ -2,9 +2,9 @@ import { animalAnimator } from './animal-animation.js'
 import { resolveAnimalSprite, STANDARD_ANIMAL_SIZE } from './animal-sprite-library.js'
 
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 802
-const APP_VERSION_LABEL = '8.02'
-const RELEASE_DATE = '2026-07-28'
+const APP_VERSION = 900
+const APP_VERSION_LABEL = '9.00'
+const RELEASE_DATE = '2026-07-29'
 const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'
 const ACTIVE_WORKSPACE_KEY = 'campo-el-rosario-active-workspace-v1'
 const WORKSPACES = Object.freeze({ REAL: 'real', DEMO: 'demo' })
@@ -510,7 +510,7 @@ function createEmptyState() {
   return {
     nombre: 'El Rosario', version: APP_VERSION, selectedSurveyId: null, surveys: [], animalEvents: [], sampleMode: false,
     rain: [], rainEntries: [], draft: null,
-    settings: { nombre: 'El Rosario', userName: 'Usuario', establishment: 'El Rosario', introSeen: false, showArchived: false },
+    settings: { nombre: 'El Rosario', userName: 'Usuario', establishment: 'El Rosario', introSeen: false, showArchived: false, lastBackupAt: null, recentEntry: {} },
     updatedAt: now, lastSavedAt: now,
   }
 }
@@ -638,7 +638,7 @@ function migrateState(parsed) {
     rain: Array.isArray(parsed.rain) ? parsed.rain : [],
     rainEntries: Array.isArray(parsed.rainEntries) ? parsed.rainEntries : [],
     draft: parsed.draft ? { mode: parsed.draft.mode || 'new', editingSurveyId: parsed.draft.editingSurveyId || null, ...parsed.draft } : null,
-    settings: { userName: 'Juan', establishment: 'El Rosario', introSeen: false, showArchived: false, ...(parsed.settings || {}) },
+    settings: { userName: 'Juan', establishment: 'El Rosario', introSeen: false, showArchived: false, lastBackupAt: null, recentEntry: {}, ...(parsed.settings || {}) },
     sampleMode: Boolean(parsed.sampleMode || parsed.nombre === 'Muestra'),
     lastSavedAt: parsed.lastSavedAt || parsed.updatedAt || new Date().toISOString(),
   }
@@ -665,6 +665,8 @@ let ui = {
   summaryViewBox: null,
   mapDragging: false,
   eventFilter: 'all',
+  reviewTab: 'campo',
+  recordConfirmation: null,
   historyShowArchived: false,
   rainTab: 'period',
   rainGranularity: 'monthly',
@@ -1257,48 +1259,267 @@ function navItemAsset(view, label, assetPath) {
 function renderShell(content, title, subtitle, action = '') {
   const latest = latestSurvey()
   const dataDate = latest ? compactDateLabel(latest.date) : 'Sin datos'
+  const savedAt = state.lastSavedAt ? new Intl.DateTimeFormat('es-AR', { hour:'2-digit', minute:'2-digit' }).format(new Date(state.lastSavedAt)) : '—'
   const sampleBadge = activeWorkspace === WORKSPACES.DEMO ? '<span class="sample-badge">MODO MUESTRA</span>' : ''
   const workspaceSelector = demoWorkspaceInstalled()
     ? `<label class="workspace-switch"><span>Espacio</span><select data-workspace-switch aria-label="Cambiar espacio"><option value="${WORKSPACES.REAL}" ${activeWorkspace===WORKSPACES.REAL?'selected':''}>El Rosario</option><option value="${WORKSPACES.DEMO}" ${activeWorkspace===WORKSPACES.DEMO?'selected':''}>Muestra · 16 meses</option></select></label>`
     : ''
   return `
     <div class="app-shell ${ui.view === 'relevamiento' ? 'survey-mode' : ''}">
-      <aside class="sidebar">
+      <aside class="sidebar v9-sidebar">
         <div class="brand"><img src="./assets/${UI_ASSETS.home}" alt="Casa principal de El Rosario"><div><strong>CAMPO</strong><span>${esc(workspaceLabel())}</span></div></div>
         ${sampleBadge}
         <nav>
-          ${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}
-          ${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}
-          ${navItem('eventos', 'Eventos', 'event')}
-          ${navItem('mapa', 'Mapa y lotes', 'map')}
-          ${navItem('lluvias', 'Lluvias', 'rain')}
+          ${navItemAsset('resumen', 'Inicio', UI_ASSETS.home)}
+          ${navItemAsset('registrar', 'Registrar', UI_ASSETS.register)}
+          ${navItem('revisar', 'Revisar', 'balance')}
+          ${navItem('mapa', 'Mapa', 'map')}
           ${navItem('historico', 'Histórico', 'history')}
-          ${navItem('intro', 'Introducción', 'info')}
-          ${navItem('datos', 'Datos y configuración', 'download')}
+          ${navItem('mas', 'Más', 'menu')}
         </nav>
         <div class="sidebar-card"><small>Espacio activo</small><strong>${esc(workspaceLabel())}</strong><span>${latest ? `Datos al ${compactDateLabel(latest.date)}` : 'Sin relevamientos guardados'}</span></div>
-        <div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Datos: ${dataDate}</span></div>
+        <div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Guardado local ${savedAt}</span></div>
       </aside>
       <div class="content-shell">
-        <header class="topbar">
-          <button class="mobile-menu" data-toggle-nav aria-label="Menú">${icon('menu', 24)}</button>
+        <header class="topbar v9-topbar">
+          <button class="mobile-more-button" data-nav="mas" aria-label="Más opciones">${icon('menu', 22)}</button>
           <div><h1>${title}</h1><p>${subtitle}</p></div>
-          <div class="topbar-actions">${workspaceSelector}${sampleBadge}<span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos más recientes ${dataDate}</small></span>${action}</div>
+          <div class="topbar-actions">${workspaceSelector}${sampleBadge}<span class="local-save-status">${icon('check',14)} Guardado ${savedAt}</span><span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos ${dataDate}</small></span>${action}</div>
         </header>
         <main class="page">${content}</main>
       </div>
-      <nav class="mobile-nav mobile-nav-v7">
-        ${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}
-        ${navItemAsset('relevamiento', 'Registrar', UI_ASSETS.register)}
-        ${navItem('eventos', 'Eventos', 'event')}
+      <nav class="mobile-nav mobile-nav-v9">
+        ${navItemAsset('resumen', 'Inicio', UI_ASSETS.home)}
+        ${navItemAsset('registrar', 'Registrar', UI_ASSETS.register)}
+        ${navItem('revisar', 'Revisar', 'balance')}
         ${navItem('mapa', 'Mapa', 'map')}
-        ${navItem('intro', 'Más', 'menu')}
       </nav>
       ${ui.modal ? renderModal() : ''}
       ${ui.toast ? `<div class="toast">${icon('check', 18)} ${esc(ui.toast)}</div>` : ''}
     </div>`
 }
 
+
+
+const CONDITION_SCORE = Object.freeze({ 'anegado':0, 'malo':1, 'regular':2, 'bueno':3, 'muy-bueno':4 })
+
+function totalInventory(inventory = {}) {
+  return Object.values(inventory).reduce((grand, categories) => grand + Object.values(categories || {}).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0), 0)
+}
+
+function projectedHerdTotalAt(date = todayISO()) {
+  return totalInventory(projectedInventoryAt(date).inventory)
+}
+
+function familyQuantity(categories = {}, familyId) {
+  return CATEGORIES.filter((category) => category.parent === familyId).reduce((sum, category) => sum + Number(categories[category.id] || 0), 0)
+}
+
+function lastObservedSurveyForLot(lotId, asOfDate = todayISO()) {
+  return sortedSurveys(false).find((survey) => String(survey.date || '') <= String(asOfDate) && (survey.lots || []).some((entry) => entry.lotId === lotId)) || null
+}
+
+function fieldPerformanceSummary(survey) {
+  const metrics = surveyMetrics(survey)
+  const previous = previousSurvey(survey)
+  const previousMetrics = previous ? surveyMetrics(previous) : null
+  const hectaresByCondition = Object.fromEntries(FIELD_STATES.map((item) => [item.id, 0]))
+  let observedHectares = 0
+  let assumedLots = 0
+  let noInfoLots = 0
+  let improved = 0
+  let worsened = 0
+  let overloaded = 0
+  const lots = LOTS.map((lot) => {
+    const condition = resolveLotCondition(survey, lot.id)
+    hectaresByCondition[condition.stateId] = (hectaresByCondition[condition.stateId] || 0) + lot.hectares
+    if (condition.source === 'observed') observedHectares += lot.hectares
+    if (conditionIsAssumed(condition.source)) assumedLots += 1
+    if (condition.source === 'none') noInfoLots += 1
+    const metric = metrics.byLot[lot.id]
+    if (metric.load > TARGET_LOAD) overloaded += 1
+    if (previous && previousMetrics) {
+      const before = resolveLotCondition(previous, lot.id)
+      const nowScore = CONDITION_SCORE[condition.stateId]
+      const beforeScore = CONDITION_SCORE[before.stateId]
+      if (Number.isFinite(nowScore) && Number.isFinite(beforeScore)) {
+        if (nowScore > beforeScore) improved += 1
+        if (nowScore < beforeScore) worsened += 1
+      }
+    }
+    const observed = lastObservedSurveyForLot(lot.id, survey.date)
+    const ageDays = observed ? dateDistanceDays(observed.date, survey.date) : null
+    return { lot, condition, metric, ageDays }
+  })
+  const goodHectares = (hectaresByCondition['muy-bueno'] || 0) + (hectaresByCondition.bueno || 0)
+  return { metrics, previous, hectaresByCondition, observedHectares, coveragePct: observedHectares / 1735 * 100, goodHectares, goodPct: goodHectares / 1735 * 100, assumedLots, noInfoLots, improved, worsened, overloaded, lots }
+}
+
+function herdPerformanceSummary(survey) {
+  const metrics = surveyMetrics(survey)
+  const previous = previousSurvey(survey)
+  const priorMetrics = previous ? surveyMetrics(previous) : null
+  const events = eventsForSurveyInterval(survey)
+  const totals = eventTotals(events)
+  const days = previous ? Math.max(1, dateDistanceDays(previous.date, survey.date)) : 30
+  const averageStock = priorMetrics ? (priorMetrics.animals + metrics.animals) / 2 : metrics.animals
+  const priorCows = priorMetrics ? familyQuantity(priorMetrics.categories, 'vacas') : 0
+  const birthRate = priorCows ? totals.birth / priorCows * 100 : null
+  const mortalityAnnualized = averageStock ? totals.death / averageStock * (365 / days) * 100 : null
+  const calfSales = events.filter((event) => event.type === 'sale' && categoryFamily(event.categoryId) === 'terneros').reduce((sum, event) => sum + Number(event.quantity || 0), 0)
+  return {
+    metrics, previous, priorMetrics, events, totals,
+    delta: priorMetrics ? metrics.animals - priorMetrics.animals : null,
+    birthRate, mortalityAnnualized,
+    commercialNet: totals.purchase - totals.sale,
+    priorCows,
+    currentCalves: familyQuantity(metrics.categories, 'terneros'),
+    currentHeifers: familyQuantity(metrics.categories, 'vaquillonas'),
+    calfSales,
+  }
+}
+
+function reviewAttentionGroups(survey) {
+  if (!survey) return []
+  const field = fieldPerformanceSummary(survey)
+  const balance = herdBalanceForSurvey(survey)
+  const rain = rainAnalysis(survey.rainPeriod || monthKey(survey.date))
+  const highLots = field.lots.filter((item) => item.metric.load > TARGET_LOAD)
+  const combined = highLots.filter((item) => ['malo','anegado'].includes(item.condition.stateId))
+  const groups = []
+  if (balance && balance.discrepancy !== 0) groups.push({ key:'inventory', severity:Math.abs(balance.discrepancyPct) > 1 ? 'danger':'warning', title:'Balance del rodeo', value:`${balance.discrepancy > 0 ? '+' : ''}${fmt(balance.discrepancy)}`, text:'diferencia entre stock esperado y observado', action:'revisar', tab:'balance' })
+  if (highLots.length) groups.push({ key:'field', severity:combined.length ? 'danger':'warning', title:'Condición y carga', value:fmt(highLots.length), text:`lotes por encima de ${decimal(TARGET_LOAD)} EV/ha${combined.length ? ` · ${combined.length} con riesgo combinado` : ''}`, lotIds:highLots.map((item)=>item.lot.id), action:'revisar', tab:'campo' })
+  const dataIssues = field.assumedLots + field.noInfoLots
+  if (dataIssues) groups.push({ key:'quality', severity:'info', title:'Calidad de datos', value:fmt(dataIssues), text:`${field.assumedLots} condiciones estimadas · ${field.noInfoLots} sin información`, action:'revisar', tab:'campo' })
+  if (rain.current == null) groups.push({ key:'rain', severity:'info', title:'Lluvia', value:'—', text:`falta registrar ${monthLabel(survey.rainPeriod || monthKey(survey.date))}`, action:'lluvias' })
+  return groups
+}
+
+function renderAttentionGroup(item) {
+  const attrs = item.lotIds?.length ? `data-alert-lots="${item.lotIds.join(',')}"` : item.action === 'revisar' ? `data-review-tab="${item.tab || 'campo'}"` : `data-nav="${item.action}"`
+  return `<button class="v9-attention-card ${item.severity}" ${attrs}><span class="v9-attention-icon">${icon(item.key === 'inventory' ? 'balance' : item.key === 'rain' ? 'rain' : item.key === 'field' ? 'map' : 'alert',20)}</span><div><small>${esc(item.title)}</small><strong>${esc(item.value)}</strong><p>${esc(item.text)}</p></div>${icon('chevron',18)}</button>`
+}
+
+function renderRecentActivity(limit = 6) {
+  const events = activeAnimalEvents().slice(0, limit).map((event) => ({
+    date:event.date,
+    html:`<button class="v9-activity-item" data-edit-event="${event.id}"><span class="activity-icon ${event.type}">${eventTypeLookup[event.type]?.icon || '•'}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)} ${categoryLookup[event.categoryId]?.short || ''}</strong><p>${lotLookup[event.lotId]?.name || event.lotId} · ${compactDateLabel(event.date)}</p></div>${icon('chevron',17)}</button>`,
+  }))
+  const surveys = sortedSurveys(false).slice(0, limit).map((survey) => ({
+    date:survey.date,
+    html:`<button class="v9-activity-item" data-detail-survey="${survey.id}"><span class="activity-icon survey">${icon('clipboard',17)}</span><div><strong>Relevamiento · ${fmt(surveyMetrics(survey).animals)} animales</strong><p>${survey.lots.length} lotes · ${compactDateLabel(survey.date)}</p></div>${icon('chevron',17)}</button>`,
+  }))
+  const rows = [...events, ...surveys].sort((a,b) => String(b.date).localeCompare(String(a.date))).slice(0, limit)
+  return rows.length ? `<div class="v9-activity-list">${rows.map((row)=>row.html).join('')}</div>` : '<div class="empty-inline">Todavía no hay actividad registrada.</div>'
+}
+
+function draftLotReviewInfo(draft, lot) {
+  const entry = (draft.lots || []).find((item) => item.lotId === lot.id)
+  const survey = draftAsSurvey(draft)
+  const metric = surveyMetrics(survey).byLot[lot.id]
+  const condition = resolveLotCondition(survey, lot.id)
+  const eventCount = (draft.projectionEventIds || []).map((id) => (state.animalEvents || []).find((event) => event.id === id)).filter((event) => event?.lotId === lot.id).length
+  const status = draft.reviewedLots?.[lot.id] || 'pending'
+  const reasons = []
+  if (eventCount) reasons.push(`${eventCount} ${eventCount===1?'evento aplicado':'eventos aplicados'}`)
+  if (metric.load > TARGET_LOAD) reasons.push(`carga ${capacityLabel(metric.load).toLowerCase()}`)
+  if (condition.source === 'none') reasons.push('condición sin información')
+  if (!reasons.length) reasons.push('sin cambios esperados')
+  const animals = entry ? metric.animals : 0
+  const priority = Boolean(entry && (animals > 0 || eventCount || metric.load > TARGET_LOAD || condition.source === 'none'))
+  return { lot, entry, metric, condition, eventCount, status, reasons, animals, priority }
+}
+
+function renderDraftReviewCard(info) {
+  const statusLabel = ({ pending:'Pendiente', confirmed:'Confirmado', modified:'Modificado' })[info.status] || 'Pendiente'
+  const stateInfo = fieldStateLookup[info.condition.stateId] || fieldStateLookup['no-observado']
+  return `<article class="v9-review-lot ${info.status}">
+    <div class="v9-review-lot-id"><b>${info.lot.name.replace('ER-','')}</b><small>${info.lot.hectares} ha</small></div>
+    <div class="v9-review-lot-main"><div><strong>${info.entry ? `${fmt(info.animals)} animales` : 'No incluido'}</strong><p>${esc(info.reasons.join(' · '))}</p></div><span class="field-mini ${stateInfo.tone}">${fieldStateIcon(stateInfo)}<b>${stateInfo.short}</b></span></div>
+    <span class="v9-review-status ${info.status}">${statusLabel}</span>
+    <div class="v9-review-actions">${info.entry && info.status === 'pending' ? `<button class="btn mini secondary" data-confirm-draft-lot="${info.lot.id}">${icon('check',14)} Sin cambios</button>` : ''}<button class="btn mini ${info.entry?'ghost':'secondary'}" ${info.entry?`data-edit-draft-lot="${info.lot.id}"`:`data-add-specific-draft-lot="${info.lot.id}"`}>${icon(info.entry?'edit':'plus',14)} ${info.entry?'Editar':'Registrar'}</button></div>
+  </article>`
+}
+
+function renderRegisterHub() {
+  const latest = latestSurvey()
+  const recent = state.settings?.recentEntry || {}
+  const draft = state.draft
+  const projected = latest ? projectedHerdTotalAt(todayISO()) : 0
+  const confirmation = ui.recordConfirmation ? `<article class="v9-record-confirmation"><span>${icon('check',22)}</span><div><small>Registro guardado</small><h3>${esc(ui.recordConfirmation.title)}</h3><p>${esc(ui.recordConfirmation.detail)}</p><strong>Stock proyectado: ${fmt(ui.recordConfirmation.projected)} animales</strong></div><button data-clear-record-confirmation>${icon('close',18)}</button></article>` : ''
+  const draftCard = draft ? `<article class="v9-draft-resume"><div><span class="eyebrow">Borrador en curso</span><h2>${draft.mode==='edit'?'Edición de relevamiento':'Relevamiento sin terminar'}</h2><p>${compactDateLabel(draft.date)} · paso ${draft.step || 1} de 3 · ${(draft.lots || []).length} lotes incluidos</p></div><button class="btn primary" data-resume-survey>Continuar</button></article>` : ''
+  const eventActions = EVENT_TYPES.map((eventType) => `<button class="v9-record-action small" data-add-event="${eventType.id}"><span>${eventType.icon}</span><div><strong>${eventType.label}</strong><small>${eventType.group==='commercial'?'Movimiento comercial':'Cambio del rodeo'}</small></div></button>`).join('')
+  const content = `${confirmation}${draftCard}<section class="v9-register-hero"><div><span class="eyebrow">Carga rápida y guiada</span><h2>¿Qué querés registrar?</h2><p>Elegí la acción. Campo guarda localmente y muestra el impacto sobre el próximo relevamiento.</p></div><div class="v9-projected-stock"><small>Stock proyectado hoy</small><strong>${latest ? fmt(projected) : '—'}</strong><span>${latest ? `base ${compactDateLabel(latest.date)}` : 'Creá el primer relevamiento'}</span></div></section>
+    <section class="v9-survey-choice"><button class="v9-record-action featured" data-start-survey-mode="quick"><span>${icon('check',26)}</span><div><strong>Revisión rápida</strong><small>Partí del estado esperado y cambiá solo las excepciones.</small></div><em>Recomendado</em></button><button class="v9-record-action featured secondary" data-start-survey-mode="full"><span>${icon('clipboard',26)}</span><div><strong>Conteo completo</strong><small>Cargá una fotografía independiente desde cero.</small></div></button></section>
+    <section class="panel v9-record-panel"><div class="panel-head"><div><span class="eyebrow">Cambios entre fotografías</span><h3>Eventos del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver historial</button></div><div class="v9-event-action-grid">${eventActions}<button class="v9-record-action small rain" data-open-rain="${monthKey(todayISO())}"><span>${icon('rain',22)}</span><div><strong>Lluvia</strong><small>Total mensual o detalle por fecha</small></div></button></div></section>
+    <section class="v9-register-bottom"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><span>${(state.animalEvents||[]).length} eventos</span></div>${renderRecentActivity(5)}</article><article class="panel v9-record-tips"><span class="eyebrow">Menos fricción</span><h3>Campo recuerda lo más usado</h3><p>Último lote: <strong>${lotLookup[recent.lotId]?.name || '—'}</strong><br>Última categoría: <strong>${categoryLookup[recent.categoryId]?.short || '—'}</strong></p><button class="btn secondary" data-nav="intro">Cómo usar Campo</button></article></section>`
+  return renderShell(content,'Registrar','Relevamientos, eventos y lluvia en pocos pasos')
+}
+
+function renderConditionLoadMatrix(field) {
+  const rows = ['muy-bueno','bueno','regular','malo','anegado']
+  const columns = [
+    { id:'low', label:'Baja', accepts:(load)=>['empty','low'].includes(capacityClass(load)) },
+    { id:'ok', label:'Adecuada', accepts:(load)=>capacityClass(load)==='ok' },
+    { id:'high', label:'Alta', accepts:(load)=>['high','over','critical'].includes(capacityClass(load)) },
+  ]
+  return `<div class="v9-matrix"><div class="v9-matrix-corner">Condición \ Carga</div>${columns.map((column)=>`<div class="v9-matrix-head ${column.id}">${column.label}</div>`).join('')}${rows.map((stateId)=>{const stateInfo=fieldStateLookup[stateId];return `<div class="v9-matrix-row-label state-${stateId}">${stateInfo.short}</div>${columns.map((column)=>{const lots=field.lots.filter((item)=>item.condition.stateId===stateId&&column.accepts(item.metric.load));return `<div class="v9-matrix-cell ${column.id}">${lots.length?lots.map((item)=>`<button data-review-lot="${item.lot.id}" title="${item.lot.name} · ${decimal(item.metric.load)} EV/ha">${item.lot.name.replace('ER-','')}</button>`).join(''):'<span>—</span>'}</div>`}).join('')}`}).join('')}</div>`
+}
+
+function renderFieldTrend(survey) {
+  const series = [...sortedSurveys(false)].reverse().filter((item)=>String(item.date||'')<=String(survey.date||'')).slice(-8)
+  return `<div class="v9-field-trend">${series.map((item)=>{const summary=fieldPerformanceSummary(item);const good=summary.goodPct;const regular=(summary.hectaresByCondition.regular||0)/1735*100;const poor=100-good-regular;return `<button data-select-survey="${item.id}" title="${dateLabel(item.date)}"><div class="trend-stack"><i class="good" style="height:${good}%"></i><i class="regular" style="height:${regular}%"></i><i class="poor" style="height:${Math.max(0,poor)}%"></i></div><strong>${decimal(summary.metrics.load,2)}</strong><small>${item.date.slice(5)}</small></button>`}).join('')}</div>`
+}
+
+function renderFieldReview(survey) {
+  const field = fieldPerformanceSummary(survey)
+  const stale = { fresh:0, medium:0, old:0, none:0 }
+  field.lots.forEach((item)=>{if(item.ageDays==null)stale.none+=1;else if(item.ageDays<=30)stale.fresh+=1;else if(item.ageDays<=60)stale.medium+=1;else stale.old+=1})
+  return `<section class="v9-review-stat-grid"><article><small>Hectáreas en MB/B</small><strong>${Math.round(field.goodPct)}%</strong><span>${fmt(field.goodHectares)} de 1.735 ha</span></article><article><small>Lotes sobre 0,8 EV/ha</small><strong>${field.overloaded}</strong><span>requieren revisar carga</span></article><article><small>Cobertura observada</small><strong>${Math.round(field.coveragePct)}%</strong><span>${field.assumedLots} estimadas · ${field.noInfoLots} sin dato</span></article><article><small>Tendencia vs. anterior</small><strong>${field.improved} ↑ · ${field.worsened} ↓</strong><span>lotes que cambiaron condición</span></article></section>
+    <section class="v9-review-grid"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Decisión operativa</span><h3>Condición × carga</h3></div><span>tocá un lote</span></div>${renderConditionLoadMatrix(field)}</article><article class="panel"><div class="panel-head"><div><span class="eyebrow">Últimos relevamientos</span><h3>Campo en el tiempo</h3></div><span>barra = condición · número = EV/ha</span></div>${renderFieldTrend(survey)}</article></section>
+    <section class="panel v9-freshness"><div class="panel-head"><h3>Vigencia de las observaciones</h3><button class="text-link" data-nav="mapa">Abrir mapa</button></div><div><span><b>${stale.fresh}</b> 0–30 días</span><span><b>${stale.medium}</b> 31–60 días</span><span><b>${stale.old}</b> +60 días</span><span><b>${stale.none}</b> nunca observados</span></div></section>`
+}
+
+function renderMortalityBreakdown(summary) {
+  const deaths = summary.events.filter((event)=>event.type==='death')
+  if (!deaths.length) return '<div class="empty-inline success">No se registró mortandad en el período.</div>'
+  const byCategory = new Map()
+  deaths.forEach((event)=>{const key=categoryLookup[event.categoryId]?.short||event.categoryId;byCategory.set(key,(byCategory.get(key)||0)+Number(event.quantity||0))})
+  return `<div class="v9-mortality-list">${[...byCategory.entries()].sort((a,b)=>b[1]-a[1]).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${fmt(value)}</strong></div>`).join('')}</div>`
+}
+
+function renderHerdReview(survey) {
+  const herd = herdPerformanceSummary(survey)
+  const currentCows = familyQuantity(herd.metrics.categories,'vacas')
+  return `<section class="v9-review-stat-grid"><article><small>Stock actual</small><strong>${fmt(herd.metrics.animals)}</strong><span>${herd.delta==null?'Primer registro':`${herd.delta>=0?'+':''}${fmt(herd.delta)} vs. anterior`}</span></article><article><small>Tasa de nacimientos</small><strong>${herd.birthRate==null?'—':`${decimal(herd.birthRate,1)}%`}</strong><span>${fmt(herd.totals.birth)} nacimientos</span></article><article><small>Mortandad anualizada</small><strong>${herd.mortalityAnnualized==null?'—':`${decimal(herd.mortalityAnnualized,1)}%`}</strong><span>${fmt(herd.totals.death)} animales</span></article><article><small>Movimiento comercial neto</small><strong>${herd.commercialNet>=0?'+':''}${fmt(herd.commercialNet)}</strong><span>${fmt(herd.totals.purchase)} compras · ${fmt(herd.totals.sale)} ventas</span></article></section>
+    <section class="v9-review-grid"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Cantidad y participación</span><h3>Composición del rodeo</h3></div><span>${fmt(herd.metrics.animals)} cabezas</span></div>${renderCategoryBars(herd.metrics.categories,herd.metrics.animals)}</article><article class="panel"><div class="panel-head"><div><span class="eyebrow">Flujo observado</span><h3>Ciclo reproductivo</h3></div><span>solo datos disponibles</span></div><div class="v9-funnel"><div><small>Vacas previas</small><strong>${fmt(herd.priorCows)}</strong></div><i>→</i><div><small>Nacimientos</small><strong>${fmt(herd.totals.birth)}</strong></div><i>→</i><div><small>Terneros actuales</small><strong>${fmt(herd.currentCalves)}</strong></div><i>→</i><div><small>Ventas de terneros</small><strong>${fmt(herd.calfSales)}</strong></div></div><p class="v9-funnel-note">Vacas actuales: ${fmt(currentCows)} · Vaquillonas actuales: ${fmt(herd.currentHeifers)}</p></article></section>
+    <section class="panel"><div class="panel-head"><h3>Mortandad por categoría</h3><button class="text-link" data-add-event="death">Registrar mortandad</button></div>${renderMortalityBreakdown(herd)}</section>`
+}
+
+function renderBalanceReview(survey) {
+  const balance = herdBalanceForSurvey(survey)
+  if (!balance) return `<section class="panel"><div class="empty-state compact"><h2>Se necesitan dos relevamientos</h2><p>El balance compara la fotografía anterior, los eventos y el stock observado actual.</p><button class="btn primary" data-start-survey-mode="quick">Crear relevamiento</button></div></section>`
+  return `<section class="v9-balance-layout"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Control principal</span><h3>Balance del rodeo</h3></div><span>${compactDateLabel(balance.previous.date)} → ${compactDateLabel(balance.survey.date)}</span></div>${renderBalancePanel(balance,false)}<div class="button-row"><button class="btn secondary" data-nav="eventos">Revisar eventos</button><button class="btn primary" data-edit-selected-survey>Revisar stock observado</button></div></article><article class="panel"><div class="panel-head"><h3>Diferencia por categoría</h3><span>esperado vs. observado</span></div><div class="v9-balance-table"><div class="head"><span>Categoría</span><span>Esperado</span><span>Observado</span><span>Dif.</span></div>${balance.categoryDifferences.map((item)=>`<div class="row ${item.difference?'has-difference':''}"><span>${esc(item.category.short)}</span><span>${fmt(item.expected)}</span><span>${fmt(item.observed)}</span><strong>${item.difference>0?'+':''}${fmt(item.difference)}</strong></div>`).join('')}</div></article></section>`
+}
+
+function renderReviewHub() {
+  const survey = selectedSurvey()
+  if (!survey) return renderShell('<div class="empty-state"><h2>No hay información para revisar</h2><button class="btn primary" data-start-survey-mode="full">Crear primer relevamiento</button></div>','Revisar','Campo, rodeo y balance')
+  const tabs = `<div class="v9-review-tabs"><button class="${ui.reviewTab==='campo'?'active':''}" data-review-tab="campo">${icon('map',18)} Campo</button><button class="${ui.reviewTab==='rodeo'?'active':''}" data-review-tab="rodeo">${icon('cow',18)} Rodeo</button><button class="${ui.reviewTab==='balance'?'active':''}" data-review-tab="balance">${icon('balance',18)} Balance</button></div>`
+  const body = ui.reviewTab==='rodeo' ? renderHerdReview(survey) : ui.reviewTab==='balance' ? renderBalanceReview(survey) : renderFieldReview(survey)
+  return renderShell(`${renderSurveyNavigator()}<section class="v9-review-header"><div><span class="eyebrow">Relevamiento ${compactDateLabel(survey.date)}</span><h2>Revisar desempeño</h2><p>Campo, rodeo y conciliación con una misma fecha de referencia.</p></div>${tabs}</section>${body}`,'Revisar','Desempeño del campo y del rodeo')
+}
+
+function renderMorePage() {
+  const cards = [
+    ['eventos','Eventos','Ventas, compras, nacimientos, mortandad y recategorizaciones.','event'],
+    ['lluvias','Lluvias','Comparación mensual, quincenal e índice hídrico de Laprida.','rain'],
+    ['historico','Histórico','Editar, archivar, eliminar y comparar relevamientos.','history'],
+    ['intro','Cómo usar Campo','Conceptos, flujo recomendado y próximas mejoras.','info'],
+    ['datos','Datos y configuración','Respaldos, muestra, exportaciones y animación.','download'],
+  ]
+  return renderShell(`<section class="v9-more-intro"><span class="eyebrow">Herramientas adicionales</span><h2>Más</h2><p>Accedé a análisis, configuración y documentación sin recargar la navegación principal.</p></section><section class="v9-more-grid">${cards.map(([view,title,description,iconName])=>`<button class="v9-more-card" data-nav="${view}"><span>${icon(iconName,26)}</span><div><strong>${title}</strong><p>${description}</p></div>${icon('chevron',19)}</button>`).join('')}</section>`,'Más','Histórico, lluvia, eventos y configuración')
+}
 
 function renderBalancePanel(balance, compact = false) {
   if (!balance) return `<div class="empty-inline">Se necesita un relevamiento anterior para calcular el balance.</div>`
@@ -1322,42 +1543,26 @@ function periodEventTotalsForSurvey(survey) {
 
 function renderDashboard() {
   const survey = selectedSurvey()
-  if (!survey) return renderShell('<div class="empty-state"><h2>No hay relevamientos</h2><button class="btn primary" data-start-survey>Crear el primero</button></div>', 'Resumen del campo', 'El Rosario')
+  if (!survey) {
+    const content = `<section class="v9-empty-home"><img src="./assets/${UI_ASSETS.home}" alt=""><span class="eyebrow">Empezá con una fotografía del campo</span><h2>Campo está listo para registrar El Rosario</h2><p>Creá un conteo completo o explorá los datos de muestra desde Más.</p><div class="button-row"><button class="btn primary large" data-start-survey-mode="full">Primer relevamiento</button><button class="btn secondary large" data-nav="mas">Ver opciones</button></div></section>`
+    return renderShell(content,'Inicio','Registrar y revisar El Rosario')
+  }
   const metrics = surveyMetrics(survey)
-  const prev = previousSurvey(survey)
-  const prevMetrics = prev ? surveyMetrics(prev) : null
-  const rainPeriod = survey.rainPeriod || monthKey(survey.date)
-  const rain = rainAnalysis(rainPeriod)
-  const alerts = operationalAlerts(survey)
-  const eventTotalsCurrent = periodEventTotalsForSurvey(survey)
-  const deltaAnimals = prevMetrics ? metrics.animals - prevMetrics.animals : null
-  const resolved = LOTS.map((lot) => resolveLotCondition(survey, lot.id))
-  const assumedCount = resolved.filter((item) => conditionIsAssumed(item.source)).length
-  const noInfoCount = resolved.filter((item) => item.source === 'none').length
   const balance = herdBalanceForSurvey(survey)
-  const cards = `<section class="kpi-grid v7">
-    ${kpiCard('Ganado total', fmt(metrics.animals), deltaAnimals == null ? 'Primer relevamiento' : `${deltaAnimals >= 0 ? '+' : ''}${fmt(deltaAnimals)} vs. anterior`, KPI_ASSETS.animals, 'brown')}
-    ${kpiCard('Carga del campo', `${decimal(metrics.load)} EV/ha`, `Objetivo ${decimal(TARGET_LOAD)} EV/ha`, KPI_ASSETS.load, capacityClass(metrics.load))}
-    ${kpiCard('Nacimientos', fmt(eventTotalsCurrent.birth), 'Entre relevamientos', KPI_ASSETS.births, 'gold', 'data-nav="eventos" role="button" tabindex="0"')}
-    ${kpiCard('Mortandad', fmt(eventTotalsCurrent.death), 'Entre relevamientos', KPI_ASSETS.deaths, eventTotalsCurrent.death ? 'red' : 'neutral', 'data-nav="eventos" role="button" tabindex="0"')}
-    ${kpiCard('Compras y ventas', `${fmt(eventTotalsCurrent.purchase)} / ${fmt(eventTotalsCurrent.sale)}`, 'Compras / ventas', KPI_ASSETS.trade, 'blue', 'data-nav="eventos" role="button" tabindex="0"')}
-    ${kpiCard('Lluvia en Laprida', rain.current == null ? 'Sin dato' : `${fmt(rain.current)} mm`, `${rain.status}${rain.index == null ? '' : ` · IH ${Math.round(rain.index)}%`}`, KPI_ASSETS.rain, 'blue', 'data-nav="lluvias" role="button" tabindex="0"')}
-  </section>`
-  const content = `${renderSurveyNavigator()}
-    <section class="welcome-strip"><div><span class="eyebrow">Relevamiento seleccionado</span><h2>${dateLabel(survey.date)}</h2><p>${survey.lots.length} lotes observados · ${assumedCount} condiciones estimadas · ${noInfoCount} sin información</p></div><div class="welcome-actions"><button class="btn secondary large" data-edit-selected-survey>${icon('edit',18)} Editar relevamiento</button><button class="btn primary large" data-start-survey>${icon('plus',19)} Nuevo relevamiento</button></div></section>
-    ${cards}
-    <section class="dashboard-grid v7-dashboard-grid">
-      <article class="panel map-panel"><div class="panel-head"><div><span class="eyebrow">Lectura visual sin etiquetas</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>${renderMap(survey,true)}<p class="map-reading-note">Terreno = condición · borde = carga · sprites = cantidad y composición.</p></article>
-      <aside class="dashboard-side">
-        <article class="panel alerts-panel"><div class="panel-head"><h3>Alertas resumidas</h3><span class="count-pill">${alerts.length}</span></div>${alerts.length?`<div class="alert-list">${alerts.map(renderAlert).join('')}</div>`:'<div class="empty-inline success">Sin alertas operativas.</div>'}</article>
-        <article class="panel"><div class="panel-head"><h3>Composición del rodeo</h3></div>${renderCategoryBars(metrics.categories,metrics.animals)}</article>
-        <article class="panel balance-panel"><div class="panel-head"><div><span class="eyebrow">Cambio entre fotografías</span><h3>Balance del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver eventos</button></div>${renderBalancePanel(balance,true)}</article>
-        <article class="panel rain-card interactive" data-nav="lluvias"><div class="panel-head"><h3>Lluvia · Laprida</h3><button class="text-link" data-nav="lluvias">Abrir módulo</button></div><div class="rain-hero"><strong>${rain.current==null?'—':fmt(rain.current)}</strong><span>mm · ${monthLabel(rainPeriod)}</span><b class="rain-state ${hydricClass(rain.index)}">${esc(rain.status)}</b></div><p>${esc(rain.detail)}</p></article>
-      </aside>
-    </section>
-    ${renderLotsSummaryTable(survey)}
-    <section class="bottom-grid"><article class="panel adoption-card"><div class="adoption-visual single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div><div><span class="eyebrow">Del evento a la próxima fotografía</span><h3>Registrá cambios y validá el siguiente relevamiento</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones preparan el stock esperado.</p><div class="button-row"><button class="btn secondary" data-nav="eventos">Registrar evento</button><button class="btn primary" data-start-survey>Nuevo relevamiento</button></div></div></article><article class="panel recent-panel"><div class="panel-head"><h3>Últimos relevamientos</h3><button class="text-link" data-open-survey-history>Ver todos</button></div>${renderRecentSurveys()}</article></section>`
-  return renderShell(content,'Resumen del campo','Condición, carga, rodeo, eventos y lluvia del relevamiento seleccionado')
+  const field = fieldPerformanceSummary(survey)
+  const herd = herdPerformanceSummary(survey)
+  const rain = rainAnalysis(survey.rainPeriod || monthKey(survey.date))
+  const attention = reviewAttentionGroups(survey)
+  const draft = state.draft
+  const primary = draft
+    ? `<article class="v9-home-primary draft"><div><span class="eyebrow">Continuar donde quedaste</span><h2>Relevamiento del ${compactDateLabel(draft.date)}</h2><p>Paso ${draft.step || 1} de 3 · ${(draft.lots || []).length} lotes incluidos · guardado localmente</p></div><button class="btn primary large" data-resume-survey>Continuar</button></article>`
+    : `<article class="v9-home-primary"><div><span class="eyebrow">Acciones frecuentes</span><h2>¿Qué necesitás hacer hoy?</h2><p>Registrá un cambio en segundos o prepará la próxima fotografía del campo.</p></div><div class="v9-home-actions"><button class="btn primary" data-start-survey-mode="quick">${icon('check',17)} Revisión rápida</button><button class="btn secondary" data-add-event="sale">${icon('event',17)} Registrar evento</button><button class="btn secondary" data-open-rain="${monthKey(todayISO())}">${icon('rain',17)} Agregar lluvia</button></div></article>`
+  const kpis = `<section class="kpi-grid v9-kpis">${kpiCard('Stock observado',fmt(metrics.animals),`al ${compactDateLabel(survey.date)}`,KPI_ASSETS.animals,'brown')}${kpiCard('Carga promedio',`${decimal(metrics.load)} EV/ha`,`${field.overloaded} lotes sobre objetivo`,KPI_ASSETS.load,capacityClass(metrics.load))}${kpiCard('Balance',balance?`${balance.discrepancy>0?'+':''}${fmt(balance.discrepancy)}`:'—',balance?'esperado vs. observado':'requiere otro relevamiento',KPI_ASSETS.trade,balance?.discrepancy?'gold':'neutral','data-review-tab="balance" role="button" tabindex="0"')}${kpiCard('Lluvia',rain.current==null?'Sin dato':`${fmt(rain.current)} mm`,rain.index==null?rain.status:`${rain.status} · IH ${Math.round(rain.index)}%`,KPI_ASSETS.rain,'blue','data-nav="lluvias" role="button" tabindex="0"')}</section>`
+  const content = `${renderSurveyNavigator()}${primary}${kpis}
+    <section class="v9-attention-section"><div class="panel-head"><div><span class="eyebrow">Excepciones primero</span><h3>Requiere atención</h3></div><button class="text-link" data-review-tab="campo">Abrir revisión</button></div><div class="v9-attention-grid">${attention.length?attention.map(renderAttentionGroup).join(''):'<div class="empty-inline success">No hay excepciones pendientes para este relevamiento.</div>'}</div></section>
+    <section class="v9-home-review-grid"><button class="v9-performance-card field" data-review-tab="campo"><span>${icon('map',24)}</span><div><small>Campo</small><strong>${Math.round(field.goodPct)}% de ha en MB/B</strong><p>${field.overloaded} lotes sobre carga · ${field.improved} mejoraron · ${field.worsened} empeoraron</p></div>${icon('chevron',18)}</button><button class="v9-performance-card herd" data-review-tab="rodeo"><span>${icon('cow',24)}</span><div><small>Rodeo</small><strong>${herd.birthRate==null?'Sin tasa':`${decimal(herd.birthRate,1)}% nacimientos`}</strong><p>${herd.delta==null?'Primer registro':`${herd.delta>=0?'+':''}${fmt(herd.delta)} cabezas`} · mortandad ${herd.mortalityAnnualized==null?'—':`${decimal(herd.mortalityAnnualized,1)}%`}</p></div>${icon('chevron',18)}</button></section>
+    <section class="dashboard-grid v9-dashboard-grid"><article class="panel map-panel"><div class="panel-head"><div><span class="eyebrow">Lectura visual</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>${renderMap(survey,true)}<p class="map-reading-note">Terreno = condición · borde = carga · sprites = composición y cantidad.</p></article><aside class="dashboard-side"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><button class="text-link" data-nav="registrar">Registrar</button></div>${renderRecentActivity(6)}</article><article class="panel"><div class="panel-head"><h3>Composición del rodeo</h3><button class="text-link" data-review-tab="rodeo">Analizar</button></div>${renderCategoryBars(metrics.categories,metrics.animals)}</article></aside></section>`
+  return renderShell(content,'Inicio','Qué requiere atención y cómo está funcionando el campo')
 }
 
 function kpiCard(label, value, note, assetPath, tone, attrs = '') {
@@ -1738,13 +1943,21 @@ function renderMapPage() {
   return renderShell(content,'Mapa y lotes',`Relevamiento del ${dateLabel(survey.date)}`,`<button class="btn primary" data-start-survey>${icon('plus',17)} Nuevo</button>`)
 }
 
-function startSurvey() {
+function startSurvey(mode = 'quick') {
+  const captureMode = mode === 'full' ? 'full' : 'quick'
   const date = todayISO()
-  const projection = projectedLotsForDate(date)
+  const projection = captureMode === 'quick'
+    ? projectedLotsForDate(date)
+    : { base: latestSurvey(), events: [], lots: [] }
   state.draft = {
-    id: uid(), nombre: state.nombre || 'Muestra', mode: 'new', editingSurveyId: null, date, rainPeriod: monthKey(date),
-    basedOnSurveyId: projection.base?.id || null, projectionEventIds: projection.events.map((event) => event.id), lots: projection.lots,
-    events: { births: 0, deaths: 0, purchases: 0, sales: 0 }, note: '', step: 1, lastSavedAt: new Date().toISOString(),
+    id: uid(), nombre: state.nombre || 'Muestra', mode: 'new', editingSurveyId: null,
+    captureMode, date, rainPeriod: monthKey(date),
+    basedOnSurveyId: projection.base?.id || null,
+    projectionEventIds: projection.events.map((event) => event.id),
+    lots: projection.lots,
+    reviewedLots: {},
+    events: { births: 0, deaths: 0, purchases: 0, sales: 0 }, note: '', step: 1,
+    lastSavedAt: new Date().toISOString(),
   }
   ui.wizardStep = 1
   saveState()
@@ -1757,12 +1970,14 @@ function editSurvey(surveyId) {
   state.draft = {
     id: survey.id,
     mode: 'edit',
+    captureMode: 'edit',
     editingSurveyId: survey.id,
     originalDate: survey.date,
     originalCreatedAt: survey.createdAt,
     date: survey.date,
     rainPeriod: survey.rainPeriod || monthKey(survey.date),
     lots: JSON.parse(JSON.stringify(survey.lots || [])),
+    reviewedLots: Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, 'confirmed'])),
     events: { births: 0, deaths: 0, purchases: 0, sales: 0, ...(survey.events || {}) },
     note: survey.note || '',
     step: 1,
@@ -1774,45 +1989,49 @@ function editSurvey(surveyId) {
 
 function renderSurveyWizard() {
   const draft = state.draft
-  if (!draft) {
-    const content = `<section class="survey-intro"><div class="survey-intro-copy"><span class="eyebrow">Una fotografía del campo</span><h2>Nuevo relevamiento</h2><p>Registrá los lotes observados. Podés cargar animales y condición, o registrar un lote vacío solamente para informar su estado.</p><ul><li>${icon('check',18)} Empezá de cero</li><li>${icon('check',18)} Agregá solo los lotes observados</li><li>${icon('check',18)} Revisá diferencias al final, sin bloqueos</li></ul><button class="btn primary large" data-start-survey>${icon('plus',19)} Comenzar</button></div><div class="survey-intro-art single"><img src="./assets/${UI_ASSETS.register}" alt="Registrar animales"></div></section>`
-    return renderShell(content, 'Nuevo relevamiento', 'Registrar animales y condición por lote')
-  }
+  if (!draft) return renderRegisterHub()
   const isEditing = draft.mode === 'edit'
   const step = draft.step || ui.wizardStep || 1
-  const stepper = `<div class="stepper"><span class="${step>=1?'done':''}"><i>1</i>Fecha y lluvia</span><span class="${step>=2?'done':''}"><i>2</i>Registrar lotes</span><span class="${step>=3?'done':''}"><i>3</i>Revisar</span></div>`
+  const stepper = `<div class="stepper v9-stepper"><span class="${step>=1?'done':''}"><i>1</i>Contexto</span><span class="${step>=2?'done':''}"><i>2</i>Lotes</span><span class="${step>=3?'done':''}"><i>3</i>Balance</span></div>`
   let body = ''
   if (step === 1) body = renderSurveyStepOne(draft)
   if (step === 2) body = renderSurveyStepTwo(draft)
   if (step === 3) body = renderSurveyStepThree(draft)
-  return renderShell(`${stepper}<div class="draft-save-status">${icon('check',14)} Borrador guardado automáticamente</div>${body}`, isEditing ? 'Editar relevamiento' : 'Nuevo relevamiento', isEditing ? `Modificando el registro del ${dateLabel(draft.originalDate || draft.date)}` : 'Podés dejar lotes sin cargar', `<button class="btn ghost" data-cancel-survey>Cancelar</button>`)
+  return renderShell(`${stepper}<div class="draft-save-status">${icon('check',14)} Guardado localmente · ${new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date(draft.lastSavedAt || Date.now()))}</div>${body}`, isEditing ? 'Editar relevamiento' : (draft.captureMode==='full'?'Conteo completo':'Revisión rápida'), isEditing ? `Modificando ${dateLabel(draft.originalDate || draft.date)}` : 'Confirmá lo esperado y cambiá solo las excepciones', `<button class="btn ghost" data-cancel-survey>Cancelar</button>`)
 }
 
 function renderSurveyStepOne(draft) {
   const rain = rainAnalysis(draft.rainPeriod)
   const base = draft.basedOnSurveyId ? state.surveys.find((survey) => survey.id === draft.basedOnSurveyId) : null
-  return `<section class="wizard-card narrow"><div class="wizard-title"><span class="step-number">1</span><div><h2>¿Cuándo se hizo el relevamiento?</h2><p>La app precarga el estado esperado usando el último relevamiento y los eventos registrados.</p></div></div>
-    ${base ? `<div class="projection-banner">${icon('balance',18)} <span><strong>Base proyectada desde ${compactDateLabel(base.date)}</strong><small>${draft.projectionEventIds?.length || 0} eventos aplicados antes de revisar el campo.</small></span></div>` : ''}
+  const quick = draft.captureMode !== 'full' && draft.mode !== 'edit'
+  return `<section class="wizard-card narrow v9-context-step"><div class="wizard-title"><span class="step-number">1</span><div><h2>Fecha y punto de partida</h2><p>${quick?'Campo prepara el stock esperado usando la fotografía anterior y los eventos.':'El conteo comienza vacío y no copia cantidades anteriores.'}</p></div></div>
+    <div class="v9-mode-banner ${quick?'quick':'full'}"><span>${icon(quick?'check':'clipboard',20)}</span><div><strong>${draft.mode==='edit'?'Edición histórica':quick?'Revisión rápida':'Conteo completo'}</strong><p>${draft.mode==='edit'?'Los cambios pueden recalcular comparaciones posteriores.':quick?'Ideal para confirmar lo que no cambió y revisar excepciones.':'Ideal para una fotografía completamente independiente.'}</p></div>${draft.mode==='new'?`<button data-switch-capture-mode="${quick?'full':'quick'}">Cambiar a ${quick?'conteo completo':'revisión rápida'}</button>`:''}</div>
+    ${base ? `<div class="projection-banner">${icon('balance',18)} <span><strong>Base ${compactDateLabel(base.date)}</strong><small>${draft.projectionEventIds?.length || 0} eventos aplicados al stock esperado.</small></span></div>` : ''}
     <label class="field"><span>Fecha del relevamiento</span><div class="input-icon">${icon('calendar',18)}<input type="date" id="survey-date" value="${esc(draft.date)}"></div></label>
     <div class="soft-divider"></div>
-    <div class="wizard-title compact"><span class="step-number water">${icon('rain',20)}</span><div><h3>Lluvia del mes <small>(opcional)</small></h3><p>Podés cargar eventos diarios o dejar el mes sin información. Cero milímetros y campo vacío son datos diferentes.</p></div></div>
-    <button class="rain-month-summary" data-open-rain="${draft.rainPeriod}"><span><small>${monthLabel(draft.rainPeriod)}</small><strong>${rain.current == null ? 'Sin información' : `${fmt(rain.current)} mm`}</strong></span><b>${rain.entries?.length ? `${rain.entries.length} registros diarios` : rain.source === 'monthly' ? 'Total mensual heredado' : 'Cargar lluvia diaria'}</b>${icon('chevron',18)}</button>
-    <div class="wizard-actions"><span></span><button class="btn primary large" data-step-one-next>Continuar ${icon('chevron',18)}</button></div>
+    <div class="wizard-title compact"><span class="step-number water">${icon('rain',20)}</span><div><h3>Lluvia del mes <small>(opcional)</small></h3><p>Cero y sin información se guardan como estados distintos.</p></div></div>
+    <button class="rain-month-summary" data-open-rain="${draft.rainPeriod}"><span><small>${monthLabel(draft.rainPeriod)}</small><strong>${rain.current == null ? 'Sin información' : `${fmt(rain.current)} mm`}</strong></span><b>${rain.entries?.length ? `${rain.entries.length} registros por fecha` : rain.source === 'monthly' ? 'Total mensual' : 'Agregar lluvia'}</b>${icon('chevron',18)}</button>
+    <div class="wizard-actions"><button class="btn ghost" data-nav="registrar">Volver</button><button class="btn primary large" data-step-one-next>Continuar ${icon('chevron',18)}</button></div>
   </section>`
 }
 
 function renderSurveyStepTwo(draft) {
-  const total = draft.lots.reduce((sum, lot) => sum + lot.groups.reduce((a, group) => a + Number(group.quantity || 0), 0), 0)
-  const cards = draft.lots.length ? draft.lots.map((lotEntry) => {
-    const lot = lotLookup[lotEntry.lotId]
-    const quantity = lotEntry.groups.reduce((sum, group) => sum + Number(group.quantity || 0), 0)
-    const stateInfo = fieldStateLookup[lotEntry.fieldState] || fieldStateLookup['no-observado']
-    return `<article class="loaded-lot-card ${lotEntry.projected ? 'projected' : ''}"><div class="lot-card-number">${lot.name.replace('ER-','')}</div><div class="loaded-lot-content"><div><h3>${lot.name}${lotEntry.projected ? '<small>Precargado</small>' : ''}</h3><p>${quantity ? `${fmt(quantity)} animales · ${lotEntry.groups.length} ${lotEntry.groups.length===1?'grupo':'grupos'}` : 'Lote observado sin animales'}</p></div><span class="field-mini ${stateInfo.tone}">${fieldStateIcon(stateInfo)}<b>${stateInfo.label}</b></span></div><div class="lot-card-actions"><button data-edit-draft-lot="${lot.id}" aria-label="Editar">${icon('edit',18)}</button><button data-remove-draft-lot="${lot.id}" aria-label="Eliminar">${icon('trash',18)}</button></div></article>`
-  }).join('') : `<div class="empty-add"><img src="./assets/${UI_ASSETS.register}"><h3>No hay lotes precargados</h3><p>Agregá un lote con animales o registralo vacío para informar su condición.</p><button class="btn primary" data-add-draft-lot>${icon('plus',18)} Registrar un lote</button></div>`
-  return `<section class="wizard-card wide"><div class="wizard-title"><span class="step-number">2</span><div><h2>Revisar el estado esperado</h2><p>Los eventos ayudan a preparar esta fotografía. Editá solamente lo que cambió o no coincide con lo observado.</p></div></div>
-    <div class="loaded-summary"><div><small>Lotes incluidos</small><strong>${draft.lots.length}</strong></div><div><small>Stock esperado</small><strong>${fmt(total)}</strong></div><button class="btn secondary" data-add-draft-lot>${icon('plus',18)} Agregar lote</button></div>
-    <div class="loaded-lots">${cards}</div>
-    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Atrás</button><button class="btn primary large" data-step-two-next>Validar balance ${icon('chevron',18)}</button></div>
+  draft.reviewedLots = draft.reviewedLots || {}
+  const infos = LOTS.map((lot)=>draftLotReviewInfo(draft,lot))
+  const included = infos.filter((info)=>info.entry)
+  const priority = included.filter((info)=>info.priority).sort((a,b)=>b.eventCount-a.eventCount||b.metric.load-a.metric.load||b.animals-a.animals)
+  const other = included.filter((info)=>!info.priority)
+  const notIncluded = infos.filter((info)=>!info.entry)
+  const reviewed = included.filter((info)=>info.status!=='pending').length
+  const totalAnimals = included.reduce((sum,info)=>sum+info.animals,0)
+  const pending = included.length-reviewed
+  const quick = draft.captureMode !== 'full' && draft.mode !== 'edit'
+  return `<section class="wizard-card wide v9-lot-review-step"><div class="wizard-title"><span class="step-number">2</span><div><h2>${quick?'Revisá excepciones primero':'Cargá los lotes observados'}</h2><p>${quick?'Confirmá sin cambios o editá solo lo que no coincide con el campo.':'Agregá animales, condición o registrá un lote observado vacío.'}</p></div></div>
+    <div class="v9-progress-summary"><div><small>Revisados</small><strong>${reviewed} / ${included.length}</strong><span>${pending} pendientes</span></div><div><small>Stock cargado</small><strong>${fmt(totalAnimals)}</strong><span>${included.length} lotes incluidos</span></div><button class="btn secondary" data-add-draft-lot>${icon('plus',17)} Agregar lote</button></div>
+    ${priority.length?`<section class="v9-review-group"><div class="v9-review-group-head"><div><span class="eyebrow">Primero</span><h3>Requieren revisión</h3></div>${quick&&priority.some((info)=>info.status==='pending')?'<button class="text-link" data-confirm-all-priority>Confirmar todos sin cambios</button>':''}</div><div class="v9-lot-review-list">${priority.map(renderDraftReviewCard).join('')}</div></section>`:''}
+    ${other.length?`<details class="v9-review-group secondary" ${quick?'':'open'}><summary>Otros lotes incluidos (${other.length})</summary><div class="v9-lot-review-list">${other.map(renderDraftReviewCard).join('')}</div></details>`:''}
+    <details class="v9-review-group tertiary"><summary>Lotes no incluidos (${notIncluded.length})</summary><div class="v9-not-included-grid">${notIncluded.map((info)=>`<button data-add-specific-draft-lot="${info.lot.id}"><b>${info.lot.name}</b><small>${info.lot.hectares} ha</small>${icon('plus',15)}</button>`).join('')}</div></details>
+    <div class="wizard-actions"><button class="btn ghost" data-wizard-back>${icon('back',18)} Atrás</button><button class="btn primary large" data-step-two-next>Revisar balance ${icon('chevron',18)}</button></div>
   </section>`
 }
 
@@ -1840,8 +2059,10 @@ function renderSurveyStepThree(draft) {
   const observedConditions = conditionSummary.filter((item) => item.source === 'observed').length
   const assumedConditions = conditionSummary.filter((item) => conditionIsAssumed(item.source)).length
   const noInfoConditions = conditionSummary.filter((item) => item.source === 'none').length
+  const reviewedCount = Object.values(draft.reviewedLots || {}).filter((value)=>value !== 'pending').length
+  const pendingCount = Math.max(0, draft.lots.length - reviewedCount)
   return `<section class="wizard-card wide review-card"><div class="wizard-title"><span class="step-number">3</span><div><h2>Validá el balance y guardá</h2><p>Los eventos explican el stock esperado. La discrepancia no bloquea el relevamiento, pero queda visible.</p></div></div>
-    <div class="review-hero"><div><small>Fecha</small><strong>${dateLabel(draft.date)}</strong></div><div><small>Animales observados</small><strong>${fmt(metrics.animals)}</strong></div><div><small>Carga promedio</small><strong>${decimal(metrics.load)} EV/ha</strong></div><div><small>Lotes incluidos</small><strong>${draft.lots.length} / 18</strong></div></div>
+    <div class="v9-final-review-note ${pendingCount?'warning':'success'}"><strong>${pendingCount ? `${pendingCount} lotes incluidos siguen pendientes de confirmación` : 'Todos los lotes incluidos fueron revisados'}</strong><span>Podés guardar igualmente; Campo conserva la diferencia para revisarla después.</span></div><div class="review-hero"><div><small>Fecha</small><strong>${dateLabel(draft.date)}</strong></div><div><small>Animales observados</small><strong>${fmt(metrics.animals)}</strong></div><div><small>Carga promedio</small><strong>${decimal(metrics.load)} EV/ha</strong></div><div><small>Lotes incluidos</small><strong>${draft.lots.length} / 18</strong></div></div>
     <div class="review-grid"><article class="review-section"><h3>Balance del rodeo</h3>${renderBalancePanel(balance,false)}</article><article class="review-section"><h3>Condición de los lotes</h3><div class="condition-origin-summary"><div><strong>${observedConditions}</strong><span>observadas</span></div><div><strong>${assumedConditions}</strong><span>estimadas</span></div><div><strong>${noInfoConditions}</strong><span>sin información</span></div></div>${renderFieldStateSummary(draft)}</article></div>
     <section class="review-alerts"><div class="panel-head"><h3>Alertas operativas</h3><span>${loadAlerts.length}</span></div>${loadAlerts.length?`<div class="alert-list">${loadAlerts.map(renderAlert).join('')}</div>`:'<div class="empty-inline success">No detectamos alertas de carga.</div>'}</section>
     <details class="empty-lots"><summary>${unobservedLots.length} lotes no fueron incluidos</summary><div>${unobservedLots.map((lot)=>{const condition=resolveLotCondition(survey,lot.id);return `<span>${lot.name} · ${condition.label}${conditionIsAssumed(condition.source)?' ≈':''}</span>`}).join('')}</div></details>
@@ -2000,9 +2221,11 @@ function renderEventModal() {
 }
 
 function renderIntroductionPage() {
-  const quickLinks = `<div class="intro-quick-links"><button data-nav="eventos">${icon('event',20)} Eventos</button><button data-nav="mapa">${icon('map',20)} Mapa</button><button data-nav="lluvias">${icon('rain',20)} Lluvias</button><button data-nav="historico">${icon('history',20)} Histórico</button><button data-nav="datos">${icon('download',20)} Respaldo</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v8.02</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v8.02</h3><ul><li>Movimiento SimFarm más visible, persistente y controlable.</li><li>Animales del mismo tamaño con movimientos cortos y naturales.</li><li>Zoom y desplazamiento también en el resumen.</li><li>Motor desacoplado para mejorar sprites en futuras versiones.</li><li>Datos de muestra instalables y separados de El Rosario.</li><li>Todos los eventos y balances de v7.01.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
-  return renderShell(content,'Introducción','Cómo usar Campo y qué mejoras están por venir')
+  const quickLinks = `<div class="intro-quick-links"><button data-nav="registrar">${icon('clipboard',18)} Registrar</button><button data-review-tab="campo">${icon('map',18)} Revisar campo</button><button data-review-tab="rodeo">${icon('cow',18)} Revisar rodeo</button><button data-review-tab="balance">${icon('balance',18)} Validar balance</button></div>`
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.00</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
+  <section class="intro-steps"><article><i>1</i><div><h3>Registrá el cambio</h3><p>Cargá una venta, compra, nacimiento, mortandad, recategorización o lluvia desde un único menú.</p></div></article><article><i>2</i><div><h3>Elegí el tipo de relevamiento</h3><p>Usá Revisión rápida para confirmar el stock esperado o Conteo completo para empezar desde cero.</p></div></article><article><i>3</i><div><h3>Revisá excepciones</h3><p>Campo prioriza lotes con eventos, carga alta o condición faltante para reducir la carga de trabajo.</p></div></article><article><i>4</i><div><h3>Validá desempeño y balance</h3><p>Separá la revisión del campo, el rodeo y la conciliación entre stock esperado y observado.</p></div></article></section>
+  <section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Revisión rápida</dt><dd>Estado anterior más eventos; editás solo las excepciones.</dd><dt>Conteo completo</dt><dd>Fotografía independiente cargada desde cero.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición y carga</dt><dd>Estado del terreno y equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v9.00</h3><ul><li>Navegación orientada a Inicio, Registrar, Revisar y Mapa.</li><li>Menú único para relevamientos, eventos y lluvia.</li><li>Revisión rápida y conteo completo.</li><li>Secuencia de lotes priorizada por excepciones.</li><li>Centro de revisión con Campo, Rodeo y Balance.</li><li>Matriz condición × carga y vigencia de observaciones.</li><li>Confirmación posterior a cada evento y stock proyectado.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario sanitario y vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos planificados entre lotes.</li><li>Reportes gerenciales automáticos.</li></ul></article></section>`
+  return renderShell(content,'Cómo usar Campo','Flujo recomendado y conceptos principales')
 }
 
 function renderRainPage() {
@@ -2038,7 +2261,7 @@ function renderDataPage() {
   const demoControls = installed
     ? `<div class="stack-buttons"><button class="btn primary" data-switch-workspace="${isDemo ? WORKSPACES.REAL : WORKSPACES.DEMO}">${isDemo ? 'Volver a El Rosario' : 'Abrir Muestra'}</button><button class="btn secondary" data-reset-demo-workspace>Restablecer Muestra</button><button class="btn danger-outline" data-delete-demo-workspace>Eliminar Muestra</button></div>`
     : `<div class="stack-buttons"><button class="btn primary" data-install-demo-workspace>Cargar datos de muestra</button></div>`
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial del espacio activo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest ${survey?'':'disabled'}>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración de <strong>${esc(workspaceLabel())}</strong>.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Espacio activo: ${esc(workspaceLabel())}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>Animación ${animalAnimator.getModeLabel()} · todos los animales usan el mismo tamaño visual.</small></article><article class="panel data-card demo-data-card ${installed?'installed':''}"><span class="data-icon">${icon('info',26)}</span><h2>Datos de muestra</h2><p>${installed?'La muestra de 16 meses está instalada en un espacio separado. Podés abrirla, restaurarla o eliminarla sin modificar El Rosario.':'Instalá 16 meses de relevamientos, eventos y lluvia sin reemplazar tus datos actuales.'}</p>${demoControls}</article><article class="panel data-card animation-settings-card"><span class="data-icon">${icon('cow',26)}</span><h2>Movimiento de los animales</h2><p>Elegí cuánta actividad querés ver en el mapa. SimFarm es el modo recomendado.</p><div class="animation-mode-picker">${['paused','soft','simfarm'].map((mode)=>`<button class="${animalAnimator.getMode()===mode?'active':''}" data-set-animation-mode="${mode}"><b>${({paused:'Pausada',soft:'Suave',simfarm:'SimFarm'})[mode]}</b><small>${({paused:'Sin movimiento',soft:'Movimiento tranquilo',simfarm:'Más visible y dinámico'})[mode]}</small></button>`).join('')}</div></article></section>`
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial del espacio activo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest ${survey?'':'disabled'}>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p class="backup-health">Último respaldo: <strong>${state.settings?.lastBackupAt?compactDateLabel(String(state.settings.lastBackupAt).slice(0,10)):'Nunca'}</strong></p><p>El JSON conserva relevamientos, eventos, lluvia y configuración de <strong>${esc(workspaceLabel())}</strong>.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Enfoque: registrar y revisar<br>Publicación: ${RELEASE_DATE}<br>Espacio activo: ${esc(workspaceLabel())}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>Animación ${animalAnimator.getModeLabel()} · todos los animales usan el mismo tamaño visual.</small></article><article class="panel data-card demo-data-card ${installed?'installed':''}"><span class="data-icon">${icon('info',26)}</span><h2>Datos de muestra</h2><p>${installed?'La muestra de 16 meses está instalada en un espacio separado. Podés abrirla, restaurarla o eliminarla sin modificar El Rosario.':'Instalá 16 meses de relevamientos, eventos y lluvia sin reemplazar tus datos actuales.'}</p>${demoControls}</article><article class="panel data-card animation-settings-card"><span class="data-icon">${icon('cow',26)}</span><h2>Movimiento de los animales</h2><p>Elegí cuánta actividad querés ver en el mapa. SimFarm es el modo recomendado.</p><div class="animation-mode-picker">${['paused','soft','simfarm'].map((mode)=>`<button class="${animalAnimator.getMode()===mode?'active':''}" data-set-animation-mode="${mode}"><b>${({paused:'Pausada',soft:'Suave',simfarm:'SimFarm'})[mode]}</b><small>${({paused:'Sin movimiento',soft:'Movimiento tranquilo',simfarm:'Más visible y dinámico'})[mode]}</small></button>`).join('')}</div></article></section>`
   return renderShell(content,'Exportar, muestra y configuración','Protegé datos y ajustá la experiencia del mapa')
 }
 
@@ -2094,9 +2317,11 @@ function allCsv() {
 }
 
 function render() {
-  if (!['resumen','relevamiento','eventos','mapa','lluvias','historico','intro','datos'].includes(ui.view)) ui.view='resumen'
+  if (!['resumen','registrar','revisar','relevamiento','eventos','mapa','lluvias','historico','intro','datos','mas'].includes(ui.view)) ui.view='resumen'
   let html = ''
   if (ui.view === 'resumen') html = renderDashboard()
+  if (ui.view === 'registrar') html = renderRegisterHub()
+  if (ui.view === 'revisar') html = renderReviewHub()
   if (ui.view === 'relevamiento') html = renderSurveyWizard()
   if (ui.view === 'eventos') html = renderEventsPage()
   if (ui.view === 'mapa') html = renderMapPage()
@@ -2104,6 +2329,7 @@ function render() {
   if (ui.view === 'historico') html = renderHistory()
   if (ui.view === 'intro') html = renderIntroductionPage()
   if (ui.view === 'datos') html = renderDataPage()
+  if (ui.view === 'mas') html = renderMorePage()
   document.getElementById('app').innerHTML = html
   bindEvents()
   animalAnimator.mount(document)
@@ -2121,7 +2347,12 @@ function bindEvents() {
   document.querySelectorAll('[data-rain-granularity]').forEach((button) => button.addEventListener('click', () => { ui.rainGranularity=button.dataset.rainGranularity; render() }))
   document.querySelectorAll('[data-rain-year]').forEach((select) => select.addEventListener('change', () => { ui.rainYear=Number(select.value); render() }))
   document.querySelectorAll('[data-rain-end-period]').forEach((input) => input.addEventListener('change', () => { ui.rainEndPeriod=input.value; render() }))
-  document.querySelectorAll('[data-start-survey]').forEach((button) => button.addEventListener('click', startSurvey))
+  document.querySelectorAll('[data-start-survey]').forEach((button) => button.addEventListener('click', () => startSurvey('quick')))
+  document.querySelectorAll('[data-start-survey-mode]').forEach((button) => button.addEventListener('click', () => startSurvey(button.dataset.startSurveyMode)))
+  document.querySelectorAll('[data-resume-survey]').forEach((button) => button.addEventListener('click', () => navigate('relevamiento')))
+  document.querySelectorAll('[data-review-tab]').forEach((button) => button.addEventListener('click', () => { ui.reviewTab=button.dataset.reviewTab || 'campo'; navigate('revisar') }))
+  document.querySelectorAll('[data-review-lot]').forEach((button) => button.addEventListener('click', () => { focusMapLot(button.dataset.reviewLot); ui.mapMode='map'; navigate('mapa') }))
+  document.querySelectorAll('[data-clear-record-confirmation]').forEach((button) => button.addEventListener('click', () => { ui.recordConfirmation=null; render() }))
   document.querySelectorAll('[data-edit-selected-survey]').forEach((button) => button.addEventListener('click', () => editSurvey(selectedSurvey()?.id)))
   document.querySelectorAll('[data-edit-survey]').forEach((button) => button.addEventListener('click', () => { ui.modal = null; editSurvey(button.dataset.editSurvey) }))
   document.querySelectorAll('[data-open-survey-history]').forEach((button) => button.addEventListener('click', (event) => { event.stopPropagation(); ui.modal = { type: 'survey-history' }; render() }))
@@ -2147,15 +2378,47 @@ function bindEvents() {
   if (dateInput) dateInput.addEventListener('change', (event) => {
     const nextDate=event.target.value
     state.draft.date=nextDate; state.draft.rainPeriod=monthKey(nextDate)
-    if(state.draft.mode==='new') { const projection=projectedLotsForDate(nextDate); state.draft.basedOnSurveyId=projection.base?.id||null; state.draft.projectionEventIds=projection.events.map((item)=>item.id); state.draft.lots=projection.lots }
+    if(state.draft.mode==='new' && state.draft.captureMode!=='full') { const projection=projectedLotsForDate(nextDate); state.draft.basedOnSurveyId=projection.base?.id||null; state.draft.projectionEventIds=projection.events.map((item)=>item.id); state.draft.lots=projection.lots; state.draft.reviewedLots={} }
     state.draft.lastSavedAt=new Date().toISOString(); saveState(); render()
   })
-  document.querySelectorAll('[data-step-one-next]').forEach((button) => button.addEventListener('click', () => { if(!state.draft.date) return alert('Elegí una fecha.'); state.draft.step=2; saveState(); render() }))
+  
+  document.querySelectorAll('[data-switch-capture-mode]').forEach((button) => button.addEventListener('click', () => {
+    const next = button.dataset.switchCaptureMode === 'full' ? 'full' : 'quick'
+    state.draft.captureMode = next
+    if (next === 'quick') {
+      const projection = projectedLotsForDate(state.draft.date)
+      state.draft.basedOnSurveyId = projection.base?.id || null
+      state.draft.projectionEventIds = projection.events.map((event)=>event.id)
+      state.draft.lots = projection.lots
+    } else {
+      state.draft.projectionEventIds = []
+      state.draft.lots = []
+    }
+    state.draft.reviewedLots = {}
+    state.draft.lastSavedAt = new Date().toISOString()
+    saveState(); render()
+  }))
+  document.querySelectorAll('[data-confirm-draft-lot]').forEach((button) => button.addEventListener('click', () => {
+    state.draft.reviewedLots = state.draft.reviewedLots || {}
+    state.draft.reviewedLots[button.dataset.confirmDraftLot] = 'confirmed'
+    state.draft.lastSavedAt = new Date().toISOString(); saveState(); render()
+  }))
+  document.querySelectorAll('[data-confirm-all-priority]').forEach((button) => button.addEventListener('click', () => {
+    state.draft.reviewedLots = state.draft.reviewedLots || {}
+    LOTS.map((lot)=>draftLotReviewInfo(state.draft,lot)).filter((info)=>info.entry&&info.priority&&info.status==='pending').forEach((info)=>{state.draft.reviewedLots[info.lot.id]='confirmed'})
+    state.draft.lastSavedAt = new Date().toISOString(); saveState(); render()
+  }))
+  document.querySelectorAll('[data-add-specific-draft-lot]').forEach((button) => button.addEventListener('click', () => {
+    const lotId=button.dataset.addSpecificDraftLot
+    ui.modal={type:'lot-form',context:'draft',isEdit:false,lot:lotFormModel({lotId,fieldState:'no-observado',conditionSource:'unobserved',groups:[]},true)}
+    render()
+  }))
+document.querySelectorAll('[data-step-one-next]').forEach((button) => button.addEventListener('click', () => { if(!state.draft.date) return alert('Elegí una fecha.'); state.draft.step=2; saveState(); render() }))
   document.querySelectorAll('[data-wizard-back]').forEach((button) => button.addEventListener('click', () => { state.draft.step=Math.max(1,(state.draft.step||1)-1); saveState(); render() }))
-  document.querySelectorAll('[data-step-two-next]').forEach((button) => button.addEventListener('click', () => { state.draft.step=3; saveState(); render() }))
+  document.querySelectorAll('[data-step-two-next]').forEach((button) => button.addEventListener('click', () => { const pending=(state.draft.lots||[]).filter((lot)=>!state.draft.reviewedLots?.[lot.lotId]).length; if(pending && !confirm(`${pending} lotes incluidos siguen pendientes de confirmación. ¿Continuar al balance?`)) return; state.draft.step=3; saveState(); render() }))
   document.querySelectorAll('[data-add-draft-lot]').forEach((button) => button.addEventListener('click', () => { ui.modal={type:'lot-form',context:'draft',isEdit:false,lot:lotFormModel({lotId:'',fieldState:'no-observado',conditionSource:'unobserved',groups:[]}, true)}; render() }))
   document.querySelectorAll('[data-edit-draft-lot]').forEach((button) => button.addEventListener('click', () => { const existing=state.draft.lots.find((item)=>item.lotId===button.dataset.editDraftLot); ui.modal={type:'lot-form',context:'draft',isEdit:true,originalLotId:existing.lotId,lot:lotFormModel(existing, true)}; render() }))
-  document.querySelectorAll('[data-remove-draft-lot]').forEach((button) => button.addEventListener('click', () => { if(confirm(`¿Eliminar ${lotLookup[button.dataset.removeDraftLot].name} del relevamiento?`)){state.draft.lots=state.draft.lots.filter((item)=>item.lotId!==button.dataset.removeDraftLot);saveState();render()} }))
+  document.querySelectorAll('[data-remove-draft-lot]').forEach((button) => button.addEventListener('click', () => { if(confirm(`¿Eliminar ${lotLookup[button.dataset.removeDraftLot].name} del relevamiento?`)){state.draft.lots=state.draft.lots.filter((item)=>item.lotId!==button.dataset.removeDraftLot);if(state.draft.reviewedLots)delete state.draft.reviewedLots[button.dataset.removeDraftLot];saveState();render()} }))
   const modalLotSelect = document.getElementById('modal-lot-select')
   if (modalLotSelect) modalLotSelect.addEventListener('change', (event) => { ui.modal.lot.lotId = event.target.value; render() })
   document.querySelectorAll('[data-add-group]').forEach((button) => button.addEventListener('click', () => { ui.modal.lot.groups.push({id:uid(),categoryId:'',quantity:0,birthYear:'',notes:'',suggested:false}); render() }))
@@ -2180,6 +2443,7 @@ function bindEvents() {
       ui.modal=null;saveState();showToast('Lote actualizado');render()
     }else{
       state.draft.lots=ui.modal.isEdit?state.draft.lots.map((item)=>item.lotId===(ui.modal.originalLotId||saved.lotId)?saved:item):[...state.draft.lots,saved]
+      state.draft.reviewedLots = state.draft.reviewedLots || {}; state.draft.reviewedLots[saved.lotId] = 'modified'
       state.draft.lastSavedAt=new Date().toISOString();ui.modal=null;saveState();render()
     }
   }))
@@ -2230,7 +2494,7 @@ function bindEvents() {
   document.querySelectorAll('[data-export-latest]').forEach((button)=>button.addEventListener('click',()=>{const survey=selectedSurvey();download(`campo-${survey.date}.csv`,surveyCsv(survey),'text/csv;charset=utf-8')}))
   document.querySelectorAll('[data-export-all]').forEach((button)=>button.addEventListener('click',()=>download('campo-historial.csv',allCsv(),'text/csv;charset=utf-8')))
   document.querySelectorAll('[data-export-survey]').forEach((button)=>button.addEventListener('click',()=>{const survey=state.surveys.find((item)=>item.id===button.dataset.exportSurvey);download(`campo-${survey.date}.csv`,surveyCsv(survey),'text/csv;charset=utf-8')}))
-  document.querySelectorAll('[data-export-backup]').forEach((button)=>button.addEventListener('click',()=>download(`campo-respaldo-${todayISO()}.json`,JSON.stringify(state,null,2),'application/json')))
+  document.querySelectorAll('[data-export-backup]').forEach((button)=>button.addEventListener('click',()=>{state.settings=state.settings||{};state.settings.lastBackupAt=new Date().toISOString();saveState();download(`campo-respaldo-${todayISO()}.json`,JSON.stringify(state,null,2),'application/json');showToast('Respaldo descargado')}))
   const importInput=document.getElementById('import-backup'); if(importInput) importInput.addEventListener('change', async(event)=>{const file=event.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());const migrated=migrateState(imported);if(!migrated)throw new Error('Formato no válido');state=migrated;saveState();showToast('Respaldo restaurado');setTimeout(()=>navigate('resumen'),400)}catch(error){alert(`No se pudo importar: ${error.message}`)}})
   document.querySelectorAll('[data-workspace-switch]').forEach((select)=>select.addEventListener('change',()=>switchWorkspace(select.value)))
   document.querySelectorAll('[data-switch-workspace]').forEach((button)=>button.addEventListener('click',()=>switchWorkspace(button.dataset.switchWorkspace)))
@@ -2348,12 +2612,12 @@ function bindV7Interactions() {
   bindMapPanAndZoom()
 
   document.querySelectorAll('[data-event-filter]').forEach((button)=>button.addEventListener('click',()=>{ui.eventFilter=button.dataset.eventFilter;render()}))
-  document.querySelectorAll('[data-add-event]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'event-form',eventType:button.dataset.addEvent||'sale',isEdit:false,event:{type:button.dataset.addEvent||'sale',date:todayISO(),lotId:button.dataset.eventLot||ui.selectedLotId||'',categoryId:'',toCategoryId:'',quantity:'',pricePerHead:'',counterparty:'',notes:''}};render()}))
+  document.querySelectorAll('[data-add-event]').forEach((button)=>button.addEventListener('click',()=>{const recent=state.settings?.recentEntry||{};ui.modal={type:'event-form',eventType:button.dataset.addEvent||'sale',isEdit:false,event:{type:button.dataset.addEvent||'sale',date:todayISO(),lotId:button.dataset.eventLot||ui.selectedLotId||recent.lotId||'',categoryId:recent.categoryId||'',toCategoryId:'',quantity:'',pricePerHead:'',counterparty:'',notes:''}};render()}))
   document.querySelectorAll('[data-edit-event]').forEach((button)=>button.addEventListener('click',()=>{const event=(state.animalEvents||[]).find((item)=>item.id===button.dataset.editEvent);if(!event)return;ui.modal={type:'event-form',eventType:event.type,isEdit:true,event:{...event}};render()}))
   document.querySelectorAll('[data-delete-event]').forEach((button)=>button.addEventListener('click',()=>{if(!confirm('¿Eliminar este evento? El balance se recalculará.'))return;state.animalEvents=(state.animalEvents||[]).filter((item)=>item.id!==button.dataset.deleteEvent);saveState();showToast('Evento eliminado');render()}))
   const eventType=document.getElementById('event-type')
   if(eventType) eventType.addEventListener('change',()=>{const current=collectEventForm();current.type=eventType.value;ui.modal.eventType=eventType.value;ui.modal.event=current;render()})
-  document.querySelectorAll('[data-save-event]').forEach((button)=>button.addEventListener('click',()=>{const event=collectEventForm();const error=validateEventRecord(event);if(error)return alert(error);const exists=(state.animalEvents||[]).some((item)=>item.id===event.id);state.animalEvents=exists?(state.animalEvents||[]).map((item)=>item.id===event.id?event:item):[...(state.animalEvents||[]),event];ui.modal=null;saveState();showToast(exists?'Evento actualizado':'Evento registrado');render()}))
+  document.querySelectorAll('[data-save-event]').forEach((button)=>button.addEventListener('click',()=>{const event=collectEventForm();const error=validateEventRecord(event);if(error)return alert(error);const exists=(state.animalEvents||[]).some((item)=>item.id===event.id);state.animalEvents=exists?(state.animalEvents||[]).map((item)=>item.id===event.id?event:item):[...(state.animalEvents||[]),event];state.settings=state.settings||{};state.settings.recentEntry={lotId:event.lotId,categoryId:event.categoryId,eventType:event.type};ui.modal=null;saveState();if(!exists){ui.recordConfirmation={title:`${eventTypeLabel(event.type)} · ${fmt(event.quantity)} ${categoryLookup[event.categoryId]?.short||''}`,detail:`${lotLookup[event.lotId]?.name||event.lotId} · ${compactDateLabel(event.date)}`,projected:projectedHerdTotalAt(event.date)};navigate('registrar')}else{showToast('Evento actualizado');render()}}))
 
   document.querySelectorAll('[data-archive-survey]').forEach((button)=>button.addEventListener('click',(e)=>{e.stopPropagation();const survey=state.surveys.find((item)=>item.id===button.dataset.archiveSurvey);if(!survey)return;survey.archived=!survey.archived;survey.editedAt=new Date().toISOString();if(survey.archived&&state.selectedSurveyId===survey.id)state.selectedSurveyId=latestSurvey()?.id||null;ui.modal=null;saveState();showToast(survey.archived?'Relevamiento archivado':'Relevamiento restaurado');render()}))
   document.querySelectorAll('[data-delete-survey]').forEach((button)=>button.addEventListener('click',(e)=>{e.stopPropagation();const survey=state.surveys.find((item)=>item.id===button.dataset.deleteSurvey);if(!survey)return;ui.modal={type:'confirm-delete-survey',survey};render()}))

@@ -1,7 +1,7 @@
 {
-  "version": "8.02",
+  "version": "9.00",
   "build": 801,
-  "description": "Assets activos de Campo El Rosario v8.02 — sprites direccionales con tamaño uniforme y dinámica SimFarm",
+  "description": "Assets activos de Campo El Rosario v9.00 — mapa, texturas, iconos y sprites direccionales preservados para Record & Review",
   "counts": {
     "total": 115,
     "aerialAnimalSprites": 64

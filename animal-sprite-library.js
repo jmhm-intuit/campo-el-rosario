@@ -1,5 +1,5 @@
 /**
- * Campo v8.02 animal sprite library.
+ * Campo v9.00 animal sprite library (preserved from Living Herds).
  *
  * The movement engine depends only on this interface. The current pack uses
  * directional stills already included in Campo. A future pack can add true
@@ -14,7 +14,7 @@ export const STANDARD_ANIMAL_SIZE = Object.freeze({
 })
 
 export const ANIMAL_SPRITE_LIBRARY = {
-  version: '8.02-current-assets-normalized',
+  version: '9.00-current-assets-normalized',
   directions: ['north', 'east', 'south', 'west'],
   kinds: {
     cow: {

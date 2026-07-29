@@ -1,4 +1,4 @@
-const CACHE = 'campo-v802-assets-1'
+const CACHE = 'campo-v900-assets-1'
 const CORE_ASSETS = [
   './',
   './index.html',

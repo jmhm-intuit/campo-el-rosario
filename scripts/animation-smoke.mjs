@@ -39,4 +39,4 @@ animalAnimator.setMode('paused')
 const paused={x:agent.x,y:agent.y}
 for(let i=0;i<30;i+=1){now+=100;animalAnimator.updateAgent(agent,0.1,now)}
 if(Math.hypot(agent.x-paused.x,agent.y-paused.y)>.001) throw new Error('El agente se movió en modo pausado')
-console.log('PASS  Animation smoke v8.02: movimiento, contención y pausa')
+console.log('PASS  Animation smoke v9.00: movimiento, contención y pausa')

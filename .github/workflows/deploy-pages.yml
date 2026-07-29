@@ -1,4 +1,4 @@
-name: Deploy Campo v8.02 to GitHub Pages
+name: Deploy Campo v9.00 to GitHub Pages
 
 on:
   push:

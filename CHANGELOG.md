@@ -1,35 +1,55 @@
 # Changelog
 
-## Campo v8.02 — Living Herds Refinement
+## Campo v9.00 — Record & Review
 
-### Dinámica SimFarm
+### Navigation and home
 
-- Nuevo selector de movimiento: Pausada, Suave y SimFarm.
-- SimFarm utiliza mayor velocidad, pausas más breves y caminatas más perceptibles.
-- Estados visuales: idle, giro, caminata, pastoreo y descanso.
-- Aceleración y desaceleración progresiva.
-- Oscilación sutil durante la caminata para reducir el efecto de deslizamiento.
-- Control de la proporción máxima del rodeo caminando al mismo tiempo.
-- Animales agrupados por lote y repulsión básica entre destinos.
-- Evitación de casas, píldoras y alambrados.
+- Reorganized navigation around user intentions: Inicio, Registrar, Revisar, Mapa, Histórico and Más.
+- Reduced phone navigation to four persistent destinations.
+- Redesigned the home screen around quick actions, drafts, exceptions and operational performance.
+- Preserved the animated map as the main visual overview without making it the first required action.
 
-### Tamaño de animales
+### Faster recording
 
-- Tamaño visual uniforme para vacas, toros, terneros y agrupaciones.
-- Eliminación de escalas diferentes por categoría.
-- 16 unidades en Resumen y 18 unidades en Mapa.
-- Se mantienen todos los sprites proporcionales a las cabezas registradas.
+- Added a unified Registrar hub for surveys, events and rainfall.
+- Added Quick Review and Full Count survey modes.
+- Quick Review preloads projected inventory from the latest survey plus events.
+- Added exception-first lot ordering.
+- Added lot review states: pending, confirmed and modified.
+- Added quick confirmation for unchanged lots.
+- Added persistent progress and draft recovery.
+- Added event confirmation with projected-stock feedback.
+- Added local memory for recently used lot and category.
 
-### Muestra segura
+### Field review
 
-- Espacio Muestra separado de El Rosario.
-- Cargar datos de muestra en instalaciones existentes.
-- Abrir, restablecer y eliminar la muestra.
-- Selector de espacio en la interfaz.
-- Migración segura de instalaciones v8.01 que tenían la muestra como estado inicial.
+- Added hectare-weighted pasture-condition metrics.
+- Added observed-coverage and trend indicators.
+- Added a condition × load decision matrix.
+- Added observation-freshness review.
+- Added recent field trend visualization.
 
-### Compatibilidad
+### Herd review
 
-- Clave real conservada: `campo-el-rosario-v2`.
-- Relevamientos, eventos, lluvia, histórico y balance de v8.01 preservados.
-- Nueva caché PWA: `campo-v802-assets-1`.
+- Added stock and change versus prior survey.
+- Added birth-rate and annualized-mortality metrics.
+- Added commercial net movement.
+- Added relative composition bars with quantities and percentages.
+- Added an observed reproductive flow using available records only.
+- Added mortality breakdown by category.
+
+### Herd balance
+
+- Added an authoritative balance screen.
+- Shows previous observed stock, births, purchases, sales, mortality, expected stock and current observed stock.
+- Added category-level expected-versus-observed differences.
+- Added direct actions to review events or observed stock.
+
+### Data confidence and compatibility
+
+- Preserved real data under `campo-el-rosario-v2`.
+- Preserved demonstration data under `campo-el-rosario-demo-v1`.
+- Preserved active workspace preference and SimFarm animation.
+- Added local backup timestamp.
+- Updated PWA cache to `campo-v900-assets-1`.
+- Updated workflow and validation scripts for v9.00.

@@ -1,45 +1,53 @@
-# Publicación de Campo v8.02
+# Publishing Campo v9.00
 
-## Archivo a subir
+## File to upload
 
-Subir a la raíz del repositorio:
+Upload this file to the repository root:
 
 ```text
-campo-el-rosario-v8-02-deploy.zip
+campo-el-rosario-v9-00-deploy.zip
 ```
 
-## Codespaces: descomprimir, confirmar y hacer push
+## Codespaces: unzip, commit and push
 
 ```bash
 git pull --rebase origin main
 
-rm -rf /tmp/campo-v8-02
-mkdir -p /tmp/campo-v8-02
+rm -rf /tmp/campo-v9-00
+mkdir -p /tmp/campo-v9-00
 
-unzip -q campo-el-rosario-v8-02-deploy.zip -d /tmp/campo-v8-02
+unzip -q campo-el-rosario-v9-00-deploy.zip -d /tmp/campo-v9-00
 
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v8-02-deploy.zip' \
+  ! -name 'campo-el-rosario-v9-00-deploy.zip' \
   -exec rm -rf {} +
 
-cp -a /tmp/campo-v8-02/. .
+cp -a /tmp/campo-v9-00/. .
 
-rm -rf /tmp/campo-v8-02
-rm -f campo-el-rosario-v8-02-deploy.zip
+rm -rf /tmp/campo-v9-00
+rm -f campo-el-rosario-v9-00-deploy.zip
 
 git add -A
-git commit -m "Deploy Campo v8.02"
+git commit -m "Deploy Campo v9.00"
 git push origin main
 ```
 
-## Verificación
+If Git reports `nothing to commit`, run only:
 
-1. Abrir **GitHub → Actions**.
-2. Esperar el check verde de **Deploy Campo v8.02 to GitHub Pages**.
-3. Abrir `https://jmhm-intuit.github.io/campo-el-rosario/`.
-4. Verificar que la interfaz muestre `Campo v8.02`.
-5. En Mapa, confirmar que el modo predeterminado sea `SimFarm`.
-6. En Datos y configuración, confirmar las acciones de Muestra.
+```bash
+git push origin main
+```
 
-Antes de actualizar, exportar un respaldo JSON de El Rosario. No borrar los datos del sitio del navegador.
+## Verification
+
+1. Open **GitHub → Actions**.
+2. Wait for **Deploy Campo v9.00 to GitHub Pages** to finish with a green check.
+3. Open `https://jmhm-intuit.github.io/campo-el-rosario/`.
+4. Confirm that the UI displays `Campo v9.00`.
+5. Confirm that Inicio, Registrar, Revisar and Mapa appear in the phone navigation.
+6. Open Revisar and validate Campo, Rodeo and Balance tabs.
+7. Start a Quick Review and confirm that projected values are preloaded.
+8. Confirm that existing El Rosario data and the separate Muestra workspace remain available.
+
+Before updating, export a JSON backup of El Rosario. Do not clear browser site data after deployment.

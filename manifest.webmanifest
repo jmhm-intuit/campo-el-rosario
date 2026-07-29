@@ -1,7 +1,7 @@
 {
-  "name": "Campo El Rosario v8.02",
-  "short_name": "Campo 8.02",
-  "description": "Gestión visual del rodeo con animales en movimiento, zoom, eventos, lotes y lluvias de Laprida.",
+  "name": "Campo El Rosario v9.00",
+  "short_name": "Campo 9.00",
+  "description": "Registro rápido y revisión integrada del campo, rodeo, balance, mapa y lluvias de Laprida.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
