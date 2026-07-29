@@ -1,33 +1,35 @@
 # Changelog
 
-## Campo v8.01 — Living Herds
+## Campo v8.02 — Living Herds Refinement
 
-### Animación
+### Dinámica SimFarm
 
-- Nuevo motor de movimiento continuo para los animales.
-- Los animales permanecen visibles durante todo el ciclo; no se simula movimiento ocultando y mostrando sprites.
-- Cada agente conserva una identidad estable por relevamiento, lote, categoría e índice.
-- Movimiento lento en el Resumen y comportamiento más activo en el lote seleccionado.
-- Selección automática de dirección según la trayectoria.
-- Pausa automática cuando la pestaña no está visible.
-- Compatibilidad con preferencias de movimiento reducido.
-- Control local para activar o pausar la animación.
+- Nuevo selector de movimiento: Pausada, Suave y SimFarm.
+- SimFarm utiliza mayor velocidad, pausas más breves y caminatas más perceptibles.
+- Estados visuales: idle, giro, caminata, pastoreo y descanso.
+- Aceleración y desaceleración progresiva.
+- Oscilación sutil durante la caminata para reducir el efecto de deslizamiento.
+- Control de la proporción máxima del rodeo caminando al mismo tiempo.
+- Animales agrupados por lote y repulsión básica entre destinos.
+- Evitación de casas, píldoras y alambrados.
 
-### Arquitectura futura
+### Tamaño de animales
 
-- Nueva biblioteca desacoplada de sprites.
-- Soporte preparado para secuencias futuras de `idle`, `walk`, `graze` y otros estados.
-- Precarga de los 64 assets direccionales actuales para evitar parpadeos al cambiar de dirección.
-- El reemplazo de sprites no requiere modificar la lógica de movimiento.
+- Tamaño visual uniforme para vacas, toros, terneros y agrupaciones.
+- Eliminación de escalas diferentes por categoría.
+- 16 unidades en Resumen y 18 unidades en Mapa.
+- Se mantienen todos los sprites proporcionales a las cabezas registradas.
 
-### Resumen
+### Muestra segura
 
-- Controles de zoom y desplazamiento incorporados al mapa principal.
-- Soporte de rueda, arrastre y gesto de pinza.
-- Botón para volver a ver todo el establecimiento.
+- Espacio Muestra separado de El Rosario.
+- Cargar datos de muestra en instalaciones existentes.
+- Abrir, restablecer y eliminar la muestra.
+- Selector de espacio en la interfaz.
+- Migración segura de instalaciones v8.01 que tenían la muestra como estado inicial.
 
 ### Compatibilidad
 
-- Datos sintéticos de 16 meses incluidos como estado inicial.
-- Persistencia conservada bajo `campo-el-rosario-v2`.
-- Funciones de eventos, balance, lluvia, histórico y edición de v7.01 preservadas.
+- Clave real conservada: `campo-el-rosario-v2`.
+- Relevamientos, eventos, lluvia, histórico y balance de v8.01 preservados.
+- Nueva caché PWA: `campo-v802-assets-1`.

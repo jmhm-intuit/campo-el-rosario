@@ -5,16 +5,42 @@ import {
   resolveAnimalSprite,
 } from './animal-sprite-library.js'
 
-const PREFERENCE_KEY = 'campo-animal-animation-v1'
-
-function readAnimationPreference() {
-  try { return localStorage.getItem(PREFERENCE_KEY) !== 'off' } catch { return true }
-}
-
-function writeAnimationPreference(enabled) {
-  try { localStorage.setItem(PREFERENCE_KEY, enabled ? 'on' : 'off') } catch {}
-}
+const PREFERENCE_KEY = 'campo-animal-animation-v2'
+const LEGACY_PREFERENCE_KEY = 'campo-animal-animation-v1'
 const SVG_NS = 'http://www.w3.org/2000/svg'
+
+const MODES = Object.freeze({
+  paused: {
+    id: 'paused', label: 'Pausada', glyph: '▶', speed: 0,
+    summaryActivity: 0, normalActivity: 0, selectedActivity: 0,
+    maxSummaryWalking: 0, maxNormalWalking: 0, maxSelectedWalking: 0,
+  },
+  soft: {
+    id: 'soft', label: 'Suave', glyph: '≈', speed: 1,
+    summaryActivity: 0.11, normalActivity: 0.15, selectedActivity: 0.24,
+    maxSummaryWalking: 0.12, maxNormalWalking: 0.18, maxSelectedWalking: 0.28,
+  },
+  simfarm: {
+    id: 'simfarm', label: 'SimFarm', glyph: '▶', speed: 1.28,
+    summaryActivity: 0.16, normalActivity: 0.22, selectedActivity: 0.36,
+    maxSummaryWalking: 0.16, maxNormalWalking: 0.22, maxSelectedWalking: 0.35,
+  },
+})
+const MODE_ORDER = ['paused', 'soft', 'simfarm']
+
+function readAnimationMode() {
+  try {
+    const stored = localStorage.getItem(PREFERENCE_KEY)
+    if (MODES[stored]) return stored
+    const legacy = localStorage.getItem(LEGACY_PREFERENCE_KEY)
+    if (legacy === 'off') return 'paused'
+  } catch {}
+  return 'simfarm'
+}
+
+function writeAnimationMode(mode) {
+  try { localStorage.setItem(PREFERENCE_KEY, MODES[mode] ? mode : 'simfarm') } catch {}
+}
 
 function hashString(value) {
   let hash = 2166136261
@@ -79,9 +105,18 @@ function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 }
 
+function agentIndexFromId(id) {
+  const value = Number(String(id || '').split(':').at(-1))
+  return Number.isFinite(value) ? value : 0
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value))
+}
+
 class AnimalAnimationManager {
   constructor() {
-    this.enabled = readAnimationPreference()
+    this.mode = readAnimationMode()
     this.states = new Map()
     this.maps = []
     this.frameRequest = null
@@ -91,15 +126,46 @@ class AnimalAnimationManager {
     document.addEventListener('visibilitychange', this.handleVisibility)
   }
 
+  getMode() {
+    return prefersReducedMotion() ? 'paused' : this.mode
+  }
+
+  getModeLabel() {
+    return MODES[this.getMode()]?.label || 'SimFarm'
+  }
+
+  getModeGlyph() {
+    return MODES[this.getMode()]?.glyph || '▶'
+  }
+
   isEnabled() {
-    return this.enabled && !prefersReducedMotion()
+    return this.getMode() !== 'paused'
+  }
+
+  setMode(mode) {
+    this.mode = MODES[mode] ? mode : 'simfarm'
+    writeAnimationMode(this.mode)
+    if (this.isEnabled()) this.start()
+    else this.stop()
+    for (const map of this.maps) {
+      for (const agent of map.agents) this.applyAgent(agent, true)
+    }
+    return this.mode
+  }
+
+  cycleMode() {
+    const current = this.getMode()
+    const index = MODE_ORDER.indexOf(current)
+    return this.setMode(MODE_ORDER[(index + 1) % MODE_ORDER.length])
   }
 
   toggle() {
-    this.enabled = !this.enabled
-    writeAnimationPreference(this.enabled)
-    if (this.enabled) this.start()
-    return this.enabled
+    return this.setMode(this.isEnabled() ? 'paused' : 'simfarm') !== 'paused'
+  }
+
+  stop() {
+    if (this.frameRequest) cancelAnimationFrame(this.frameRequest)
+    this.frameRequest = null
   }
 
   preload() {
@@ -130,7 +196,16 @@ class AnimalAnimationManager {
         list.push(rectFromImage(image))
         obstacles.set(image.dataset.lotId, list)
       })
-      const map = { svg, type, selectedLotId, polygons, obstacles, agents: [] }
+      svg.querySelectorAll('.map-pill-svg[data-map-lot]').forEach((pill) => {
+        try {
+          const box = pill.getBBox()
+          if (!box?.width || !box?.height) return
+          const list = obstacles.get(pill.dataset.mapLot) || []
+          list.push({ x: box.x, y: box.y, width: box.width, height: box.height })
+          obstacles.set(pill.dataset.mapLot, list)
+        } catch {}
+      })
+      const map = { svg, type, selectedLotId, polygons, obstacles, agents: [], agentsByLot: new Map() }
       svg.querySelectorAll('image.map-animal-svg[data-animal-id]').forEach((element) => {
         const id = element.dataset.animalId
         const polygon = polygons.get(element.dataset.lotId)
@@ -139,12 +214,14 @@ class AnimalAnimationManager {
         let agent = this.states.get(id)
         const initialX = Number(element.dataset.centerX)
         const initialY = Number(element.dataset.centerY)
-        const width = Number(element.dataset.animalWidth) || Number(element.getAttribute('width')) || 20
+        const width = Number(element.dataset.animalWidth) || Number(element.getAttribute('width')) || 18
         const height = Number(element.dataset.animalHeight) || Number(element.getAttribute('height')) || width
         if (!agent) {
           const random = createRandom(id)
+          const index = Number(element.dataset.agentIndex) || agentIndexFromId(id)
           agent = {
             id,
+            index,
             random,
             x: initialX,
             y: initialY,
@@ -161,7 +238,9 @@ class AnimalAnimationManager {
             state: 'idle',
             frame: 0,
             frameClock: random() * 1.2,
-            nextDecision: performance.now() + 1200 + random() * 5000,
+            bobPhase: random() * Math.PI * 2,
+            currentSpeed: 0,
+            nextDecision: performance.now() + 250 + random() * 2500,
             lastSeen: Date.now(),
           }
           this.states.set(id, agent)
@@ -176,17 +255,22 @@ class AnimalAnimationManager {
         if (!this.validPosition(agent, agent.x, agent.y)) {
           agent.x = initialX
           agent.y = initialY
+          agent.homeX = initialX
+          agent.homeY = initialY
           agent.targetX = initialX
           agent.targetY = initialY
           agent.state = 'idle'
         }
         map.agents.push(agent)
+        const lotAgents = map.agentsByLot.get(agent.lotId) || []
+        lotAgents.push(agent)
+        map.agentsByLot.set(agent.lotId, lotAgents)
         this.applyAgent(agent, true)
       })
       maps.push(map)
     })
     this.maps = maps
-    const expiration = Date.now() - 1000 * 60 * 20
+    const expiration = Date.now() - 1000 * 60 * 30
     for (const [id, state] of this.states) {
       if (!activeIds.has(id) && state.lastSeen < expiration) this.states.delete(id)
     }
@@ -194,10 +278,12 @@ class AnimalAnimationManager {
   }
 
   handleVisibility() {
-    if (!document.hidden) {
-      this.lastTime = performance.now()
-      this.start()
+    if (document.hidden) {
+      this.stop()
+      return
     }
+    this.lastTime = performance.now()
+    this.start()
   }
 
   start() {
@@ -218,53 +304,38 @@ class AnimalAnimationManager {
     if (this.maps.length && this.isEnabled()) this.frameRequest = requestAnimationFrame((nextTime) => this.tick(nextTime))
   }
 
-  movementIntensity(agent) {
-    if (agent.map.type === 'summary') return 0.28
-    if (agent.map.selectedLotId && agent.map.selectedLotId === agent.lotId) return 1
-    return 0.24
+  profile(agent) {
+    const mode = MODES[this.getMode()] || MODES.simfarm
+    const selected = Boolean(agent.map.selectedLotId && agent.map.selectedLotId === agent.lotId)
+    const activity = agent.map.type === 'summary'
+      ? mode.summaryActivity
+      : selected ? mode.selectedActivity : mode.normalActivity
+    const maxWalking = agent.map.type === 'summary'
+      ? mode.maxSummaryWalking
+      : selected ? mode.maxSelectedWalking : mode.maxNormalWalking
+    const viewSpeed = agent.map.type === 'summary' ? 0.88 : selected ? 1.05 : 0.94
+    return { mode, selected, activity, maxWalking, viewSpeed }
   }
 
   updateAgent(agent, dt, now) {
-    const intensity = this.movementIntensity(agent)
+    const profile = this.profile(agent)
+    if (!profile.mode.speed) {
+      agent.currentSpeed = 0
+      this.applyAgent(agent)
+      return
+    }
+
     if (agent.state === 'walk') {
-      const dx = agent.targetX - agent.x
-      const dy = agent.targetY - agent.y
-      const distance = Math.hypot(dx, dy)
-      const config = animalKindConfig(agent.kind)
-      const speed = config.speed * (agent.map.type === 'summary' ? 0.55 : 1)
-      const step = speed * dt
-      if (distance <= Math.max(0.8, step)) {
-        agent.x = agent.targetX
-        agent.y = agent.targetY
-        agent.state = 'idle'
-        agent.nextDecision = now + 1800 + agent.random() * 5200 / Math.max(0.25, intensity)
-      } else {
-        const nextX = agent.x + dx / distance * step
-        const nextY = agent.y + dy / distance * step
-        if (this.validPosition(agent, nextX, nextY)) {
-          agent.x = nextX
-          agent.y = nextY
-          const nextDirection = directionFromVector(dx, dy)
-          if (nextDirection !== agent.direction) {
-            agent.direction = nextDirection
-            agent.frame = 0
-            this.updateSprite(agent)
-          }
-        } else {
-          agent.state = 'idle'
-          agent.nextDecision = now + 1200 + agent.random() * 2600
-        }
-      }
-    } else if (now >= agent.nextDecision) {
-      const moveChance = 0.45 * intensity
-      if (agent.random() < moveChance && this.chooseTarget(agent)) {
+      this.advanceWalk(agent, dt, now, profile)
+    } else if (agent.state === 'turn') {
+      if (now >= agent.nextDecision) {
         agent.state = 'walk'
+        agent.currentSpeed = 0
         agent.frame = 0
         this.updateSprite(agent)
-      } else {
-        agent.state = 'idle'
-        agent.nextDecision = now + 2200 + agent.random() * 6500 / Math.max(0.25, intensity)
       }
+    } else if (now >= agent.nextDecision) {
+      this.decideNextState(agent, now, profile)
     }
 
     const frameCount = animalFrameCount(agent.kind, agent.state, agent.direction)
@@ -280,18 +351,91 @@ class AnimalAnimationManager {
     this.applyAgent(agent)
   }
 
-  chooseTarget(agent) {
+  advanceWalk(agent, dt, now, profile) {
+    const dx = agent.targetX - agent.x
+    const dy = agent.targetY - agent.y
+    const distance = Math.hypot(dx, dy)
+    const config = animalKindConfig(agent.kind)
+    const desiredSpeed = config.speed * profile.mode.speed * profile.viewSpeed
+    agent.currentSpeed += (desiredSpeed - agent.currentSpeed) * Math.min(1, dt * 4.8)
+    const step = agent.currentSpeed * dt
+    if (distance <= Math.max(0.8, step)) {
+      agent.x = agent.targetX
+      agent.y = agent.targetY
+      agent.currentSpeed = 0
+      const roll = agent.random()
+      if (roll < 0.58) this.enterState(agent, 'graze', now, 2400, 6200)
+      else if (roll < 0.72) this.enterState(agent, 'rest', now, 5500, 12000)
+      else this.enterState(agent, 'idle', now, 1200, 3600)
+      return
+    }
+    const nextX = agent.x + dx / distance * step
+    const nextY = agent.y + dy / distance * step
+    if (this.validPosition(agent, nextX, nextY)) {
+      agent.x = nextX
+      agent.y = nextY
+      const nextDirection = directionFromVector(dx, dy)
+      if (nextDirection !== agent.direction) {
+        agent.direction = nextDirection
+        agent.frame = 0
+        this.updateSprite(agent)
+      }
+    } else {
+      agent.currentSpeed = 0
+      this.enterState(agent, 'idle', now, 900, 2400)
+    }
+  }
+
+  decideNextState(agent, now, profile) {
+    const lotAgents = agent.map.agentsByLot.get(agent.lotId) || []
+    const moving = lotAgents.filter((other) => other.state === 'walk' || other.state === 'turn').length
+    const movingRatio = lotAgents.length ? moving / lotAgents.length : 0
+    const canWalk = movingRatio < profile.maxWalking
+    const roll = agent.random()
+    if (canWalk && roll < profile.activity && this.chooseTarget(agent, profile)) {
+      agent.state = 'turn'
+      agent.currentSpeed = 0
+      agent.nextDecision = now + 160 + agent.random() * 280
+      agent.frame = 0
+      this.updateSprite(agent)
+      return
+    }
+    if (roll < 0.68) {
+      this.enterState(agent, 'graze', now, 2200, 5800)
+    } else if (roll < 0.78 && agent.map.type !== 'summary') {
+      this.enterState(agent, 'rest', now, 5500, 13000)
+    } else {
+      this.enterState(agent, 'idle', now, 1000, profile.selected ? 2800 : 4400)
+    }
+  }
+
+  enterState(agent, state, now, minDuration, maxDuration) {
+    agent.state = state
+    agent.frame = 0
+    agent.nextDecision = now + minDuration + agent.random() * Math.max(0, maxDuration - minDuration)
+    this.updateSprite(agent)
+  }
+
+  chooseTarget(agent, profile) {
     const { bounds } = agent.polygon
     const span = Math.max(12, Math.min(bounds.maxX - bounds.minX, bounds.maxY - bounds.minY))
-    const maxDistance = span * (agent.map.type === 'summary' ? 0.13 : 0.24)
-    const minDistance = Math.min(8, maxDistance * 0.35)
-    for (let attempt = 0; attempt < 36; attempt += 1) {
-      const angle = agent.random() * Math.PI * 2
-      const distance = minDistance + agent.random() * Math.max(2, maxDistance - minDistance)
+    const maxDistance = span * (agent.map.type === 'summary' ? 0.11 : profile.selected ? 0.24 : 0.17)
+    const minDistance = Math.max(5, maxDistance * 0.36)
+    const homeRadius = span * (agent.map.type === 'summary' ? 0.22 : profile.selected ? 0.38 : 0.29)
+    for (let attempt = 0; attempt < 42; attempt += 1) {
+      let angle = agent.random() * Math.PI * 2
+      let distance = minDistance + agent.random() * Math.max(2, maxDistance - minDistance)
+      const fromHome = Math.hypot(agent.x - agent.homeX, agent.y - agent.homeY)
+      if (fromHome > homeRadius * 0.76) {
+        const towardHome = Math.atan2(agent.homeY - agent.y, agent.homeX - agent.x)
+        angle = towardHome + (agent.random() - 0.5) * 1.1
+        distance = Math.min(distance, Math.max(5, fromHome * 0.5))
+      }
       const x = agent.x + Math.cos(angle) * distance
       const y = agent.y + Math.sin(angle) * distance
       if (!this.validPosition(agent, x, y)) continue
-      if (agent.map.agents.some((other) => other !== agent && other.lotId === agent.lotId && Math.hypot(other.x - x, other.y - y) < Math.max(4, agent.width * 0.42))) continue
+      const minimumSpacing = Math.max(3.5, agent.width * 0.52)
+      if ((agent.map.agentsByLot.get(agent.lotId) || []).some((other) => other !== agent && Math.hypot(other.x - x, other.y - y) < minimumSpacing)) continue
       agent.targetX = x
       agent.targetY = y
       agent.direction = directionFromVector(x - agent.x, y - agent.y)
@@ -308,7 +452,7 @@ class AnimalAnimationManager {
       [x, y - radiusY], [x, y + radiusY],
     ]
     if (!samples.every((point) => pointInPolygon(point, agent.polygon.points))) return false
-    if (agent.obstacles.some((rect) => pointInRect(x, y, rect, Math.max(3, agent.width * 0.18)))) return false
+    if (agent.obstacles.some((rect) => pointInRect(x, y, rect, Math.max(3, agent.width * 0.22)))) return false
     return true
   }
 
@@ -327,10 +471,15 @@ class AnimalAnimationManager {
     const element = agent.element
     if (!element || !element.isConnected) return
     if (forceSprite) this.updateSprite(agent)
+    const now = performance.now() / 1000
+    const bob = agent.state === 'walk'
+      ? Math.sin(now * 12 + agent.bobPhase) * 0.55
+      : agent.state === 'graze' ? Math.sin(now * 3.2 + agent.bobPhase) * 0.12 : 0
     element.setAttribute('x', (agent.x - agent.width / 2).toFixed(2))
     element.setAttribute('y', (agent.y - agent.height / 2).toFixed(2))
     element.setAttribute('width', agent.width.toFixed(2))
     element.setAttribute('height', agent.height.toFixed(2))
+    element.setAttribute('transform', bob ? `translate(0 ${bob.toFixed(2)})` : '')
     element.dataset.animationState = agent.state
     element.dataset.direction = agent.direction
     element.style.opacity = '1'

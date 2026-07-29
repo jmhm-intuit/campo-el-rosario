@@ -8,7 +8,7 @@ const fail = (message) => { failed = true; console.error(`FAIL  ${message}`) }
 
 const required = [
   'index.html','app.js','animal-animation.js','animal-sprite-library.js','styles.css',
-  'manifest.webmanifest','VERSION.json','sw.js','.nojekyll',
+  'manifest.webmanifest','VERSION.json','sw.js','.nojekyll','scripts/animation-smoke.mjs',
   '.github/workflows/deploy-pages.yml','data/sample-v8.js','data/campo-muestra-16-meses-v8.json',
   'assets/map/el-rosario-map.png','assets/geometry/polygons-reviewed-final.json',
   'assets/icons/icon-home-house.png','assets/icons/icon-register-animals.png',
@@ -30,15 +30,18 @@ const workflow = fs.readFileSync(path.join(root,'.github/workflows/deploy-pages.
 const geometry = JSON.parse(fs.readFileSync(path.join(root,'assets/geometry/polygons-reviewed-final.json'),'utf8'))
 const sample = JSON.parse(fs.readFileSync(path.join(root,'data/campo-muestra-16-meses-v8.json'),'utf8'))
 
-if (version.version !== '8.01' || version.build !== 801) fail('VERSION.json no identifica Campo v8.01 build 801')
-if (version.storageKey !== 'campo-el-rosario-v2') fail('Cambió la clave de persistencia')
-if (version.cache !== 'campo-v801-assets-1') fail('Caché incorrecta')
-if (!html.includes('Campo v8.01') || !html.includes('data/sample-v8.js')) fail('index.html no carga v8.01 y la muestra')
-if (!js.includes("const APP_VERSION_LABEL = '8.01'")) fail('app.js no identifica v8.01')
+if (version.version !== '8.02' || version.build !== 802) fail('VERSION.json no identifica Campo v8.02 build 802')
+if (version.storageKey !== 'campo-el-rosario-v2') fail('Cambió la clave real de persistencia')
+if (version.demoStorageKey !== 'campo-el-rosario-demo-v1') fail('Falta clave separada de la muestra')
+if (version.cache !== 'campo-v802-assets-1') fail('Caché incorrecta')
+if (!html.includes('Campo v8.02') || !html.includes('data/sample-v8.js')) fail('index.html no carga v8.02 y la muestra')
+if (!js.includes("const APP_VERSION_LABEL = '8.02'")) fail('app.js no identifica v8.02')
 if (!js.includes("const STORAGE_KEY = 'campo-el-rosario-v2'")) fail('app.js no conserva storage key')
-if (!sw.includes('campo-v801-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js') || !sw.includes('./data/sample-v8.js')) fail('Service worker incompleto')
+if (!js.includes("const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'")) fail('app.js no separa datos de muestra')
+if (!sw.includes('campo-v802-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js') || !sw.includes('./data/sample-v8.js')) fail('Service worker incompleto')
 if (!workflow.includes('node-version: 24')) fail('Workflow no usa Node 24')
-if (!css.includes('Campo v8.01') || !css.includes('v801-map-svg')) fail('CSS v8.01 ausente')
+if (!workflow.includes('animation-smoke.mjs')) fail('Workflow no ejecuta la prueba de animación')
+if (!css.includes('Campo v8.02') || !css.includes('v802-map-svg')) fail('CSS v8.02 ausente')
 if (!failed) pass('Versión, persistencia, caché y workflow validados')
 
 function pngInfo(file) {
@@ -57,19 +60,24 @@ if (!Array.isArray(sample.surveys) || sample.surveys.length !== 16) fail('La mue
 if (!Array.isArray(sample.animalEvents) || sample.animalEvents.length < 40) fail('La muestra no contiene eventos detallados suficientes')
 if (!sample.surveys.every(s=>s.nombre==='Muestra')) fail('Hay relevamientos sin Nombre=Muestra')
 if (!sample.animalEvents.every(e=>e.nombre==='Muestra')) fail('Hay eventos sin Nombre=Muestra')
-if (!failed) pass(`Muestra preestablecida: ${sample.surveys.length} relevamientos y ${sample.animalEvents.length} eventos`)
+if (!failed) pass(`Muestra disponible: ${sample.surveys.length} relevamientos y ${sample.animalEvents.length} eventos`)
 
 for (const token of [
   'class AnimalAnimationManager','requestAnimationFrame','chooseTarget','validPosition',
-  'animationState','PREFERENCE_KEY','pointInPolygon',
-]) if (!animation.includes(token)) fail(`Falta lógica de animación: ${token}`)
-for (const token of ['ANIMAL_SPRITE_LIBRARY','resolveAnimalSprite','states: {}','allAnimalSpritePaths']) if (!library.includes(token)) fail(`Falta interfaz intercambiable de sprites: ${token}`)
-for (const token of ['data-animal-id','data-map-zoom-in="summary"','data-animation-toggle','currentSummaryViewBox','zoomSummaryMap','animalAnimator.mount']) if (!js.includes(token)) fail(`Falta integración v8.01: ${token}`)
-if (!failed) pass('Movimiento continuo, biblioteca intercambiable y zoom del resumen presentes')
+  "simfarm",'maxSelectedWalking','cycleMode','advanceWalk','decideNextState','agentsByLot',
+]) if (!animation.includes(token)) fail(`Falta dinámica SimFarm: ${token}`)
+for (const token of ['ANIMAL_SPRITE_LIBRARY','STANDARD_ANIMAL_SIZE','resolveAnimalSprite','scale: 1','allAnimalSpritePaths']) if (!library.includes(token)) fail(`Falta interfaz uniforme de sprites: ${token}`)
+for (const token of [
+  'data-animal-id','data-agent-index','data-map-zoom-in="summary"','data-animation-mode',
+  'currentSummaryViewBox','zoomSummaryMap','animalAnimator.mount','demoWorkspaceInstalled',
+  'installDemoWorkspace','removeDemoWorkspace','switchWorkspace','data-install-demo-workspace',
+]) if (!js.includes(token)) fail(`Falta integración v8.02: ${token}`)
+if (!js.includes('const width = spriteWidth') || !js.includes('const height = spriteWidth')) fail('Los animales no usan tamaño uniforme')
+if (!failed) pass('Dinámica SimFarm, tamaño uniforme y espacio de muestra presentes')
 
 const spriteManifest = JSON.parse(fs.readFileSync(path.join(root,'assets/animals/v601/manifest.json'),'utf8'))
 if (spriteManifest.count !== 64 || !Array.isArray(spriteManifest.sprites) || spriteManifest.sprites.length !== 64) fail('La biblioteca actual no contiene 64 sprites')
 else pass('64 sprites direccionales reutilizados')
 
 if (failed) process.exit(1)
-console.log('Campo v8.01 preflight complete')
+console.log('Campo v8.02 preflight complete')

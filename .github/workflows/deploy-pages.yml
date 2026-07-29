@@ -1,4 +1,4 @@
-name: Deploy Campo v8.01 to GitHub Pages
+name: Deploy Campo v8.02 to GitHub Pages
 
 on:
   push:
@@ -39,7 +39,9 @@ jobs:
         run: node scripts/preflight.mjs
 
       - name: Smoke test
-        run: node scripts/smoke.mjs
+        run: |
+          node scripts/smoke.mjs
+          node scripts/animation-smoke.mjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

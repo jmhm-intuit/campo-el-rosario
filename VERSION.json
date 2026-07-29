@@ -1,10 +1,11 @@
 {
   "name": "Campo El Rosario",
-  "version": "8.01",
-  "build": 801,
+  "version": "8.02",
+  "build": 802,
   "releaseDate": "2026-07-28",
   "storageKey": "campo-el-rosario-v2",
-  "cache": "campo-v801-assets-1",
-  "sample": "16 months / Muestra",
-  "animationEngine": "continuous-directional-v1"
+  "demoStorageKey": "campo-el-rosario-demo-v1",
+  "cache": "campo-v802-assets-1",
+  "sample": "optional separate workspace / 16 months",
+  "animationEngine": "simfarm-persistent-agents-v2"
 }

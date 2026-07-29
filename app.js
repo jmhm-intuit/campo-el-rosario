@@ -1,10 +1,13 @@
 import { animalAnimator } from './animal-animation.js'
-import { resolveAnimalSprite } from './animal-sprite-library.js'
+import { resolveAnimalSprite, STANDARD_ANIMAL_SIZE } from './animal-sprite-library.js'
 
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 801
-const APP_VERSION_LABEL = '8.01'
+const APP_VERSION = 802
+const APP_VERSION_LABEL = '8.02'
 const RELEASE_DATE = '2026-07-28'
+const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'
+const ACTIVE_WORKSPACE_KEY = 'campo-el-rosario-active-workspace-v1'
+const WORKSPACES = Object.freeze({ REAL: 'real', DEMO: 'demo' })
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
 
@@ -475,12 +478,13 @@ const monthKey = (date) => String(date).slice(0, 7)
 const monthLabel = (period) => new Intl.DateTimeFormat('es-AR', { month: 'long', year: 'numeric' }).format(new Date(`${period}-01T12:00:00`))
 const todayISO = () => new Date().toISOString().slice(0, 10)
 
-function createInitialState() {
+function createSampleState() {
   if (window.CAMPO_SAMPLE_STATE) {
     const sample = JSON.parse(JSON.stringify(window.CAMPO_SAMPLE_STATE))
     sample.version = APP_VERSION
     sample.sampleMode = true
-    sample.settings = { userName: 'Muestra', establishment: 'El Rosario', introSeen: false, showArchived: false, ...(sample.settings || {}) }
+    sample.nombre = 'Muestra'
+    sample.settings = { userName: 'Muestra', establishment: 'Muestra · 16 meses', introSeen: false, showArchived: false, ...(sample.settings || {}) }
     sample.updatedAt = new Date().toISOString()
     sample.lastSavedAt = sample.updatedAt
     return sample
@@ -496,9 +500,95 @@ function createInitialState() {
   return {
     nombre: 'Muestra', version: APP_VERSION, selectedSurveyId: survey.id, surveys: [survey], animalEvents: [], sampleMode: true,
     rain: [{ period: '2026-07', millimeters: 82 }], rainEntries: [], draft: null,
-    settings: { nombre: 'Muestra', userName: 'Muestra', establishment: 'El Rosario', introSeen: false, showArchived: false },
+    settings: { nombre: 'Muestra', userName: 'Muestra', establishment: 'Muestra · 16 meses', introSeen: false, showArchived: false },
     updatedAt: new Date().toISOString(), lastSavedAt: new Date().toISOString(),
   }
+}
+
+function createEmptyState() {
+  const now = new Date().toISOString()
+  return {
+    nombre: 'El Rosario', version: APP_VERSION, selectedSurveyId: null, surveys: [], animalEvents: [], sampleMode: false,
+    rain: [], rainEntries: [], draft: null,
+    settings: { nombre: 'El Rosario', userName: 'Usuario', establishment: 'El Rosario', introSeen: false, showArchived: false },
+    updatedAt: now, lastSavedAt: now,
+  }
+}
+
+function storageKeyForWorkspace(workspace = activeWorkspace) {
+  return workspace === WORKSPACES.DEMO ? DEMO_STORAGE_KEY : STORAGE_KEY
+}
+
+function demoWorkspaceInstalled() {
+  try { return Boolean(localStorage.getItem(DEMO_STORAGE_KEY)) } catch { return false }
+}
+
+function readActiveWorkspacePreference() {
+  try {
+    const stored = localStorage.getItem(ACTIVE_WORKSPACE_KEY)
+    if (stored === WORKSPACES.DEMO || stored === WORKSPACES.REAL) return stored
+  } catch {}
+  return null
+}
+
+function writeActiveWorkspacePreference(workspace) {
+  try { localStorage.setItem(ACTIVE_WORKSPACE_KEY, workspace) } catch {}
+}
+
+function installDemoWorkspace({ reset = false } = {}) {
+  if (!reset && demoWorkspaceInstalled()) return
+  const sample = migrateState(createSampleState()) || createSampleState()
+  sample.sampleMode = true
+  sample.nombre = 'Muestra'
+  try { localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(sample)) } catch {}
+}
+
+function bootstrapWorkspaces() {
+  let preferred = readActiveWorkspacePreference()
+  let realRaw = null
+  let demoRaw = null
+  try {
+    realRaw = localStorage.getItem(STORAGE_KEY)
+    demoRaw = localStorage.getItem(DEMO_STORAGE_KEY)
+  } catch {}
+
+  if (realRaw) {
+    try {
+      const legacy = migrateState(JSON.parse(realRaw))
+      if (legacy?.sampleMode && !demoRaw) {
+        localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(legacy))
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(createEmptyState()))
+        demoRaw = JSON.stringify(legacy)
+        preferred = WORKSPACES.DEMO
+      }
+    } catch {}
+  } else {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(createEmptyState())) } catch {}
+  }
+
+  if (!realRaw && !demoRaw) {
+    installDemoWorkspace({ reset: true })
+    preferred = WORKSPACES.DEMO
+  }
+  if (preferred === WORKSPACES.DEMO && !demoWorkspaceInstalled()) preferred = WORKSPACES.REAL
+  if (!preferred) preferred = WORKSPACES.REAL
+  writeActiveWorkspacePreference(preferred)
+  return preferred
+}
+
+function loadWorkspaceState(workspace) {
+  try {
+    const raw = localStorage.getItem(storageKeyForWorkspace(workspace))
+    if (!raw) return workspace === WORKSPACES.DEMO ? createSampleState() : createEmptyState()
+    const migrated = migrateState(JSON.parse(raw))
+    if (migrated) {
+      migrated.sampleMode = workspace === WORKSPACES.DEMO
+      migrated.nombre = workspace === WORKSPACES.DEMO ? 'Muestra' : (migrated.nombre === 'Muestra' ? 'El Rosario' : migrated.nombre || 'El Rosario')
+      migrated.settings = { ...(migrated.settings || {}), establishment: workspace === WORKSPACES.DEMO ? 'Muestra · 16 meses' : (migrated.settings?.establishment || 'El Rosario') }
+      return migrated
+    }
+  } catch {}
+  return workspace === WORKSPACES.DEMO ? createSampleState() : createEmptyState()
 }
 
 function migrateState(parsed) {
@@ -560,17 +650,10 @@ function migrateState(parsed) {
 }
 
 function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return createInitialState()
-    const parsed = JSON.parse(raw)
-    const migrated = migrateState(parsed)
-    return migrated || createInitialState()
-  } catch {
-    return createInitialState()
-  }
+  return loadWorkspaceState(activeWorkspace)
 }
 
+let activeWorkspace = bootstrapWorkspaces()
 let state = loadState()
 let ui = {
   view: location.hash.replace('#/', '') || 'resumen',
@@ -595,7 +678,44 @@ function saveState() {
   state.version = APP_VERSION
   state.updatedAt = new Date().toISOString()
   state.lastSavedAt = state.updatedAt
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  state.sampleMode = activeWorkspace === WORKSPACES.DEMO
+  localStorage.setItem(storageKeyForWorkspace(), JSON.stringify(state))
+}
+
+function workspaceLabel(workspace = activeWorkspace) {
+  return workspace === WORKSPACES.DEMO ? 'Muestra · 16 meses' : (state.settings?.establishment || 'El Rosario')
+}
+
+function resetWorkspaceUi() {
+  ui.selectedLotId = null
+  ui.mapViewBox = null
+  ui.summaryViewBox = null
+  ui.mapInspectorTab = 'actual'
+  ui.modal = null
+  ui.wizardStep = state.draft ? state.draft.step || 1 : 1
+  ui.rainYear = Number((selectedSurvey()?.date || '2026-01-01').slice(0, 4))
+  ui.rainEndPeriod = monthKey(selectedSurvey()?.date || todayISO())
+}
+
+function switchWorkspace(workspace) {
+  if (![WORKSPACES.REAL, WORKSPACES.DEMO].includes(workspace)) return
+  if (workspace === WORKSPACES.DEMO && !demoWorkspaceInstalled()) installDemoWorkspace({ reset: true })
+  saveState()
+  activeWorkspace = workspace
+  writeActiveWorkspacePreference(workspace)
+  state = loadWorkspaceState(workspace)
+  resetWorkspaceUi()
+  render()
+}
+
+function removeDemoWorkspace() {
+  try { localStorage.removeItem(DEMO_STORAGE_KEY) } catch {}
+  if (activeWorkspace === WORKSPACES.DEMO) {
+    activeWorkspace = WORKSPACES.REAL
+    writeActiveWorkspacePreference(activeWorkspace)
+    state = loadWorkspaceState(activeWorkspace)
+    resetWorkspaceUi()
+  }
 }
 
 function selectedSurvey() {
@@ -1137,11 +1257,14 @@ function navItemAsset(view, label, assetPath) {
 function renderShell(content, title, subtitle, action = '') {
   const latest = latestSurvey()
   const dataDate = latest ? compactDateLabel(latest.date) : 'Sin datos'
-  const sampleBadge = state.sampleMode ? '<span class="sample-badge">MODO MUESTRA</span>' : ''
+  const sampleBadge = activeWorkspace === WORKSPACES.DEMO ? '<span class="sample-badge">MODO MUESTRA</span>' : ''
+  const workspaceSelector = demoWorkspaceInstalled()
+    ? `<label class="workspace-switch"><span>Espacio</span><select data-workspace-switch aria-label="Cambiar espacio"><option value="${WORKSPACES.REAL}" ${activeWorkspace===WORKSPACES.REAL?'selected':''}>El Rosario</option><option value="${WORKSPACES.DEMO}" ${activeWorkspace===WORKSPACES.DEMO?'selected':''}>Muestra · 16 meses</option></select></label>`
+    : ''
   return `
     <div class="app-shell ${ui.view === 'relevamiento' ? 'survey-mode' : ''}">
       <aside class="sidebar">
-        <div class="brand"><img src="./assets/${UI_ASSETS.home}" alt="Casa principal de El Rosario"><div><strong>CAMPO</strong><span>El Rosario</span></div></div>
+        <div class="brand"><img src="./assets/${UI_ASSETS.home}" alt="Casa principal de El Rosario"><div><strong>CAMPO</strong><span>${esc(workspaceLabel())}</span></div></div>
         ${sampleBadge}
         <nav>
           ${navItemAsset('resumen', 'Resumen', UI_ASSETS.home)}
@@ -1151,16 +1274,16 @@ function renderShell(content, title, subtitle, action = '') {
           ${navItem('lluvias', 'Lluvias', 'rain')}
           ${navItem('historico', 'Histórico', 'history')}
           ${navItem('intro', 'Introducción', 'info')}
-          ${navItem('datos', 'Exportar y respaldo', 'download')}
+          ${navItem('datos', 'Datos y configuración', 'download')}
         </nav>
-        <div class="sidebar-card"><small>Datos más recientes</small><strong>${latest ? dateLabel(latest.date) : 'Sin datos'}</strong><span>Los datos se guardan en este dispositivo.</span></div>
+        <div class="sidebar-card"><small>Espacio activo</small><strong>${esc(workspaceLabel())}</strong><span>${latest ? `Datos al ${compactDateLabel(latest.date)}` : 'Sin relevamientos guardados'}</span></div>
         <div class="sidebar-footer"><span>Campo v${APP_VERSION_LABEL}</span><span>Datos: ${dataDate}</span></div>
       </aside>
       <div class="content-shell">
         <header class="topbar">
           <button class="mobile-menu" data-toggle-nav aria-label="Menú">${icon('menu', 24)}</button>
           <div><h1>${title}</h1><p>${subtitle}</p></div>
-          <div class="topbar-actions">${sampleBadge}<span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos más recientes ${dataDate}</small></span>${action}</div>
+          <div class="topbar-actions">${workspaceSelector}${sampleBadge}<span class="release-status"><b>Campo v${APP_VERSION_LABEL}</b><small>Datos más recientes ${dataDate}</small></span>${action}</div>
         </header>
         <main class="page">${content}</main>
       </div>
@@ -1426,21 +1549,19 @@ function conditionShortCode(stateId) {
 function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition, surveyId) {
   const count = spriteCountForLot(lot, metric, compact)
   if (!count) return ''
-  const area = polygonArea(parseLotPoints(lot))
-  const calculated = Math.sqrt(Math.max(1, area / count)) * (compact ? .45 : .52)
-  const spriteWidth = Math.max(compact ? 10 : 14, Math.min(compact ? 22 : 31, calculated))
+  const spriteWidth = compact ? STANDARD_ANIMAL_SIZE.summary : STANDARD_ANIMAL_SIZE.full
   const positions = spritePositions(lot, count, spriteWidth)
   const kinds = allocateVisualKinds(lotEntry, positions.length)
   const directions = ['north', 'east', 'south', 'west']
   return positions.map((position, index) => {
     const kind = kinds[index] || 'cow'
-    const direction = directions[Math.floor(seededNumber(`${lot.id}-${index}-direction-v801`) * directions.length) % directions.length]
-    const variant = Math.floor(seededNumber(`${lot.id}-${index}-asset-v801`) * 4) % 4
+    const direction = directions[Math.floor(seededNumber(`${lot.id}-${index}-direction-v802`) * directions.length) % directions.length]
+    const variant = Math.floor(seededNumber(`${lot.id}-${index}-asset-v802`) * 4) % 4
     const asset = resolveAnimalSprite({ kind, direction, variant, state: 'idle', frame: 0 })
-    const width = kind === 'calf' ? spriteWidth * .78 : kind === 'bull' ? spriteWidth * 1.08 : spriteWidth
-    const height = width
+    const width = spriteWidth
+    const height = spriteWidth
     const agentId = `${surveyId || 'survey'}:${lot.id}:${kind}:${index}`
-    return `<image class="map-animal-svg animated-animal ${kind} direction-${direction} state-${condition?.stateId || 'no-observado'}" href="${asset}" x="${(position.x - width / 2).toFixed(2)}" y="${(position.y - height / 2).toFixed(2)}" width="${width.toFixed(2)}" height="${height.toFixed(2)}" preserveAspectRatio="xMidYMid meet" data-animal-id="${esc(agentId)}" data-lot-id="${lot.id}" data-kind="${kind}" data-direction="${direction}" data-variant="${variant}" data-center-x="${position.x.toFixed(2)}" data-center-y="${position.y.toFixed(2)}" data-animal-width="${width.toFixed(2)}" data-animal-height="${height.toFixed(2)}" />`
+    return `<image class="map-animal-svg animated-animal ${kind} direction-${direction} state-${condition?.stateId || 'no-observado'}" href="${asset}" x="${(position.x - width / 2).toFixed(2)}" y="${(position.y - height / 2).toFixed(2)}" width="${width.toFixed(2)}" height="${height.toFixed(2)}" preserveAspectRatio="xMidYMid meet" data-animal-id="${esc(agentId)}" data-agent-index="${index}" data-lot-id="${lot.id}" data-kind="${kind}" data-direction="${direction}" data-variant="${variant}" data-center-x="${position.x.toFixed(2)}" data-center-y="${position.y.toFixed(2)}" data-animal-width="${width.toFixed(2)}" data-animal-height="${height.toFixed(2)}" />`
   }).join('')
 }
 
@@ -1556,11 +1677,13 @@ function renderMap(survey, compact = false) {
   const animals = (survey.lots || []).filter((entry) => metrics.byLot[entry.lotId]?.animals > 0).map((entry) => renderHerdSpritesHtml(entry, lotLookup[entry.lotId], compact, metrics.byLot[entry.lotId], conditions[entry.lotId], survey.id)).join('')
   const pills = compact ? '' : LOTS.map((lot) => renderMapPillSvg(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], selected === lot.id, viewBox)).join('')
   const hitAreas = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
-  const svg = `<svg class="map-canvas v801-map-svg ${compact?'summary':'zoomable'}" data-map-svg="${compact?'summary':'full'}" data-selected-lot-id="${selected || ''}" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario"><defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="map-animal-layer">${animals}</g><g class="map-house-layer">${renderMapHousesSvg()}</g><g class="map-pill-layer">${pills}</g><g class="interaction-layer">${hitAreas}</g></svg>`
-  const animationLabel = animalAnimator.isEnabled() ? 'Pausar animación' : 'Activar animación'
-  const animationGlyph = animalAnimator.isEnabled() ? '⏸' : '▶'
-  if (compact) return `<div class="map-zoom-shell summary-zoom-shell"><div class="ranch-map compact summary-map v801-summary-map">${svg}</div><div class="map-zoom-controls summary-map-controls"><button data-map-zoom-in="summary" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="summary" title="Alejar">${icon('zoomOut',18)}</button><button data-map-view-all="summary" title="Ver todo">Todo</button><button class="animation-toggle ${animalAnimator.isEnabled()?'active':''}" data-animation-toggle title="${animationLabel}" aria-label="${animationLabel}">${animationGlyph}</button></div></div>`
-  return `<div class="map-zoom-shell"><div class="ranch-map full full-map v801-full-map">${svg}</div><div class="map-zoom-controls full-map-controls"><button data-map-zoom-in="full" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="full" title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all="full" title="Ver todo">Todo</button><button class="animation-toggle ${animalAnimator.isEnabled()?'active':''}" data-animation-toggle title="${animationLabel}" aria-label="${animationLabel}">${animationGlyph}</button></div><div class="map-zoom-hint">Arrastrá para mover · rueda, gesto o botones para zoom</div></div>`
+  const svg = `<svg class="map-canvas v802-map-svg ${compact?'summary':'zoomable'}" data-map-svg="${compact?'summary':'full'}" data-selected-lot-id="${selected || ''}" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario"><defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="map-animal-layer">${animals}</g><g class="map-house-layer">${renderMapHousesSvg()}</g><g class="map-pill-layer">${pills}</g><g class="interaction-layer">${hitAreas}</g></svg>`
+  const animationMode = animalAnimator.getMode()
+  const animationLabel = `Animación: ${animalAnimator.getModeLabel()}`
+  const animationGlyph = animalAnimator.getModeGlyph()
+  const animationButton = `<button class="animation-toggle mode-${animationMode} ${animalAnimator.isEnabled()?'active':''}" data-animation-mode title="${animationLabel}. Tocá para cambiar" aria-label="${animationLabel}"><span>${animationGlyph}</span><small>${animalAnimator.getModeLabel()}</small></button>`
+  if (compact) return `<div class="map-zoom-shell summary-zoom-shell"><div class="ranch-map compact summary-map v802-summary-map">${svg}</div><div class="map-zoom-controls summary-map-controls"><button data-map-zoom-in="summary" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="summary" title="Alejar">${icon('zoomOut',18)}</button><button data-map-view-all="summary" title="Ver todo">Todo</button>${animationButton}</div></div>`
+  return `<div class="map-zoom-shell"><div class="ranch-map full full-map v802-full-map">${svg}</div><div class="map-zoom-controls full-map-controls"><button data-map-zoom-in="full" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="full" title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all="full" title="Ver todo">Todo</button>${animationButton}</div><div class="map-zoom-hint">Arrastrá para mover · zoom táctil · Animación ${animalAnimator.getModeLabel()}</div></div>`
 }
 
 
@@ -1743,7 +1866,8 @@ function renderModal() {
   if (ui.modal.type === 'rain-manager') return renderRainModal()
   if (ui.modal.type === 'confirm-delete-survey') return `<div class="modal-backdrop"><div class="modal small"><span class="eyebrow">Eliminación permanente</span><h2>Eliminar ${compactDateLabel(ui.modal.survey?.date)}</h2><p>Esta acción recalculará comparaciones y balances. Se recomienda exportar un respaldo antes de continuar.</p><label class="confirm-input"><span>Escribí ELIMINAR para confirmar</span><input id="delete-survey-confirm" autocomplete="off"></label><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-delete-survey="${ui.modal.survey?.id}">Eliminar definitivamente</button></div></div></div>`
   if (ui.modal.type === 'zero-rain-confirm') return `<div class="modal-backdrop"><div class="modal small"><span class="eyebrow">Confirmación requerida</span><h2>Ingresaste 0 mm</h2><p>¿Realmente no llovió en ${monthLabel(ui.modal.period)} o querés dejar el mes sin información?</p><div class="modal-actions stacked"><button class="btn primary" data-confirm-zero-rain>Fue realmente 0 mm</button><button class="btn secondary" data-zero-rain-no-info>No hay información</button><button class="btn ghost" data-close-modal>Cancelar</button></div></div></div>`
-  if (ui.modal.type === 'confirm-reset') return `<div class="modal-backdrop"><div class="modal small"><button class="modal-close" data-close-modal>${icon('close')}</button><h2>Restablecer datos de demostración</h2><p>Se eliminarán los datos guardados en este dispositivo y se volverá a cargar la muestra de 16 meses.</p><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-reset>Restablecer</button></div></div></div>`
+  if (ui.modal.type === 'confirm-reset-demo') return `<div class="modal-backdrop"><div class="modal small"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Espacio de demostración</span><h2>Restablecer la Muestra</h2><p>Se recuperarán los 16 meses sintéticos originales. El Rosario y sus datos reales no se modificarán.</p><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-reset-demo>Restablecer Muestra</button></div></div></div>`
+  if (ui.modal.type === 'confirm-delete-demo') return `<div class="modal-backdrop"><div class="modal small"><button class="modal-close" data-close-modal>${icon('close')}</button><span class="eyebrow">Espacio de demostración</span><h2>Eliminar datos de muestra</h2><p>Se eliminará únicamente la Muestra de 16 meses de este dispositivo. Los datos de El Rosario permanecerán intactos.</p><div class="modal-actions"><button class="btn ghost" data-close-modal>Cancelar</button><button class="btn danger" data-confirm-delete-demo>Eliminar Muestra</button></div></div></div>`
   return ''
 }
 
@@ -1877,7 +2001,7 @@ function renderEventModal() {
 
 function renderIntroductionPage() {
   const quickLinks = `<div class="intro-quick-links"><button data-nav="eventos">${icon('event',20)} Eventos</button><button data-nav="mapa">${icon('map',20)} Mapa</button><button data-nav="lluvias">${icon('rain',20)} Lluvias</button><button data-nav="historico">${icon('history',20)} Histórico</button><button data-nav="datos">${icon('download',20)} Respaldo</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v8.01</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v8.01</h3><ul><li>Rodeos vivos con movimiento continuo.</li><li>Animación estable sin apariciones ni desapariciones.</li><li>Zoom y desplazamiento también en el resumen.</li><li>Motor desacoplado para mejorar sprites en futuras versiones.</li><li>Datos sintéticos de 16 meses preestablecidos.</li><li>Todos los eventos y balances de v7.01.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v8.02</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v8.02</h3><ul><li>Movimiento SimFarm más visible, persistente y controlable.</li><li>Animales del mismo tamaño con movimientos cortos y naturales.</li><li>Zoom y desplazamiento también en el resumen.</li><li>Motor desacoplado para mejorar sprites en futuras versiones.</li><li>Datos de muestra instalables y separados de El Rosario.</li><li>Todos los eventos y balances de v7.01.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
   return renderShell(content,'Introducción','Cómo usar Campo y qué mejoras están por venir')
 }
 
@@ -1909,8 +2033,13 @@ function renderSurveyDetailModal() {
 
 function renderDataPage() {
   const survey = selectedSurvey(), latest = latestSurvey()
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial completo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>${state.sampleMode?'Datos sintéticos identificados como Muestra.':'Datos locales del usuario.'}</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos de muestra</h2><p>Podés restablecer los 16 meses sintéticos preestablecidos para probar todas las funciones de v8.01.</p><button class="btn danger-outline" data-reset-demo>Restablecer Muestra</button></article></section>`
-  return renderShell(content,'Exportar y respaldo','Protegé relevamientos, eventos y lluvia')
+  const installed = demoWorkspaceInstalled()
+  const isDemo = activeWorkspace === WORKSPACES.DEMO
+  const demoControls = installed
+    ? `<div class="stack-buttons"><button class="btn primary" data-switch-workspace="${isDemo ? WORKSPACES.REAL : WORKSPACES.DEMO}">${isDemo ? 'Volver a El Rosario' : 'Abrir Muestra'}</button><button class="btn secondary" data-reset-demo-workspace>Restablecer Muestra</button><button class="btn danger-outline" data-delete-demo-workspace>Eliminar Muestra</button></div>`
+    : `<div class="stack-buttons"><button class="btn primary" data-install-demo-workspace>Cargar datos de muestra</button></div>`
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial del espacio activo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest ${survey?'':'disabled'}>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración de <strong>${esc(workspaceLabel())}</strong>.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Espacio activo: ${esc(workspaceLabel())}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>Animación ${animalAnimator.getModeLabel()} · todos los animales usan el mismo tamaño visual.</small></article><article class="panel data-card demo-data-card ${installed?'installed':''}"><span class="data-icon">${icon('info',26)}</span><h2>Datos de muestra</h2><p>${installed?'La muestra de 16 meses está instalada en un espacio separado. Podés abrirla, restaurarla o eliminarla sin modificar El Rosario.':'Instalá 16 meses de relevamientos, eventos y lluvia sin reemplazar tus datos actuales.'}</p>${demoControls}</article><article class="panel data-card animation-settings-card"><span class="data-icon">${icon('cow',26)}</span><h2>Movimiento de los animales</h2><p>Elegí cuánta actividad querés ver en el mapa. SimFarm es el modo recomendado.</p><div class="animation-mode-picker">${['paused','soft','simfarm'].map((mode)=>`<button class="${animalAnimator.getMode()===mode?'active':''}" data-set-animation-mode="${mode}"><b>${({paused:'Pausada',soft:'Suave',simfarm:'SimFarm'})[mode]}</b><small>${({paused:'Sin movimiento',soft:'Movimiento tranquilo',simfarm:'Más visible y dinámico'})[mode]}</small></button>`).join('')}</div></article></section>`
+  return renderShell(content,'Exportar, muestra y configuración','Protegé datos y ajustá la experiencia del mapa')
 }
 
 function renderLotFormModalEventUpdate(target) {
@@ -2103,8 +2232,13 @@ function bindEvents() {
   document.querySelectorAll('[data-export-survey]').forEach((button)=>button.addEventListener('click',()=>{const survey=state.surveys.find((item)=>item.id===button.dataset.exportSurvey);download(`campo-${survey.date}.csv`,surveyCsv(survey),'text/csv;charset=utf-8')}))
   document.querySelectorAll('[data-export-backup]').forEach((button)=>button.addEventListener('click',()=>download(`campo-respaldo-${todayISO()}.json`,JSON.stringify(state,null,2),'application/json')))
   const importInput=document.getElementById('import-backup'); if(importInput) importInput.addEventListener('change', async(event)=>{const file=event.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());const migrated=migrateState(imported);if(!migrated)throw new Error('Formato no válido');state=migrated;saveState();showToast('Respaldo restaurado');setTimeout(()=>navigate('resumen'),400)}catch(error){alert(`No se pudo importar: ${error.message}`)}})
-  document.querySelectorAll('[data-reset-demo]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'confirm-reset'};render()}))
-  document.querySelectorAll('[data-confirm-reset]').forEach((button)=>button.addEventListener('click',()=>{state=createInitialState();saveState();ui.modal=null;showToast('Datos restablecidos');setTimeout(()=>navigate('resumen'),300)}))
+  document.querySelectorAll('[data-workspace-switch]').forEach((select)=>select.addEventListener('change',()=>switchWorkspace(select.value)))
+  document.querySelectorAll('[data-switch-workspace]').forEach((button)=>button.addEventListener('click',()=>switchWorkspace(button.dataset.switchWorkspace)))
+  document.querySelectorAll('[data-install-demo-workspace]').forEach((button)=>button.addEventListener('click',()=>{installDemoWorkspace({reset:true});showToast('Datos de muestra instalados');switchWorkspace(WORKSPACES.DEMO)}))
+  document.querySelectorAll('[data-reset-demo-workspace]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'confirm-reset-demo'};render()}))
+  document.querySelectorAll('[data-delete-demo-workspace]').forEach((button)=>button.addEventListener('click',()=>{ui.modal={type:'confirm-delete-demo'};render()}))
+  document.querySelectorAll('[data-confirm-reset-demo]').forEach((button)=>button.addEventListener('click',()=>{installDemoWorkspace({reset:true});if(activeWorkspace===WORKSPACES.DEMO)state=loadWorkspaceState(WORKSPACES.DEMO);ui.modal=null;resetWorkspaceUi();showToast('Muestra restablecida');render()}))
+  document.querySelectorAll('[data-confirm-delete-demo]').forEach((button)=>button.addEventListener('click',()=>{removeDemoWorkspace();ui.modal=null;showToast('Muestra eliminada');render()}))
   bindV7Interactions()
 }
 
@@ -2208,7 +2342,8 @@ function bindMapPanAndZoom() {
 
 
 function bindV7Interactions() {
-  document.querySelectorAll('[data-animation-toggle]').forEach((button)=>button.addEventListener('click',()=>{animalAnimator.toggle();render()}))
+  document.querySelectorAll('[data-animation-toggle],[data-animation-mode]').forEach((button)=>button.addEventListener('click',()=>{animalAnimator.cycleMode();render()}))
+  document.querySelectorAll('[data-set-animation-mode]').forEach((button)=>button.addEventListener('click',()=>{animalAnimator.setMode(button.dataset.setAnimationMode);render()}))
   document.querySelectorAll('[data-map-inspector-tab],[data-inspector-tab]').forEach((button)=>button.addEventListener('click',()=>{ui.mapInspectorTab=button.dataset.mapInspectorTab||button.dataset.inspectorTab;render()}))
   bindMapPanAndZoom()
 

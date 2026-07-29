@@ -1,46 +1,58 @@
-# Campo El Rosario v8.01
+# Campo El Rosario v8.02
 
-Campo v8.01 añade una primera implementación de **rodeos vivos** utilizando exclusivamente los 64 sprites aéreos que ya formaban parte de la aplicación.
+Campo v8.02 refina **Living Herds** con una dinámica de movimiento inspirada en SimFarm y agrega un espacio seguro para cargar o eliminar los 16 meses de datos de muestra sin reemplazar El Rosario.
 
 ## Novedades principales
 
-- Movimiento continuo de los animales dentro de su lote.
-- Los sprites nunca se ocultan para simular la animación: permanecen visibles y cambian de posición.
-- Dirección del sprite actualizada según la trayectoria: norte, este, sur u oeste.
-- Posiciones estables por relevamiento y lote.
-- Respeto de los límites de los polígonos y exclusión de las dos casas.
-- Mayor actividad en el lote seleccionado y movimiento reducido en los demás.
-- Zoom, arrastre, rueda y gesto táctil también en el mapa del Resumen.
-- Botón para pausar o activar la animación.
-- Respeto de `prefers-reduced-motion`.
-- Los 16 meses de datos sintéticos continúan preestablecidos en instalaciones nuevas.
-- Compatibilidad con todos los relevamientos, eventos y respaldos de v7.01.
+### Movimiento SimFarm
 
-## Arquitectura de sprites
+- Movimiento aproximadamente 25% más visible que en v8.01.
+- Caminatas cortas, giros, pausas, pastoreo y descanso visual.
+- Límite de animales que caminan simultáneamente para evitar movimiento caótico.
+- Mayor actividad en el lote seleccionado y movimiento más calmo en el resto.
+- Los animales permanecen visibles y conservan su identidad, posición y destino al hacer zoom o cambiar vistas.
+- Modos disponibles: `Pausada`, `Suave` y `SimFarm`.
+- `SimFarm` es el modo predeterminado.
+- Se respeta `prefers-reduced-motion`.
 
-La lógica se divide en dos archivos:
+### Tamaño uniforme
 
-- `animal-animation.js`: movimiento, límites, estados y sincronización con el mapa.
-- `animal-sprite-library.js`: resolución de archivos, escalas, velocidades y futura definición de frames.
+- Vaca, toro y ternero usan el mismo tamaño visual dentro de cada vista.
+- Tamaño estándar del Resumen: 16 unidades del mapa.
+- Tamaño estándar del Mapa: 18 unidades del mapa.
+- La categoría se reconoce por la silueta, no por diferencias artificiales de escala.
+- Se conserva la proporción aproximada de un sprite cada diez animales.
 
-La biblioteca actual usa imágenes direccionales estáticas. Cuando existan secuencias reales de caminata, pastoreo o reposo, podrán agregarse al objeto `states` sin reescribir el motor de movimiento.
+### Datos de muestra separados
 
-## Datos
+- El Rosario y Muestra se guardan en espacios locales distintos.
+- Usuarios existentes pueden instalar la muestra después de actualizar.
+- Acciones disponibles: abrir, restablecer y eliminar la muestra.
+- Eliminar la muestra no modifica los relevamientos reales.
+- Instalaciones antiguas que tenían la muestra como base principal se migran de manera segura al espacio Muestra.
 
-- Clave local conservada: `campo-el-rosario-v2`.
-- Los datos existentes no se eliminan al actualizar.
-- Las instalaciones nuevas cargan la muestra sintética de 16 meses.
-- Los sprites representan aproximadamente diez animales y no identifican animales individuales.
+## Arquitectura
+
+- `animal-animation.js`: agentes persistentes, estados, límites, obstáculos y modos de velocidad.
+- `animal-sprite-library.js`: rutas, tamaños estándar y soporte futuro de frames reales.
+- `app.js`: selección de espacios, interfaz, mapas y lógica operativa.
+
+Los sprites actuales son imágenes direccionales estáticas. La biblioteca permite incorporar en el futuro secuencias reales para `walk`, `idle`, `graze` y `rest` sin modificar la lógica de movimiento.
+
+## Persistencia
+
+- El Rosario: `campo-el-rosario-v2`.
+- Muestra: `campo-el-rosario-demo-v1`.
+- Espacio activo: `campo-el-rosario-active-workspace-v1`.
+- Los datos existentes se preservan al actualizar.
 
 ## Desarrollo local
-
-Servir la carpeta con cualquier servidor estático. Por ejemplo:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Después abrir `http://localhost:8080`.
+Abrir `http://localhost:8080`.
 
 ## Validación
 

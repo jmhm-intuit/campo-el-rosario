@@ -1,31 +1,36 @@
 /**
- * Campo v8.01 animal sprite library.
+ * Campo v8.02 animal sprite library.
  *
- * The animation engine depends only on this interface. Replacing the current
- * directional stills with true multi-frame sprites later requires changing
- * this file (or loading a generated manifest), not the movement logic.
+ * The movement engine depends only on this interface. The current pack uses
+ * directional stills already included in Campo. A future pack can add true
+ * frame sequences in `states` without changing the movement logic.
  */
 
 const CURRENT_BASE = './assets/animals/v601'
 
+export const STANDARD_ANIMAL_SIZE = Object.freeze({
+  summary: 16,
+  full: 18,
+})
+
 export const ANIMAL_SPRITE_LIBRARY = {
-  version: '8.01-current-assets',
+  version: '8.02-current-assets-normalized',
   directions: ['north', 'east', 'south', 'west'],
   kinds: {
     cow: {
-      folder: 'cow', prefix: 'cow', variantCount: 4, scale: 1, speed: 4.1,
+      folder: 'cow', prefix: 'cow', variantCount: 4, scale: 1, speed: 8.2,
       states: {},
     },
     bull: {
-      folder: 'bull', prefix: 'bull', variantCount: 4, scale: 1.08, speed: 3.25,
+      folder: 'bull', prefix: 'bull', variantCount: 4, scale: 1, speed: 7.4,
       states: {},
     },
     calf: {
-      folder: 'calf', prefix: 'calf', variantCount: 4, scale: 0.78, speed: 5.15,
+      folder: 'calf', prefix: 'calf', variantCount: 4, scale: 1, speed: 9.2,
       states: {},
     },
     cowCalf: {
-      folder: 'cow-calf', prefix: 'cow-calf', variantCount: 4, scale: 1.18, speed: 3.65,
+      folder: 'cow-calf', prefix: 'cow-calf', variantCount: 4, scale: 1, speed: 7.8,
       states: {},
     },
   },
@@ -40,15 +45,15 @@ function safeDirection(direction) {
 }
 
 /**
- * Resolves a sprite path. Future sprite packs can add a `states` object:
+ * Resolves one image for an animal. Future packs can provide:
  *
  * states: {
  *   walk: { east: ['path/frame-1.webp', 'path/frame-2.webp'] },
  *   idle: { east: ['path/idle-1.webp', 'path/idle-2.webp'] },
  * }
  *
- * Until those assets exist, the stable directional image is returned and the
- * animal moves continuously without blinking or being removed from the DOM.
+ * Until then, movement, easing and the SimFarm-style body bob are handled by
+ * the animation engine while the animal remains continuously visible.
  */
 export function resolveAnimalSprite({ kind = 'cow', direction = 'east', variant = 0, state = 'idle', frame = 0 } = {}) {
   const normalizedKind = safeKind(kind)
