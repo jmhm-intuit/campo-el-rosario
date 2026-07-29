@@ -1,9 +1,10 @@
 {
   "name": "Campo El Rosario",
-  "version": "7.01",
-  "build": 701,
+  "version": "8.01",
+  "build": 801,
   "releaseDate": "2026-07-28",
   "storageKey": "campo-el-rosario-v2",
-  "cache": "campo-v701-assets-1",
-  "sample": "16 months / Muestra"
+  "cache": "campo-v801-assets-1",
+  "sample": "16 months / Muestra",
+  "animationEngine": "continuous-directional-v1"
 }

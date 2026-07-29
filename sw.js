@@ -1,13 +1,15 @@
-const CACHE = 'campo-v701-assets-1'
+const CACHE = 'campo-v801-assets-1'
 const CORE_ASSETS = [
   './',
   './index.html',
   './app.js',
+  './animal-animation.js',
+  './animal-sprite-library.js',
   './styles.css',
   './manifest.webmanifest',
   './VERSION.json',
-  './data/sample-v7.js',
-  './data/campo-muestra-16-meses-v7.json',
+  './data/sample-v8.js',
+  './data/campo-muestra-16-meses-v8.json',
   './assets/map/el-rosario-map.png',
   './assets/geometry/polygons-reviewed-final.json',
   './assets/asset-manifest.json',

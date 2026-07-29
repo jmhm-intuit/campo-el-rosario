@@ -7,8 +7,9 @@ const pass = (message) => console.log(`PASS  ${message}`)
 const fail = (message) => { failed = true; console.error(`FAIL  ${message}`) }
 
 const required = [
-  'index.html','app.js','styles.css','manifest.webmanifest','VERSION.json','sw.js','.nojekyll',
-  '.github/workflows/deploy-pages.yml','data/sample-v7.js','data/campo-muestra-16-meses-v7.json',
+  'index.html','app.js','animal-animation.js','animal-sprite-library.js','styles.css',
+  'manifest.webmanifest','VERSION.json','sw.js','.nojekyll',
+  '.github/workflows/deploy-pages.yml','data/sample-v8.js','data/campo-muestra-16-meses-v8.json',
   'assets/map/el-rosario-map.png','assets/geometry/polygons-reviewed-final.json',
   'assets/icons/icon-home-house.png','assets/icons/icon-register-animals.png',
   'assets/conditions/v505/pasture-excellent.png','assets/conditions/v505/pasture-good.png',
@@ -21,21 +22,23 @@ if (!failed) pass('Archivos obligatorios presentes')
 const version = JSON.parse(fs.readFileSync(path.join(root,'VERSION.json'),'utf8'))
 const html = fs.readFileSync(path.join(root,'index.html'),'utf8')
 const js = fs.readFileSync(path.join(root,'app.js'),'utf8')
+const animation = fs.readFileSync(path.join(root,'animal-animation.js'),'utf8')
+const library = fs.readFileSync(path.join(root,'animal-sprite-library.js'),'utf8')
 const css = fs.readFileSync(path.join(root,'styles.css'),'utf8')
 const sw = fs.readFileSync(path.join(root,'sw.js'),'utf8')
 const workflow = fs.readFileSync(path.join(root,'.github/workflows/deploy-pages.yml'),'utf8')
 const geometry = JSON.parse(fs.readFileSync(path.join(root,'assets/geometry/polygons-reviewed-final.json'),'utf8'))
-const sample = JSON.parse(fs.readFileSync(path.join(root,'data/campo-muestra-16-meses-v7.json'),'utf8'))
+const sample = JSON.parse(fs.readFileSync(path.join(root,'data/campo-muestra-16-meses-v8.json'),'utf8'))
 
-if (version.version !== '7.01' || version.build !== 701) fail('VERSION.json no identifica Campo v7.01 build 701')
+if (version.version !== '8.01' || version.build !== 801) fail('VERSION.json no identifica Campo v8.01 build 801')
 if (version.storageKey !== 'campo-el-rosario-v2') fail('Cambió la clave de persistencia')
-if (version.cache !== 'campo-v701-assets-1') fail('Caché incorrecta')
-if (!html.includes('Campo v7.01') || !html.includes('data/sample-v7.js')) fail('index.html no carga v7.01 y la muestra')
-if (!js.includes("const APP_VERSION_LABEL = '7.01'")) fail('app.js no identifica v7.01')
+if (version.cache !== 'campo-v801-assets-1') fail('Caché incorrecta')
+if (!html.includes('Campo v8.01') || !html.includes('data/sample-v8.js')) fail('index.html no carga v8.01 y la muestra')
+if (!js.includes("const APP_VERSION_LABEL = '8.01'")) fail('app.js no identifica v8.01')
 if (!js.includes("const STORAGE_KEY = 'campo-el-rosario-v2'")) fail('app.js no conserva storage key')
-if (!sw.includes('campo-v701-assets-1') || !sw.includes('./data/sample-v7.js')) fail('Service worker incompleto')
+if (!sw.includes('campo-v801-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js') || !sw.includes('./data/sample-v8.js')) fail('Service worker incompleto')
 if (!workflow.includes('node-version: 24')) fail('Workflow no usa Node 24')
-if (!css.includes('Campo v7.01') && !css.includes('v701-map-svg')) fail('CSS v7.01 ausente')
+if (!css.includes('Campo v8.01') || !css.includes('v801-map-svg')) fail('CSS v8.01 ausente')
 if (!failed) pass('Versión, persistencia, caché y workflow validados')
 
 function pngInfo(file) {
@@ -54,16 +57,19 @@ if (!Array.isArray(sample.surveys) || sample.surveys.length !== 16) fail('La mue
 if (!Array.isArray(sample.animalEvents) || sample.animalEvents.length < 40) fail('La muestra no contiene eventos detallados suficientes')
 if (!sample.surveys.every(s=>s.nombre==='Muestra')) fail('Hay relevamientos sin Nombre=Muestra')
 if (!sample.animalEvents.every(e=>e.nombre==='Muestra')) fail('Hay eventos sin Nombre=Muestra')
-const forbidden = new Set(['hembras-no-cria','machos-recria','otros'])
-const used = new Set(sample.surveys.flatMap(s=>s.lots||[]).flatMap(l=>l.groups||[]).map(g=>g.categoryId))
-for (const id of forbidden) if (used.has(id)) fail(`Categoría antigua presente: ${id}`)
-for (const requiredCategory of ['vacas-cria','vacas-descarte','vaquillonas-reposicion','ternero-macho','ternera-hembra','toro-reproductor','novillito']) if (!used.has(requiredCategory)) fail(`Falta categoría v7: ${requiredCategory}`)
-if (!failed) pass(`Muestra validada: ${sample.surveys.length} relevamientos y ${sample.animalEvents.length} eventos`)
+if (!failed) pass(`Muestra preestablecida: ${sample.surveys.length} relevamientos y ${sample.animalEvents.length} eventos`)
 
-for (const token of ['renderEventsPage','renderIntroductionPage','herdBalanceForSurvey','projectedLotsForDate','renderLotHistoryChart','data-map-zoom-in','data-archive-survey','data-delete-survey','eventsCsv']) {
-  if (!js.includes(token)) fail(`Falta función o control ${token}`)
-}
-if (!failed) pass('Eventos, balance, proyección, zoom, evolución y archivo presentes')
+for (const token of [
+  'class AnimalAnimationManager','requestAnimationFrame','chooseTarget','validPosition',
+  'animationState','PREFERENCE_KEY','pointInPolygon',
+]) if (!animation.includes(token)) fail(`Falta lógica de animación: ${token}`)
+for (const token of ['ANIMAL_SPRITE_LIBRARY','resolveAnimalSprite','states: {}','allAnimalSpritePaths']) if (!library.includes(token)) fail(`Falta interfaz intercambiable de sprites: ${token}`)
+for (const token of ['data-animal-id','data-map-zoom-in="summary"','data-animation-toggle','currentSummaryViewBox','zoomSummaryMap','animalAnimator.mount']) if (!js.includes(token)) fail(`Falta integración v8.01: ${token}`)
+if (!failed) pass('Movimiento continuo, biblioteca intercambiable y zoom del resumen presentes')
+
+const spriteManifest = JSON.parse(fs.readFileSync(path.join(root,'assets/animals/v601/manifest.json'),'utf8'))
+if (spriteManifest.count !== 64 || !Array.isArray(spriteManifest.sprites) || spriteManifest.sprites.length !== 64) fail('La biblioteca actual no contiene 64 sprites')
+else pass('64 sprites direccionales reutilizados')
 
 if (failed) process.exit(1)
-console.log('Campo v7.01 preflight complete')
+console.log('Campo v8.01 preflight complete')

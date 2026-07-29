@@ -1,6 +1,9 @@
+import { animalAnimator } from './animal-animation.js'
+import { resolveAnimalSprite } from './animal-sprite-library.js'
+
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 701
-const APP_VERSION_LABEL = '7.01'
+const APP_VERSION = 801
+const APP_VERSION_LABEL = '8.01'
 const RELEASE_DATE = '2026-07-28'
 const TARGET_LOAD = 0.8
 const CONDITION_RECENT_DAYS = 60
@@ -423,7 +426,7 @@ const UI_ASSETS = {
   register: 'icons/icon-register-animals.png',
 }
 
-const SAMPLE_DATA_URL = './data/campo-muestra-16-meses-v7.json'
+const SAMPLE_DATA_URL = './data/campo-muestra-16-meses-v8.json'
 
 const INITIAL_GROUPS = {
   'ER-01': { fieldState: 'bueno', groups: [['vacas', 80], ['toros', 2], ['vacas-descarte', 96]] },
@@ -576,6 +579,7 @@ let ui = {
   mapMode: 'map',
   mapInspectorTab: 'actual',
   mapViewBox: null,
+  summaryViewBox: null,
   mapDragging: false,
   eventFilter: 'all',
   historyShowArchived: false,
@@ -1419,7 +1423,7 @@ function conditionShortCode(stateId) {
   return ({ 'muy-bueno': 'MB', bueno: 'B', regular: 'R', malo: 'M', anegado: 'AN', 'no-observado': '—' })[stateId] || '—'
 }
 
-function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition) {
+function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition, surveyId) {
   const count = spriteCountForLot(lot, metric, compact)
   if (!count) return ''
   const area = polygonArea(parseLotPoints(lot))
@@ -1430,12 +1434,13 @@ function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition) {
   const directions = ['north', 'east', 'south', 'west']
   return positions.map((position, index) => {
     const kind = kinds[index] || 'cow'
-    const direction = directions[Math.floor(seededNumber(`${lot.id}-${index}-direction-v701`) * directions.length) % directions.length]
-    const variants = SPRITE_VARIANTS[kind]?.[direction] || SPRITE_VARIANTS.cow.east
-    const asset = variants[Math.floor(seededNumber(`${lot.id}-${index}-asset-v701`) * variants.length) % variants.length]
+    const direction = directions[Math.floor(seededNumber(`${lot.id}-${index}-direction-v801`) * directions.length) % directions.length]
+    const variant = Math.floor(seededNumber(`${lot.id}-${index}-asset-v801`) * 4) % 4
+    const asset = resolveAnimalSprite({ kind, direction, variant, state: 'idle', frame: 0 })
     const width = kind === 'calf' ? spriteWidth * .78 : kind === 'bull' ? spriteWidth * 1.08 : spriteWidth
     const height = width
-    return `<image class="map-animal-svg ${kind} direction-${direction} state-${condition?.stateId || 'no-observado'}" href="./assets/${asset}" x="${(position.x - width / 2).toFixed(2)}" y="${(position.y - height / 2).toFixed(2)}" width="${width.toFixed(2)}" height="${height.toFixed(2)}" preserveAspectRatio="xMidYMid meet" />`
+    const agentId = `${surveyId || 'survey'}:${lot.id}:${kind}:${index}`
+    return `<image class="map-animal-svg animated-animal ${kind} direction-${direction} state-${condition?.stateId || 'no-observado'}" href="${asset}" x="${(position.x - width / 2).toFixed(2)}" y="${(position.y - height / 2).toFixed(2)}" width="${width.toFixed(2)}" height="${height.toFixed(2)}" preserveAspectRatio="xMidYMid meet" data-animal-id="${esc(agentId)}" data-lot-id="${lot.id}" data-kind="${kind}" data-direction="${direction}" data-variant="${variant}" data-center-x="${position.x.toFixed(2)}" data-center-y="${position.y.toFixed(2)}" data-animal-width="${width.toFixed(2)}" data-animal-height="${height.toFixed(2)}" />`
   }).join('')
 }
 
@@ -1481,6 +1486,18 @@ function zoomMap(factor, anchorX = .5, anchorY = .5) {
   ui.mapViewBox = clampViewBox({ x: box.x + (box.width - width) * anchorX, y: box.y + (box.height - height) * anchorY, width, height })
 }
 
+function currentSummaryViewBox() {
+  if (!ui.summaryViewBox) ui.summaryViewBox = fullMapViewBox()
+  return clampViewBox(ui.summaryViewBox)
+}
+
+function zoomSummaryMap(factor, anchorX = .5, anchorY = .5) {
+  const box = currentSummaryViewBox()
+  const width = box.width * factor
+  const height = box.height * factor
+  ui.summaryViewBox = clampViewBox({ x: box.x + (box.width - width) * anchorX, y: box.y + (box.height - height) * anchorY, width, height })
+}
+
 function focusMapLot(lotId) {
   ui.selectedLotId = lotId
   ui.mapViewBox = viewBoxForLot(lotId)
@@ -1505,7 +1522,7 @@ function renderMapPillSvg(lot, metric, entry, condition, selected, viewBox) {
 }
 
 function renderMapHousesSvg() {
-  return `<image class="map-house-svg main" href="./assets/buildings/building-house-main-er08-09.png" x="309" y="375" width="58" height="58" preserveAspectRatio="xMidYMid meet"/><image class="map-house-svg secondary" href="./assets/buildings/building-house-secondary-er13.png" x="586" y="719" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`
+  return `<image class="map-house-svg main" data-lot-id="ER-08-09" href="./assets/buildings/building-house-main-er08-09.png" x="309" y="375" width="58" height="58" preserveAspectRatio="xMidYMid meet"/><image class="map-house-svg secondary" data-lot-id="ER-13" href="./assets/buildings/building-house-secondary-er13.png" x="586" y="719" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`
 }
 
 function renderMapLabelHtml(lot, metric, entry, condition, compact) {
@@ -1521,7 +1538,7 @@ function renderMap(survey, compact = false) {
   const selected = ui.selectedLotId
   const lotEntries = Object.fromEntries((survey.lots || []).map((entry) => [entry.lotId, entry]))
   const conditions = Object.fromEntries(LOTS.map((lot) => [lot.id, resolveLotCondition(survey, lot.id)]))
-  const viewBox = compact ? fullMapViewBox() : currentMapViewBox()
+  const viewBox = compact ? currentSummaryViewBox() : currentMapViewBox()
   const patternDefs = LOTS.flatMap((lot) => FIELD_STATES.filter((item) => item.pattern).map((item) => {
     const baseSize = compact ? 34 : 46
     const tileSize = baseSize + Math.floor(seededNumber(`${lot.id}-${item.id}-tile-size-v701`) * (compact ? 8 : 12))
@@ -1536,12 +1553,14 @@ function renderMap(survey, compact = false) {
   }).join('')
   const loadHalos = LOTS.map((lot) => `<polygon class="lot-load-halo ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
   const loadBorders = LOTS.map((lot) => `<polygon class="lot-load-border ${capacityClass(metrics.byLot[lot.id].load)}" points="${lot.points}" vector-effect="non-scaling-stroke" />`).join('')
-  const animals = (survey.lots || []).filter((entry) => metrics.byLot[entry.lotId]?.animals > 0).map((entry) => renderHerdSpritesHtml(entry, lotLookup[entry.lotId], compact, metrics.byLot[entry.lotId], conditions[entry.lotId])).join('')
+  const animals = (survey.lots || []).filter((entry) => metrics.byLot[entry.lotId]?.animals > 0).map((entry) => renderHerdSpritesHtml(entry, lotLookup[entry.lotId], compact, metrics.byLot[entry.lotId], conditions[entry.lotId], survey.id)).join('')
   const pills = compact ? '' : LOTS.map((lot) => renderMapPillSvg(lot, metrics.byLot[lot.id], lotEntries[lot.id], conditions[lot.id], selected === lot.id, viewBox)).join('')
   const hitAreas = LOTS.map((lot) => `<polygon class="lot-hit ${selected === lot.id ? 'selected' : ''}" data-map-lot="${lot.id}" points="${lot.points}" />`).join('')
-  const svg = `<svg class="map-canvas v701-map-svg ${compact?'summary':'zoomable'}" data-map-svg="${compact?'summary':'full'}" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario"><defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="map-animal-layer">${animals}</g><g class="map-house-layer">${renderMapHousesSvg()}</g><g class="map-pill-layer">${pills}</g><g class="interaction-layer">${hitAreas}</g></svg>`
-  if (compact) return `<div class="ranch-map compact summary-map v701-summary-map">${svg}</div>`
-  return `<div class="map-zoom-shell"><div class="ranch-map full full-map v701-full-map">${svg}</div><div class="map-zoom-controls"><button data-map-zoom-in title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all title="Ver todo">Todo</button></div><div class="map-zoom-hint">Arrastrá para mover · rueda o botones para zoom</div></div>`
+  const svg = `<svg class="map-canvas v801-map-svg ${compact?'summary':'zoomable'}" data-map-svg="${compact?'summary':'full'}" data-selected-lot-id="${selected || ''}" viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa interactivo de El Rosario"><defs>${patternDefs}</defs><image class="aerial-base" href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g class="condition-layer">${conditionLayer}</g><g class="load-halo-layer">${loadHalos}</g><g class="load-border-layer">${loadBorders}</g><g class="map-animal-layer">${animals}</g><g class="map-house-layer">${renderMapHousesSvg()}</g><g class="map-pill-layer">${pills}</g><g class="interaction-layer">${hitAreas}</g></svg>`
+  const animationLabel = animalAnimator.isEnabled() ? 'Pausar animación' : 'Activar animación'
+  const animationGlyph = animalAnimator.isEnabled() ? '⏸' : '▶'
+  if (compact) return `<div class="map-zoom-shell summary-zoom-shell"><div class="ranch-map compact summary-map v801-summary-map">${svg}</div><div class="map-zoom-controls summary-map-controls"><button data-map-zoom-in="summary" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="summary" title="Alejar">${icon('zoomOut',18)}</button><button data-map-view-all="summary" title="Ver todo">Todo</button><button class="animation-toggle ${animalAnimator.isEnabled()?'active':''}" data-animation-toggle title="${animationLabel}" aria-label="${animationLabel}">${animationGlyph}</button></div></div>`
+  return `<div class="map-zoom-shell"><div class="ranch-map full full-map v801-full-map">${svg}</div><div class="map-zoom-controls full-map-controls"><button data-map-zoom-in="full" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="full" title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all="full" title="Ver todo">Todo</button><button class="animation-toggle ${animalAnimator.isEnabled()?'active':''}" data-animation-toggle title="${animationLabel}" aria-label="${animationLabel}">${animationGlyph}</button></div><div class="map-zoom-hint">Arrastrá para mover · rueda, gesto o botones para zoom</div></div>`
 }
 
 
@@ -1858,7 +1877,7 @@ function renderEventModal() {
 
 function renderIntroductionPage() {
   const quickLinks = `<div class="intro-quick-links"><button data-nav="eventos">${icon('event',20)} Eventos</button><button data-nav="mapa">${icon('map',20)} Mapa</button><button data-nav="lluvias">${icon('rain',20)} Lluvias</button><button data-nav="historico">${icon('history',20)} Histórico</button><button data-nav="datos">${icon('download',20)} Respaldo</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v7.01</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v7.01</h3><ul><li>Registro detallado de eventos.</li><li>Balance del rodeo mes sobre mes.</li><li>Categorías jerárquicas sin “Otros”.</li><li>Zoom del mapa centrado por lote.</li><li>Historia de carga y condición por lote.</li><li>Archivar y eliminar relevamientos.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v8.01</span><h2>De los eventos a la próxima fotografía</h2><p>Campo separa lo observado de lo ocurrido. El relevamiento es una fotografía; los eventos explican cómo debería evolucionar el rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}<section class="intro-steps"><article><i>1</i><div><h3>Revisá el resumen</h3><p>El terreno representa condición, el borde la carga y los sprites la cantidad y composición.</p></div></article><article><i>2</i><div><h3>Registrá eventos</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones actualizan el estado esperado.</p></div></article><article><i>3</i><div><h3>Creá el siguiente relevamiento</h3><p>La app precarga el stock proyectado. Corregí lo que no coincida con lo observado.</p></div></article><article><i>4</i><div><h3>Validá el balance</h3><p>Compará stock esperado y observado; la discrepancia queda visible sin bloquear el guardado.</p></div></article></section><section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Estado esperado</dt><dd>Relevamiento anterior más los eventos.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición</dt><dd>Estado visual del terreno.</dd><dt>Carga</dt><dd>Equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v8.01</h3><ul><li>Rodeos vivos con movimiento continuo.</li><li>Animación estable sin apariciones ni desapariciones.</li><li>Zoom y desplazamiento también en el resumen.</li><li>Motor desacoplado para mejorar sprites en futuras versiones.</li><li>Datos sintéticos de 16 meses preestablecidos.</li><li>Todos los eventos y balances de v7.01.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario de vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos entre lotes.</li><li>Sincronización con Supabase.</li></ul></article></section>`
   return renderShell(content,'Introducción','Cómo usar Campo y qué mejoras están por venir')
 }
 
@@ -1890,7 +1909,7 @@ function renderSurveyDetailModal() {
 
 function renderDataPage() {
   const survey = selectedSurvey(), latest = latestSurvey()
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial completo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>${state.sampleMode?'Datos sintéticos identificados como Muestra.':'Datos locales del usuario.'}</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos de muestra</h2><p>Podés restablecer los 16 meses sintéticos para probar todas las funciones de v7.01.</p><button class="btn danger-outline" data-reset-demo>Restablecer Muestra</button></article></section>`
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial completo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p>El JSON conserva relevamientos, eventos, lluvia y configuración.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Publicación: ${RELEASE_DATE}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>${state.sampleMode?'Datos sintéticos identificados como Muestra.':'Datos locales del usuario.'}</small></article><article class="panel data-card warning-card"><span class="data-icon">${icon('alert',26)}</span><h2>Datos de muestra</h2><p>Podés restablecer los 16 meses sintéticos preestablecidos para probar todas las funciones de v8.01.</p><button class="btn danger-outline" data-reset-demo>Restablecer Muestra</button></article></section>`
   return renderShell(content,'Exportar y respaldo','Protegé relevamientos, eventos y lluvia')
 }
 
@@ -1958,6 +1977,7 @@ function render() {
   if (ui.view === 'datos') html = renderDataPage()
   document.getElementById('app').innerHTML = html
   bindEvents()
+  animalAnimator.mount(document)
 }
 
 function bindEvents() {
@@ -1979,7 +1999,7 @@ function bindEvents() {
   document.querySelectorAll('[data-survey-older]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().older; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
   document.querySelectorAll('[data-survey-newer]').forEach((button) => button.addEventListener('click', () => { const target=surveyNavigation().newer; if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
   document.querySelectorAll('[data-view-latest]').forEach((button) => button.addEventListener('click', () => { const target=latestSurvey(); if(target){state.selectedSurveyId=target.id;ui.selectedLotId=null;ui.mapViewBox=null;saveState();render()} }))
-  document.querySelectorAll('[data-map-lot]').forEach((element) => element.addEventListener('click', () => { focusMapLot(element.dataset.mapLot); ui.mapMode='map'; if (ui.view !== 'mapa') navigate('mapa'); else render() }))
+  document.querySelectorAll('[data-map-lot]').forEach((element) => element.addEventListener('click', () => { const svg=element.closest('svg[data-map-svg]'); if(svg?.dataset.suppressClick==='1') return; focusMapLot(element.dataset.mapLot); ui.mapMode='map'; if (ui.view !== 'mapa') navigate('mapa'); else render() }))
   document.querySelectorAll('[data-lot]').forEach((element) => element.addEventListener('click', () => { focusMapLot(element.dataset.lot); ui.mapMode='map'; navigate('mapa') }))
   document.querySelectorAll('[data-close-lot]').forEach((button) => button.addEventListener('click', () => { ui.selectedLotId=null; ui.mapInspectorTab='actual'; render() }))
   document.querySelectorAll('[data-edit-map-lot]').forEach((button) => button.addEventListener('click', () => {
@@ -2118,25 +2138,77 @@ function validateEventRecord(event) {
 }
 
 function bindMapPanAndZoom() {
-  const svg=document.querySelector('[data-map-svg="full"]')
-  if(!svg) return
-  document.querySelectorAll('[data-map-zoom-in]').forEach((button)=>button.addEventListener('click',()=>{zoomMap(.78);render()}))
-  document.querySelectorAll('[data-map-zoom-out]').forEach((button)=>button.addEventListener('click',()=>{zoomMap(1.28);render()}))
-  document.querySelectorAll('[data-map-view-all]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=fullMapViewBox();render()}))
-  document.querySelectorAll('[data-map-focus-selected]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=viewBoxForLot(ui.selectedLotId||'ER-08-09');render()}))
-  svg.addEventListener('wheel',(event)=>{
-    event.preventDefault()
-    const rect=svg.getBoundingClientRect(), ax=(event.clientX-rect.left)/rect.width, ay=(event.clientY-rect.top)/rect.height
-    zoomMap(event.deltaY<0?.82:1.22,ax,ay); render()
-  },{passive:false})
-  let drag=null
-  svg.addEventListener('pointerdown',(event)=>{ if(event.button!==0)return; const box=currentMapViewBox(); drag={x:event.clientX,y:event.clientY,box}; svg.setPointerCapture(event.pointerId); svg.classList.add('dragging') })
-  svg.addEventListener('pointermove',(event)=>{ if(!drag)return; const rect=svg.getBoundingClientRect(); ui.mapViewBox=clampViewBox({x:drag.box.x-(event.clientX-drag.x)*drag.box.width/rect.width,y:drag.box.y-(event.clientY-drag.y)*drag.box.height/rect.height,width:drag.box.width,height:drag.box.height}); svg.setAttribute('viewBox',`${ui.mapViewBox.x} ${ui.mapViewBox.y} ${ui.mapViewBox.width} ${ui.mapViewBox.height}`) })
-  const stop=(event)=>{ if(!drag)return; drag=null; svg.classList.remove('dragging'); try{svg.releasePointerCapture(event.pointerId)}catch{} }
-  svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop)
+  const bindOne = (svg) => {
+    const type = svg.dataset.mapSvg === 'summary' ? 'summary' : 'full'
+    const readBox = () => type === 'summary' ? currentSummaryViewBox() : currentMapViewBox()
+    const writeBox = (box) => { if (type === 'summary') ui.summaryViewBox = clampViewBox(box); else ui.mapViewBox = clampViewBox(box) }
+    const zoom = (factor, anchorX=.5, anchorY=.5) => { if (type === 'summary') zoomSummaryMap(factor,anchorX,anchorY); else zoomMap(factor,anchorX,anchorY) }
+    document.querySelectorAll(`[data-map-zoom-in="${type}"]`).forEach((button)=>button.addEventListener('click',()=>{zoom(.78);render()}))
+    document.querySelectorAll(`[data-map-zoom-out="${type}"]`).forEach((button)=>button.addEventListener('click',()=>{zoom(1.28);render()}))
+    document.querySelectorAll(`[data-map-view-all="${type}"]`).forEach((button)=>button.addEventListener('click',()=>{writeBox(fullMapViewBox());render()}))
+    if(type==='full') document.querySelectorAll('[data-map-focus-selected]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=viewBoxForLot(ui.selectedLotId||'ER-08-09');render()}))
+    svg.addEventListener('wheel',(event)=>{
+      event.preventDefault()
+      const rect=svg.getBoundingClientRect(), ax=(event.clientX-rect.left)/rect.width, ay=(event.clientY-rect.top)/rect.height
+      zoom(event.deltaY<0?.82:1.22,ax,ay); render()
+    },{passive:false})
+
+    const pointers = new Map()
+    let drag = null
+    let pinch = null
+    let moved = false
+    const applyBox = (box) => {
+      const clamped=clampViewBox(box); writeBox(clamped)
+      svg.setAttribute('viewBox',`${clamped.x} ${clamped.y} ${clamped.width} ${clamped.height}`)
+    }
+    const distance = () => {
+      const values=[...pointers.values()]
+      return values.length<2?0:Math.hypot(values[0].x-values[1].x,values[0].y-values[1].y)
+    }
+    const midpoint = () => {
+      const values=[...pointers.values()]
+      return values.length<2?{x:0,y:0}:{x:(values[0].x+values[1].x)/2,y:(values[0].y+values[1].y)/2}
+    }
+    svg.addEventListener('pointerdown',(event)=>{
+      if(event.pointerType==='mouse'&&event.button!==0)return
+      pointers.set(event.pointerId,{x:event.clientX,y:event.clientY})
+      svg.setPointerCapture(event.pointerId)
+      moved=false
+      if(pointers.size===1){const box=readBox();drag={x:event.clientX,y:event.clientY,box}}
+      if(pointers.size===2){pinch={distance:distance(),midpoint:midpoint(),box:readBox()};drag=null}
+      svg.classList.add('dragging')
+    })
+    svg.addEventListener('pointermove',(event)=>{
+      if(!pointers.has(event.pointerId))return
+      pointers.set(event.pointerId,{x:event.clientX,y:event.clientY})
+      const rect=svg.getBoundingClientRect()
+      if(pointers.size>=2&&pinch){
+        const nextDistance=Math.max(8,distance()), factor=pinch.distance/nextDistance
+        const mid=midpoint(), ax=(pinch.midpoint.x-rect.left)/rect.width, ay=(pinch.midpoint.y-rect.top)/rect.height
+        const width=pinch.box.width*factor, height=pinch.box.height*factor
+        applyBox({x:pinch.box.x+(pinch.box.width-width)*ax-(mid.x-pinch.midpoint.x)*pinch.box.width/rect.width,y:pinch.box.y+(pinch.box.height-height)*ay-(mid.y-pinch.midpoint.y)*pinch.box.height/rect.height,width,height})
+        moved=true
+      } else if(drag){
+        const dx=event.clientX-drag.x,dy=event.clientY-drag.y
+        if(Math.hypot(dx,dy)>4)moved=true
+        applyBox({x:drag.box.x-dx*drag.box.width/rect.width,y:drag.box.y-dy*drag.box.height/rect.height,width:drag.box.width,height:drag.box.height})
+      }
+    })
+    const stop=(event)=>{
+      pointers.delete(event.pointerId)
+      try{svg.releasePointerCapture(event.pointerId)}catch{}
+      if(moved){svg.dataset.suppressClick='1';setTimeout(()=>{svg.dataset.suppressClick='0'},80)}
+      if(pointers.size===1){const remaining=[...pointers.values()][0];drag={x:remaining.x,y:remaining.y,box:readBox()};pinch=null}
+      else if(!pointers.size){drag=null;pinch=null;svg.classList.remove('dragging')}
+    }
+    svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop)
+  }
+  document.querySelectorAll('svg[data-map-svg]').forEach(bindOne)
 }
 
+
 function bindV7Interactions() {
+  document.querySelectorAll('[data-animation-toggle]').forEach((button)=>button.addEventListener('click',()=>{animalAnimator.toggle();render()}))
   document.querySelectorAll('[data-map-inspector-tab],[data-inspector-tab]').forEach((button)=>button.addEventListener('click',()=>{ui.mapInspectorTab=button.dataset.mapInspectorTab||button.dataset.inspectorTab;render()}))
   bindMapPanAndZoom()
 

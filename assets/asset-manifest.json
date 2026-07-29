@@ -1,7 +1,7 @@
 {
-  "version": "6.01",
-  "build": 601,
-  "description": "Assets activos de Campo El Rosario v6.01",
+  "version": "8.01",
+  "build": 801,
+  "description": "Assets activos de Campo El Rosario v8.01 — biblioteca direccional reutilizada por el motor de animación",
   "counts": {
     "total": 115,
     "aerialAnimalSprites": 64

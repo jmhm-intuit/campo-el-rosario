@@ -1,47 +1,44 @@
-# Publicar Campo v7.01 desde el teléfono
+# Publicación de Campo v8.01
 
-## 1. Respaldo
+## Archivo a subir
 
-Antes de actualizar, abrir la versión actual de Campo y descargar un respaldo JSON.
+Subir a la raíz del repositorio:
 
-## 2. Subir el ZIP
+```text
+campo-el-rosario-v8-01-deploy.zip
+```
 
-Subir `campo-el-rosario-v7-01-deploy.zip` a la raíz del repositorio `jmhm-intuit/campo-el-rosario` y confirmar el archivo en `main`.
-
-## 3. Abrir Codespaces
-
-Abrir el repositorio, seleccionar **Code → Codespaces** y abrir la terminal en la raíz.
-
-## 4. Descomprimir, reemplazar y publicar
+## Codespaces: descomprimir, confirmar y hacer push
 
 ```bash
 git pull --rebase origin main
 
-rm -rf /tmp/campo-v7-01
-mkdir -p /tmp/campo-v7-01
+rm -rf /tmp/campo-v8-01
+mkdir -p /tmp/campo-v8-01
 
-unzip -q campo-el-rosario-v7-01-deploy.zip -d /tmp/campo-v7-01
+unzip -q campo-el-rosario-v8-01-deploy.zip -d /tmp/campo-v8-01
 
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v7-01-deploy.zip' \
+  ! -name 'campo-el-rosario-v8-01-deploy.zip' \
   -exec rm -rf {} +
 
-cp -a /tmp/campo-v7-01/. .
+cp -a /tmp/campo-v8-01/. .
 
-rm -rf /tmp/campo-v7-01
-rm -f campo-el-rosario-v7-01-deploy.zip
+rm -rf /tmp/campo-v8-01
+rm -f campo-el-rosario-v8-01-deploy.zip
 
 git add -A
-git commit -m "Deploy Campo v7.01"
+git commit -m "Deploy Campo v8.01"
 git push origin main
 ```
 
-## 5. Verificar
+## Verificación
 
-- Abrir GitHub → Actions.
-- Esperar el check verde de `Deploy Campo v7.01 to GitHub Pages`.
-- Abrir `https://jmhm-intuit.github.io/campo-el-rosario/`.
-- Confirmar que la interfaz muestra `Campo v7.01`.
+1. Abrir **GitHub → Actions**.
+2. Esperar el check verde de **Deploy Campo v8.01 to GitHub Pages**.
+3. Abrir `https://jmhm-intuit.github.io/campo-el-rosario/`.
+4. Verificar que la interfaz muestre `Campo v8.01`.
+5. Confirmar que el mapa del Resumen tenga controles de zoom y un botón de pausa/reproducción.
 
-No borrar los datos del sitio: los relevamientos permanecen almacenados localmente en ese navegador.
+Antes de actualizar, exportar un respaldo JSON de los datos actuales. No borrar los datos del sitio del navegador.

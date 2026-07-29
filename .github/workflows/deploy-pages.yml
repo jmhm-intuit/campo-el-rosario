@@ -1,4 +1,4 @@
-name: Deploy Campo v7.01 to GitHub Pages
+name: Deploy Campo v8.01 to GitHub Pages
 
 on:
   push:
@@ -30,7 +30,10 @@ jobs:
           node-version: 24
 
       - name: Validate JavaScript
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check animal-animation.js
+          node --check animal-sprite-library.js
 
       - name: Product preflight
         run: node scripts/preflight.mjs
