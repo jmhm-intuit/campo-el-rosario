@@ -30,17 +30,17 @@ const workflow = fs.readFileSync(path.join(root,'.github/workflows/deploy-pages.
 const geometry = JSON.parse(fs.readFileSync(path.join(root,'assets/geometry/polygons-reviewed-final.json'),'utf8'))
 const sample = JSON.parse(fs.readFileSync(path.join(root,'data/campo-muestra-16-meses-v8.json'),'utf8'))
 
-if (version.version !== '9.00' || version.build !== 900) fail('VERSION.json no identifica Campo v9.00 build 900')
+if (version.version !== '9.01' || version.build !== 901) fail('VERSION.json no identifica Campo v9.01 build 901')
 if (version.storageKey !== 'campo-el-rosario-v2') fail('Cambió la clave real de persistencia')
 if (version.demoStorageKey !== 'campo-el-rosario-demo-v1') fail('Falta clave separada de la muestra')
-if (version.cache !== 'campo-v900-assets-1') fail('Caché incorrecta')
-if (!html.includes('Campo v9.00') || !html.includes('data/sample-v8.js')) fail('index.html no carga v9.00 y la muestra')
-if (!js.includes("const APP_VERSION_LABEL = '9.00'")) fail('app.js no identifica v9.00')
+if (version.cache !== 'campo-v901-assets-1') fail('Caché incorrecta')
+if (!html.includes('Campo v9.01') || !html.includes('data/sample-v8.js')) fail('index.html no carga v9.01 y la muestra')
+if (!js.includes("const APP_VERSION_LABEL = '9.01'")) fail('app.js no identifica v9.01')
 if (!js.includes("const STORAGE_KEY = 'campo-el-rosario-v2'")) fail('app.js no conserva storage key')
-if (!sw.includes('campo-v900-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js')) fail('Service worker incompleto')
+if (!sw.includes('campo-v901-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js')) fail('Service worker incompleto')
 if (!workflow.includes('node-version: 24')) fail('Workflow no usa Node 24')
 if (!workflow.includes('animation-smoke.mjs')) fail('Workflow no ejecuta la prueba de animación')
-if (!css.includes('Campo v9.00') || !css.includes('v9-review-tabs')) fail('CSS v9.00 ausente')
+if (!css.includes('Campo v9.01') || !css.includes('v9-review-tabs')) fail('CSS v9.01 ausente')
 if (!failed) pass('Versión, persistencia, caché y workflow validados')
 
 function pngInfo(file) {
@@ -66,15 +66,15 @@ for (const token of [
   "captureMode",'data-start-survey-mode="quick"','data-start-survey-mode="full"',
   'renderConditionLoadMatrix','reviewAttentionGroups','v9-review-lot','renderMorePage',
   "navItemAsset('registrar'","navItem('revisar'","mobile-nav-v9",
-]) if (!js.includes(token)) fail(`Falta integración v9.00: ${token}`)
-for (const token of ['v9-home-primary','v9-record-action','v9-review-stat-grid','v9-matrix','v9-lot-review-list','v9-more-grid']) if (!css.includes(token)) fail(`Falta estilo v9.00: ${token}`)
-if (!failed) pass('Registrar, revisión, balance y navegación v9.00 presentes')
+]) if (!js.includes(token)) fail(`Falta integración v9.01: ${token}`)
+for (const token of ['v9-home-primary','v9-record-action','v9-review-stat-grid','v9-matrix','v9-lot-review-list','v9-more-grid']) if (!css.includes(token)) fail(`Falta estilo v9.01: ${token}`)
+if (!failed) pass('Registrar, revisión, balance y navegación v9.01 presentes')
 
 for (const token of ['class AnimalAnimationManager','requestAnimationFrame','chooseTarget','validPosition','simfarm']) if (!animation.includes(token)) fail(`Falta motor de animación: ${token}`)
 for (const token of ['ANIMAL_SPRITE_LIBRARY','STANDARD_ANIMAL_SIZE','resolveAnimalSprite']) if (!library.includes(token)) fail(`Falta biblioteca de sprites: ${token}`)
 const spriteManifest = JSON.parse(fs.readFileSync(path.join(root,'assets/animals/v601/manifest.json'),'utf8'))
 if (spriteManifest.count !== 64 || !Array.isArray(spriteManifest.sprites) || spriteManifest.sprites.length !== 64) fail('La biblioteca actual no contiene 64 sprites')
-else pass('Animación Living Herds preservada en v9.00 con 64 sprites')
+else pass('Animación Living Herds preservada en v9.01 con 64 sprites')
 
 if (failed) process.exit(1)
-console.log('Campo v9.00 preflight complete')
+console.log('Campo v9.01 preflight complete')

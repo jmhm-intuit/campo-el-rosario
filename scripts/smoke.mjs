@@ -41,7 +41,7 @@ const api=context.__campoTest
 const checks=[]
 const check=(condition,message)=>{if(!condition)throw new Error(message);checks.push(message)}
 
-check(appElement.innerHTML.includes('Campo v9.00'),'Versión visible')
+check(appElement.innerHTML.includes('Campo v9.01'),'Versión visible')
 check(appElement.innerHTML.includes('¿Qué necesitás hacer hoy?'),'Inicio orientado a acciones')
 check(appElement.innerHTML.includes('Requiere atención'),'Inicio prioriza excepciones')
 check(api.state.surveys.length===16,'16 relevamientos disponibles')
@@ -88,4 +88,4 @@ check(api.herdBalanceForSurvey(survey)!==null,'Balance preservado')
 check(api.renderLotHistoryChart('ER-08-09').includes('history-load-line'),'Historia de lote preservada')
 check(api.eventsCsv().includes('categoria_destino'),'CSV de eventos preservado')
 
-console.log(`PASS  Smoke test v9.00: ${checks.length} comprobaciones`)
+console.log(`PASS  Smoke test v9.01: ${checks.length} comprobaciones`)

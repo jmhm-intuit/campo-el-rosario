@@ -2,9 +2,9 @@ import { animalAnimator } from './animal-animation.js'
 import { resolveAnimalSprite, STANDARD_ANIMAL_SIZE } from './animal-sprite-library.js'
 
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 900
-const APP_VERSION_LABEL = '9.00'
-const RELEASE_DATE = '2026-07-29'
+const APP_VERSION = 901
+const APP_VERSION_LABEL = '9.01'
+const RELEASE_DATE = '2026-07-30'
 const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'
 const ACTIVE_WORKSPACE_KEY = 'campo-el-rosario-active-workspace-v1'
 const WORKSPACES = Object.freeze({ REAL: 'real', DEMO: 'demo' })
@@ -459,7 +459,16 @@ function normalizeFieldState(value) {
 
 function fieldStateIcon(item, className = '') {
   const stateItem = item || fieldStateLookup['no-observado']
-  return `<img class="field-state-icon ${className}" src="./assets/conditions/${stateItem.indicator}" alt="">`
+  const statusAsset = ['muy-bueno','bueno','regular','malo','anegado'].includes(stateItem.id)
+    ? `./assets/icons/status/condition-${stateItem.id}.svg`
+    : `./assets/conditions/${stateItem.indicator}`
+  return `<img class="field-state-icon ${className}" src="${statusAsset}" alt="">`
+}
+
+function loadStatusAsset(load) {
+  const level = capacityClass(load)
+  const map = { empty:'low', low:'low', ok:'adequate', high:'high', over:'overload', critical:'critical' }
+  return `./assets/icons/status/load-${map[level] || 'adequate'}.svg`
 }
 
 function compactDateLabel(date) {
@@ -1488,11 +1497,45 @@ function renderMortalityBreakdown(summary) {
   return `<div class="v9-mortality-list">${[...byCategory.entries()].sort((a,b)=>b[1]-a[1]).map(([label,value])=>`<div><span>${esc(label)}</span><strong>${fmt(value)}</strong></div>`).join('')}</div>`
 }
 
+
+function monthlyHerdSeries(survey) {
+  const surveys = [...sortedSurveys(false)].reverse().filter((item)=>String(item.date||'')<=String(survey.date||''))
+  const byMonth = new Map()
+  surveys.forEach((item)=>byMonth.set(String(item.date).slice(0,7), item))
+  return [...byMonth.values()].slice(-16).map((item)=>{
+    const metrics=surveyMetrics(item)
+    const previous=previousSurvey(item)
+    const events=previous ? eventsBetween(previous.date,item.date) : []
+    const totals=eventTotals(events)
+    return { survey:item, metrics, totals, categories:metrics.categories }
+  })
+}
+
+function renderHerdMonthlyEvolution(survey) {
+  const series=monthlyHerdSeries(survey)
+  if(!series.length) return '<div class="empty-inline">No hay relevamientos mensuales para mostrar.</div>'
+  const width=900,height=290,padX=46,padTop=20,chartH=165,eventBase=225
+  const stocks=series.map((item)=>item.metrics.animals)
+  const min=Math.min(...stocks), max=Math.max(...stocks)
+  const range=Math.max(80,max-min)
+  const x=(i)=>padX+(series.length===1?0:i*(width-padX*2)/(series.length-1))
+  const y=(v)=>padTop+chartH-(v-(min-range*.15))/(range*1.3)*chartH
+  const points=series.map((item,i)=>`${x(i)},${y(item.metrics.animals)}`).join(' ')
+  const maxEvent=Math.max(1,...series.flatMap((item)=>[item.totals.birth+item.totals.purchase,item.totals.sale+item.totals.death]))
+  const barH=(v)=>Math.max(0,Math.min(42,v/maxEvent*42))
+  const bars=series.map((item,i)=>{const up=item.totals.birth+item.totals.purchase,down=item.totals.sale+item.totals.death;return `<rect class="herd-event-up" x="${x(i)-7}" y="${eventBase-barH(up)}" width="6" height="${barH(up)}" rx="2"><title>Altas: ${fmt(up)}</title></rect><rect class="herd-event-down" x="${x(i)+1}" y="${eventBase}" width="6" height="${barH(down)}" rx="2"><title>Bajas: ${fmt(down)}</title></rect>`}).join('')
+  const labels=series.map((item,i)=>`<text x="${x(i)}" y="${height-9}" text-anchor="middle">${item.survey.date.slice(5,7)}/${item.survey.date.slice(2,4)}</text>`).join('')
+  const dots=series.map((item,i)=>`<circle cx="${x(i)}" cy="${y(item.metrics.animals)}" r="4"><title>${compactDateLabel(item.survey.date)} · ${fmt(item.metrics.animals)} animales</title></circle>`).join('')
+  const rows=series.slice(-8).reverse().map((item)=>`<tr><th>${monthLabel(item.survey.date.slice(0,7))}</th><td>${fmt(item.metrics.animals)}</td><td class="positive">+${fmt(item.totals.birth+item.totals.purchase)}</td><td class="negative">-${fmt(item.totals.sale+item.totals.death)}</td><td>${fmt(familyQuantity(item.metrics.categories,'vacas'))}</td><td>${fmt(familyQuantity(item.metrics.categories,'terneros'))}</td><td>${fmt(familyQuantity(item.metrics.categories,'toros'))}</td></tr>`).join('')
+  return `<div class="herd-monthly-evolution"><div class="herd-chart-legend"><span class="stock">Stock total</span><span class="up">Altas</span><span class="down">Bajas</span></div><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Evolución mensual del rodeo"><line class="herd-event-axis" x1="${padX}" y1="${eventBase}" x2="${width-padX}" y2="${eventBase}"/>${bars}<polyline class="herd-stock-line" points="${points}"/>${dots}${labels}</svg><div class="herd-monthly-table-wrap"><table class="herd-monthly-table"><thead><tr><th>Mes</th><th>Stock</th><th>Altas</th><th>Bajas</th><th>Vaca</th><th>Tern.</th><th>Toro</th></tr></thead><tbody>${rows}</tbody></table></div></div>`
+}
+
 function renderHerdReview(survey) {
   const herd = herdPerformanceSummary(survey)
   const currentCows = familyQuantity(herd.metrics.categories,'vacas')
   return `<section class="v9-review-stat-grid"><article><small>Stock actual</small><strong>${fmt(herd.metrics.animals)}</strong><span>${herd.delta==null?'Primer registro':`${herd.delta>=0?'+':''}${fmt(herd.delta)} vs. anterior`}</span></article><article><small>Tasa de nacimientos</small><strong>${herd.birthRate==null?'—':`${decimal(herd.birthRate,1)}%`}</strong><span>${fmt(herd.totals.birth)} nacimientos</span></article><article><small>Mortandad anualizada</small><strong>${herd.mortalityAnnualized==null?'—':`${decimal(herd.mortalityAnnualized,1)}%`}</strong><span>${fmt(herd.totals.death)} animales</span></article><article><small>Movimiento comercial neto</small><strong>${herd.commercialNet>=0?'+':''}${fmt(herd.commercialNet)}</strong><span>${fmt(herd.totals.purchase)} compras · ${fmt(herd.totals.sale)} ventas</span></article></section>
     <section class="v9-review-grid"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Cantidad y participación</span><h3>Composición del rodeo</h3></div><span>${fmt(herd.metrics.animals)} cabezas</span></div>${renderCategoryBars(herd.metrics.categories,herd.metrics.animals)}</article><article class="panel"><div class="panel-head"><div><span class="eyebrow">Flujo observado</span><h3>Ciclo reproductivo</h3></div><span>solo datos disponibles</span></div><div class="v9-funnel"><div><small>Vacas previas</small><strong>${fmt(herd.priorCows)}</strong></div><i>→</i><div><small>Nacimientos</small><strong>${fmt(herd.totals.birth)}</strong></div><i>→</i><div><small>Terneros actuales</small><strong>${fmt(herd.currentCalves)}</strong></div><i>→</i><div><small>Ventas de terneros</small><strong>${fmt(herd.calfSales)}</strong></div></div><p class="v9-funnel-note">Vacas actuales: ${fmt(currentCows)} · Vaquillonas actuales: ${fmt(herd.currentHeifers)}</p></article></section>
+    <section class="panel herd-evolution-panel"><div class="panel-head"><div><span class="eyebrow">Stock, altas y bajas</span><h3>Evolución mensual del rodeo</h3></div><span>línea = stock · barras = movimientos</span></div>${renderHerdMonthlyEvolution(survey)}</section>
     <section class="panel"><div class="panel-head"><h3>Mortandad por categoría</h3><button class="text-link" data-add-event="death">Registrar mortandad</button></div>${renderMortalityBreakdown(herd)}</section>`
 }
 
@@ -1604,6 +1647,7 @@ function renderLotsDataTable(survey, context = 'summary') {
     return `<div class="lot-data-row v7-one-line ${ui.selectedLotId === lot.id ? 'selected' : ''}" data-table-lot="${lot.id}">
       <button class="lot-data-main" data-table-lot="${lot.id}" aria-label="Abrir ${lot.name}">
         <span class="lot-data-cell lot-name">${lot.name.replace('ER-','')}</span>
+        <span class="lot-data-cell hectares">${fmt(lot.hectares)}</span>
         <span class="lot-data-cell condition"><b class="state-${condition.stateId}">${conditionCode}</b></span>
         <span class="lot-data-cell load"><i class="load-dot ${loadClass}"></i>${loadValue}</span>
         <span class="lot-data-cell total"><strong>${entry ? fmt(metric.animals) : '—'}</strong></span>
@@ -1616,7 +1660,7 @@ function renderLotsDataTable(survey, context = 'summary') {
       <button class="lot-data-edit" data-edit-table-lot="${lot.id}" aria-label="Editar ${lot.name}">${icon('edit', 15)}</button>
     </div>`
   }).join('')
-  return `<div class="lot-data-table v7 ${context}"><div class="lot-data-header"><span>Lote</span><span>Cond.</span><span>EV</span><span>Total</span><span>Vaca</span><span>Tern.</span><span>Toro</span><span class="heifer">Vaq.</span><span class="steer">Nov.</span><span></span></div>${rows}</div>`
+  return `<div class="lot-data-table v7 ${context}"><div class="lot-data-header"><span>Lote</span><span>ha</span><span>Cond.</span><span>EV</span><span>Total</span><span>Vaca</span><span>Tern.</span><span>Toro</span><span class="heifer">Vaq.</span><span class="steer">Nov.</span><span></span></div>${rows}</div>`
 }
 
 function renderLotsSummaryTable(survey) {
@@ -1924,7 +1968,7 @@ function renderLotInspector(survey) {
   const index = LOTS.findIndex((item) => item.id === lot.id)
   const prevLot = LOTS[Math.max(0, index - 1)], nextLot = LOTS[Math.min(LOTS.length - 1, index + 1)]
   const tabs = `<div class="inspector-tabs"><button class="${ui.mapInspectorTab==='actual'?'active':''}" data-inspector-tab="actual">Actual</button><button class="${ui.mapInspectorTab==='evolution'?'active':''}" data-inspector-tab="evolution">Evolución</button><button class="${ui.mapInspectorTab==='events'?'active':''}" data-inspector-tab="events">Eventos</button></div>`
-  const actual = `<div class="inspector-tab-content"><div class="lot-concept-grid"><div class="concept-card condition state-${condition.stateId} source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${conditionSourceLabel(condition.source)}</span></div></div><div class="concept-card load ${loadClass}"><span class="concept-dot"></span><div><small>Carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${lotEntry ? `${decimal(metric.load)} EV/ha · ${Math.round(metric.capacityUse * 100)}%` : 'No registrada'}</span></div></div></div><div class="lot-stat-grid"><div><small>Total</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>Vaca</small><strong>${lotEntry ? fmt(rollup.cows) : '—'}</strong></div><div><small>Tern.</small><strong>${lotEntry ? fmt(rollup.calves) : '—'}</strong></div><div><small>Toro</small><strong>${lotEntry ? fmt(rollup.bulls) : '—'}</strong></div></div><h3 class="mini-history-title">Historia de carga y condición</h3>${renderLotHistoryChart(lot.id,true)}</div>`
+  const actual = `<div class="inspector-tab-content"><div class="lot-concept-grid"><div class="concept-card condition state-${condition.stateId} source-${condition.source}">${fieldStateIcon(fieldStateLookup[condition.stateId])}<div><small>Condición</small><strong>${condition.label}${conditionIsAssumed(condition.source) ? ' ≈' : ''}</strong><span>${conditionSourceLabel(condition.source)}</span></div></div><div class="concept-card load ${loadClass}"><img class="concept-status-icon" src="${loadStatusAsset(metric.load)}" alt=""><div><small>Carga</small><strong>${lotEntry ? capacityLabel(metric.load) : 'Sin carga'}</strong><span>${lotEntry ? `${decimal(metric.load)} EV/ha · ${Math.round(metric.capacityUse * 100)}%` : 'No registrada'}</span></div></div></div><div class="lot-stat-grid"><div><small>Total</small><strong>${lotEntry ? fmt(metric.animals) : '—'}</strong></div><div><small>Vaca</small><strong>${lotEntry ? fmt(rollup.cows) : '—'}</strong></div><div><small>Tern.</small><strong>${lotEntry ? fmt(rollup.calves) : '—'}</strong></div><div><small>Toro</small><strong>${lotEntry ? fmt(rollup.bulls) : '—'}</strong></div></div><h3 class="mini-history-title">Historia de carga y condición</h3>${renderLotHistoryChart(lot.id,true)}</div>`
   const evolution = `<div class="inspector-tab-content"><div class="section-heading"><h3>Evolución del lote</h3><p>La línea representa EV/ha y la franja inferior la condición de cada relevamiento.</p></div>${renderLotHistoryChart(lot.id,false)}</div>`
   const events = `<div class="inspector-tab-content"><div class="section-heading"><h3>Eventos del lote</h3><p>Ventas, compras, nacimientos, mortandad y recategorizaciones.</p></div>${renderLotEvents(lot.id,survey.date)}<button class="btn secondary full-width" data-add-event data-event-lot="${lot.id}">${icon('plus',16)} Registrar evento</button></div>`
   const tabContent = ui.mapInspectorTab==='evolution'?evolution:ui.mapInspectorTab==='events'?events:actual
@@ -2222,7 +2266,7 @@ function renderEventModal() {
 
 function renderIntroductionPage() {
   const quickLinks = `<div class="intro-quick-links"><button data-nav="registrar">${icon('clipboard',18)} Registrar</button><button data-review-tab="campo">${icon('map',18)} Revisar campo</button><button data-review-tab="rodeo">${icon('cow',18)} Revisar rodeo</button><button data-review-tab="balance">${icon('balance',18)} Validar balance</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.00</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.01</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
   <section class="intro-steps"><article><i>1</i><div><h3>Registrá el cambio</h3><p>Cargá una venta, compra, nacimiento, mortandad, recategorización o lluvia desde un único menú.</p></div></article><article><i>2</i><div><h3>Elegí el tipo de relevamiento</h3><p>Usá Revisión rápida para confirmar el stock esperado o Conteo completo para empezar desde cero.</p></div></article><article><i>3</i><div><h3>Revisá excepciones</h3><p>Campo prioriza lotes con eventos, carga alta o condición faltante para reducir la carga de trabajo.</p></div></article><article><i>4</i><div><h3>Validá desempeño y balance</h3><p>Separá la revisión del campo, el rodeo y la conciliación entre stock esperado y observado.</p></div></article></section>
   <section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Revisión rápida</dt><dd>Estado anterior más eventos; editás solo las excepciones.</dd><dt>Conteo completo</dt><dd>Fotografía independiente cargada desde cero.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición y carga</dt><dd>Estado del terreno y equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v9.00</h3><ul><li>Navegación orientada a Inicio, Registrar, Revisar y Mapa.</li><li>Menú único para relevamientos, eventos y lluvia.</li><li>Revisión rápida y conteo completo.</li><li>Secuencia de lotes priorizada por excepciones.</li><li>Centro de revisión con Campo, Rodeo y Balance.</li><li>Matriz condición × carga y vigencia de observaciones.</li><li>Confirmación posterior a cada evento y stock proyectado.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario sanitario y vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos planificados entre lotes.</li><li>Reportes gerenciales automáticos.</li></ul></article></section>`
   return renderShell(content,'Cómo usar Campo','Flujo recomendado y conceptos principales')

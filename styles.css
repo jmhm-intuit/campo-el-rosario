@@ -1217,7 +1217,7 @@ button:disabled{cursor:not-allowed;opacity:.45}
   .workspace-switch select{font-size:10px}
 }
 
-/* Campo v9.00 — Record & Review */
+/* Campo v9.01 — Record & Review */
 .v9-topbar{min-height:88px;height:auto;padding-top:12px;padding-bottom:12px}
 .local-save-status{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border-radius:999px;background:#edf4e9;color:#3c6d3f;font-size:10px;font-weight:800;white-space:nowrap}
 .mobile-more-button{display:none;border:0;background:#eef2e9;color:var(--green-900);width:38px;height:38px;border-radius:11px;place-items:center}
@@ -1285,3 +1285,19 @@ button:disabled{cursor:not-allowed;opacity:.45}
 @media(max-width:420px){
   .v9-event-action-grid{grid-template-columns:1fr}.kpi-grid.v9-kpis{grid-template-columns:1fr 1fr}.v9-review-stat-grid{grid-template-columns:1fr 1fr}.v9-not-included-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+
+/* Campo v9.01 — visual status, full overview map and monthly herd evolution */
+.v9-dashboard-grid{grid-template-columns:1fr!important}
+.v9-dashboard-grid .dashboard-side{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.v9-dashboard-grid .map-panel{width:100%}
+.v9-dashboard-grid .summary-zoom-shell{max-width:980px;margin:0 auto;width:100%}
+.v9-dashboard-grid .v802-summary-map{max-height:none!important;width:100%;aspect-ratio:1154/1363!important}
+.lot-data-table.v7{--lot-cols:54px 37px 39px 48px 46px 45px 45px 41px 39px 39px}
+.lot-data-cell.hectares{font-variant-numeric:tabular-nums;color:var(--muted)}
+.status-stat{position:relative;padding-left:48px!important;min-height:56px}
+.status-stat>img{position:absolute;left:8px;top:8px;width:34px;height:34px;object-fit:contain}
+.herd-monthly-evolution{padding:0 18px 18px}.herd-monthly-evolution svg{width:100%;height:auto;display:block;overflow:visible}.herd-stock-line{fill:none;stroke:#245d39;stroke-width:3}.herd-monthly-evolution circle{fill:#fff;stroke:#245d39;stroke-width:2.5}.herd-event-axis{stroke:#d8d2c5;stroke-width:1}.herd-event-up{fill:#6b9f58}.herd-event-down{fill:#c65f42}.herd-monthly-evolution text{font-size:10px;fill:#6f776f}.herd-chart-legend{display:flex;gap:18px;padding:0 0 8px;font-size:11px;color:var(--muted)}.herd-chart-legend span:before{content:'';display:inline-block;width:11px;height:3px;border-radius:3px;margin-right:6px;vertical-align:middle}.herd-chart-legend .stock:before{background:#245d39}.herd-chart-legend .up:before{height:9px;background:#6b9f58}.herd-chart-legend .down:before{height:9px;background:#c65f42}.herd-monthly-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}.herd-monthly-table{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums}.herd-monthly-table th,.herd-monthly-table td{padding:9px 10px;border-bottom:1px solid #ece7dc;text-align:right}.herd-monthly-table th:first-child,.herd-monthly-table td:first-child{text-align:left}.herd-monthly-table thead{background:#f1f4ec}.herd-monthly-table .positive{color:#397735}.herd-monthly-table .negative{color:#a84b37}
+@media(max-width:760px){.v9-dashboard-grid .dashboard-side{grid-template-columns:1fr}.v9-dashboard-grid .summary-zoom-shell{max-width:none}.lot-data-table.v7{--lot-cols:40px 27px 30px 38px 34px 34px 34px 30px}.lot-data-table.v7 .lot-data-header span.heifer,.lot-data-table.v7 .lot-data-header span.steer,.lot-data-table.v7 .lot-data-main .heifer,.lot-data-table.v7 .lot-data-main .steer{display:none}.lot-data-table.v7 .lot-data-header,.lot-data-table.v7 .lot-data-main{font-size:7.3px}.herd-monthly-evolution{padding:0 8px 12px}.herd-monthly-evolution svg{min-width:680px}.herd-monthly-evolution{overflow-x:auto}.herd-monthly-table{min-width:600px}.status-stat{padding-left:42px!important}.status-stat>img{width:28px;height:28px}}
+.field-state-icon{object-fit:contain}
+.concept-status-icon{width:42px;height:42px;object-fit:contain;flex:0 0 auto}

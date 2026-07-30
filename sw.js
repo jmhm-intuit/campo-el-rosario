@@ -1,4 +1,4 @@
-const CACHE = 'campo-v900-assets-1'
+const CACHE = 'campo-v901-assets-1'
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,17 @@ const CORE_ASSETS = [
   './assets/map/el-rosario-map.png',
   './assets/geometry/polygons-reviewed-final.json',
   './assets/asset-manifest.json',
+  './assets/icons/status/load-low.svg',
+  './assets/icons/status/load-adequate.svg',
+  './assets/icons/status/load-optimal.svg',
+  './assets/icons/status/load-high.svg',
+  './assets/icons/status/load-overload.svg',
+  './assets/icons/status/load-critical.svg',
+  './assets/icons/status/condition-muy-bueno.svg',
+  './assets/icons/status/condition-bueno.svg',
+  './assets/icons/status/condition-regular.svg',
+  './assets/icons/status/condition-malo.svg',
+  './assets/icons/status/condition-anegado.svg',
   './assets/icons/icon-home-house.png',
   './assets/icons/icon-register-animals.png',
   './assets/ui/register-animals.png',

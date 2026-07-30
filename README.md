@@ -1,6 +1,6 @@
-# Campo El Rosario v9.00 — Record & Review
+# Campo El Rosario v9.01 — Record & Review
 
-Campo v9.00 refocuses the application around the two most important jobs in a ranch-management workflow:
+Campo v9.01 refocuses the application around the two most important jobs in a ranch-management workflow:
 
 1. **Registrar** what happened or what was observed with very low friction.
 2. **Revisar** field, herd and inventory performance with one coherent date reference.
