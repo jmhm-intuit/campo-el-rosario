@@ -1,53 +1,30 @@
-# Publishing Campo v9.01
+# Publishing Campo v9.02
 
-## File to upload
-
-Upload this file to the repository root:
-
-```text
-campo-el-rosario-v9-01-deploy.zip
-```
-
-## Codespaces: unzip, commit and push
+Upload `campo-el-rosario-v9-02-deploy.zip` to the repository root, then run:
 
 ```bash
 git pull --rebase origin main
 
-rm -rf /tmp/campo-v9-01
-mkdir -p /tmp/campo-v9-01
+rm -rf /tmp/campo-v9-02
+mkdir -p /tmp/campo-v9-02
 
-unzip -q campo-el-rosario-v9-01-deploy.zip -d /tmp/campo-v9-01
+unzip -q campo-el-rosario-v9-02-deploy.zip -d /tmp/campo-v9-02
 
 find . -mindepth 1 -maxdepth 1 \
   ! -name '.git' \
-  ! -name 'campo-el-rosario-v9-01-deploy.zip' \
+  ! -name 'campo-el-rosario-v9-02-deploy.zip' \
   -exec rm -rf {} +
 
-cp -a /tmp/campo-v9-01/. .
+cp -a /tmp/campo-v9-02/. .
 
-rm -rf /tmp/campo-v9-01
-rm -f campo-el-rosario-v9-01-deploy.zip
+rm -rf /tmp/campo-v9-02
+rm -f campo-el-rosario-v9-02-deploy.zip
 
 git add -A
-git commit -m "Deploy Campo v9.01"
+git commit -m "Deploy Campo v9.02"
 git push origin main
 ```
 
-If Git reports `nothing to commit`, run only:
+After the push, wait for the GitHub Pages action to finish and confirm the UI displays `Campo v9.02`.
 
-```bash
-git push origin main
-```
-
-## Verification
-
-1. Open **GitHub → Actions**.
-2. Wait for **Deploy Campo v9.01 to GitHub Pages** to finish with a green check.
-3. Open `https://jmhm-intuit.github.io/campo-el-rosario/`.
-4. Confirm that the UI displays `Campo v9.01`.
-5. Confirm that Inicio, Registrar, Revisar and Mapa appear in the phone navigation.
-6. Open Revisar and validate Campo, Rodeo and Balance tabs.
-7. Start a Quick Review and confirm that projected values are preloaded.
-8. Confirm that existing El Rosario data and the separate Muestra workspace remain available.
-
-Before updating, export a JSON backup of El Rosario. Do not clear browser site data after deployment.
+Before deploying, export a JSON backup. Do not clear browser site data because Campo keeps the operational database locally.

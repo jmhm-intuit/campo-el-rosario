@@ -41,7 +41,9 @@ const api=context.__campoTest
 const checks=[]
 const check=(condition,message)=>{if(!condition)throw new Error(message);checks.push(message)}
 
-check(appElement.innerHTML.includes('Campo v9.01'),'Versión visible')
+check(appElement.innerHTML.includes('Campo v9.02'),'Versión visible')
+check(appElement.innerHTML.includes('assets/icons/v902/64/nav-home.png'),'Navegación usa iconos v9.02')
+check(appElement.innerHTML.includes('assets/icons/v902/64/kpi-animals.png'),'KPI usa iconos v9.02')
 check(appElement.innerHTML.includes('¿Qué necesitás hacer hoy?'),'Inicio orientado a acciones')
 check(appElement.innerHTML.includes('Requiere atención'),'Inicio prioriza excepciones')
 check(api.state.surveys.length===16,'16 relevamientos disponibles')
@@ -49,6 +51,8 @@ check(api.state.animalEvents.length>=40,'Eventos sintéticos disponibles')
 const survey=api.state.surveys.find(s=>s.id===api.state.selectedSurveyId)||api.state.surveys.at(-1)
 
 api.ui.view='registrar';api.render()
+check(appElement.innerHTML.includes('assets/icons/v902/64/survey-quick.png'),'Registrar usa iconos de relevamiento')
+check(appElement.innerHTML.includes('assets/icons/v902/64/event-sale.png'),'Registrar usa iconos de eventos')
 check(appElement.innerHTML.includes('Revisión rápida'),'Registrar ofrece revisión rápida')
 check(appElement.innerHTML.includes('Conteo completo'),'Registrar ofrece conteo completo')
 check(appElement.innerHTML.includes('Eventos del rodeo'),'Registrar unifica eventos')
@@ -88,4 +92,4 @@ check(api.herdBalanceForSurvey(survey)!==null,'Balance preservado')
 check(api.renderLotHistoryChart('ER-08-09').includes('history-load-line'),'Historia de lote preservada')
 check(api.eventsCsv().includes('categoria_destino'),'CSV de eventos preservado')
 
-console.log(`PASS  Smoke test v9.01: ${checks.length} comprobaciones`)
+console.log(`PASS  Smoke test v9.02: ${checks.length} comprobaciones`)

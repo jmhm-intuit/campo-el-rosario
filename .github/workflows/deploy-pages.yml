@@ -1,4 +1,4 @@
-name: Deploy Campo v9.00 to GitHub Pages
+name: Deploy Campo v9.02 to GitHub Pages
 
 on:
   push:
@@ -32,6 +32,7 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
+          node --check icon-library.js
           node --check animal-animation.js
           node --check animal-sprite-library.js
 

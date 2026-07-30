@@ -1,10 +1,11 @@
 {
-  "version": "9.00",
-  "build": 801,
-  "description": "Assets activos de Campo El Rosario v9.00 — mapa, texturas, iconos y sprites direccionales preservados para Record & Review",
+  "version": "9.02",
+  "build": 902,
+  "description": "Assets activos de Campo El Rosario v9.02 — sistema aprobado de iconos transparentes, mapa, texturas y sprites direccionales",
   "counts": {
-    "total": 115,
-    "aerialAnimalSprites": 64
+    "total": 202,
+    "aerialAnimalSprites": 64,
+    "uiIconsV902": 87
   },
   "assets": [
     {
@@ -696,6 +697,528 @@
       "type": "interface",
       "path": "assets/ui/register-animals.png",
       "bytes": 145856
+    },
+    {
+      "id": "alert-condition",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/alert-condition.png",
+      "bytes": 8386
+    },
+    {
+      "id": "alert-data",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/alert-data.png",
+      "bytes": 7074
+    },
+    {
+      "id": "alert-inventory",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/alert-inventory.png",
+      "bytes": 5889
+    },
+    {
+      "id": "alert-load",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/alert-load.png",
+      "bytes": 7998
+    },
+    {
+      "id": "alert-rain",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/alert-rain.png",
+      "bytes": 5145
+    },
+    {
+      "id": "backup-export",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/backup-export.png",
+      "bytes": 6734
+    },
+    {
+      "id": "backup-import",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/backup-import.png",
+      "bytes": 6642
+    },
+    {
+      "id": "balance",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/balance.png",
+      "bytes": 3392
+    },
+    {
+      "id": "bull",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/bull.png",
+      "bytes": 6396
+    },
+    {
+      "id": "calendar-commercial",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/calendar-commercial.png",
+      "bytes": 5923
+    },
+    {
+      "id": "calendar-pasture",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/calendar-pasture.png",
+      "bytes": 5816
+    },
+    {
+      "id": "calendar-vaccination",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/calendar-vaccination.png",
+      "bytes": 5149
+    },
+    {
+      "id": "calf",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/calf.png",
+      "bytes": 6722
+    },
+    {
+      "id": "condition-flooded",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-flooded.png",
+      "bytes": 6508
+    },
+    {
+      "id": "condition-good",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-good.png",
+      "bytes": 6516
+    },
+    {
+      "id": "condition-no-info",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-no-info.png",
+      "bytes": 6726
+    },
+    {
+      "id": "condition-poor",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-poor.png",
+      "bytes": 6624
+    },
+    {
+      "id": "condition-regular",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-regular.png",
+      "bytes": 6585
+    },
+    {
+      "id": "condition-very-good",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/condition-very-good.png",
+      "bytes": 6822
+    },
+    {
+      "id": "cow",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/cow.png",
+      "bytes": 5985
+    },
+    {
+      "id": "demo-delete",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/demo-delete.png",
+      "bytes": 5781
+    },
+    {
+      "id": "demo-load",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/demo-load.png",
+      "bytes": 6957
+    },
+    {
+      "id": "demo-open",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/demo-open.png",
+      "bytes": 7210
+    },
+    {
+      "id": "demo-reset",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/demo-reset.png",
+      "bytes": 7723
+    },
+    {
+      "id": "demo",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/demo.png",
+      "bytes": 5624
+    },
+    {
+      "id": "event-adjustment",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-adjustment.png",
+      "bytes": 7048
+    },
+    {
+      "id": "event-birth",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-birth.png",
+      "bytes": 7469
+    },
+    {
+      "id": "event-mortality",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-mortality.png",
+      "bytes": 7703
+    },
+    {
+      "id": "event-purchase",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-purchase.png",
+      "bytes": 5680
+    },
+    {
+      "id": "event-reclassification",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-reclassification.png",
+      "bytes": 6881
+    },
+    {
+      "id": "event-sale",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/event-sale.png",
+      "bytes": 6361
+    },
+    {
+      "id": "export-csv",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/export-csv.png",
+      "bytes": 6331
+    },
+    {
+      "id": "export-pdf",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/export-pdf.png",
+      "bytes": 6218
+    },
+    {
+      "id": "heifer",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/heifer.png",
+      "bytes": 7170
+    },
+    {
+      "id": "herd",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/herd.png",
+      "bytes": 6462
+    },
+    {
+      "id": "kpi-animals",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-animals.png",
+      "bytes": 5679
+    },
+    {
+      "id": "kpi-balance",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-balance.png",
+      "bytes": 6184
+    },
+    {
+      "id": "kpi-birth",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-birth.png",
+      "bytes": 6306
+    },
+    {
+      "id": "kpi-condition",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-condition.png",
+      "bytes": 6086
+    },
+    {
+      "id": "kpi-load",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-load.png",
+      "bytes": 5199
+    },
+    {
+      "id": "kpi-mortality",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-mortality.png",
+      "bytes": 4217
+    },
+    {
+      "id": "kpi-purchases",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-purchases.png",
+      "bytes": 5652
+    },
+    {
+      "id": "kpi-rain",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-rain.png",
+      "bytes": 4761
+    },
+    {
+      "id": "kpi-sales",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-sales.png",
+      "bytes": 5601
+    },
+    {
+      "id": "kpi-water-index",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/kpi-water-index.png",
+      "bytes": 5880
+    },
+    {
+      "id": "load-adequate",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/load-adequate.png",
+      "bytes": 6541
+    },
+    {
+      "id": "load-critical",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/load-critical.png",
+      "bytes": 6524
+    },
+    {
+      "id": "load-high",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/load-high.png",
+      "bytes": 6703
+    },
+    {
+      "id": "load-low",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/load-low.png",
+      "bytes": 7426
+    },
+    {
+      "id": "load-overload",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/load-overload.png",
+      "bytes": 6540
+    },
+    {
+      "id": "map-animation",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-animation.png",
+      "bytes": 4560
+    },
+    {
+      "id": "map-fit",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-fit.png",
+      "bytes": 6524
+    },
+    {
+      "id": "map-pause",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-pause.png",
+      "bytes": 6044
+    },
+    {
+      "id": "map-selected",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-selected.png",
+      "bytes": 6935
+    },
+    {
+      "id": "map-zoom-in",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-zoom-in.png",
+      "bytes": 6415
+    },
+    {
+      "id": "map-zoom-out",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/map-zoom-out.png",
+      "bytes": 6360
+    },
+    {
+      "id": "nav-history",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-history.png",
+      "bytes": 6922
+    },
+    {
+      "id": "nav-home",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-home.png",
+      "bytes": 6573
+    },
+    {
+      "id": "nav-map",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-map.png",
+      "bytes": 8296
+    },
+    {
+      "id": "nav-more",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-more.png",
+      "bytes": 4798
+    },
+    {
+      "id": "nav-register",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-register.png",
+      "bytes": 6925
+    },
+    {
+      "id": "nav-review",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/nav-review.png",
+      "bytes": 7199
+    },
+    {
+      "id": "rain-cumulative",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/rain-cumulative.png",
+      "bytes": 6020
+    },
+    {
+      "id": "rain-fortnight",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/rain-fortnight.png",
+      "bytes": 7199
+    },
+    {
+      "id": "rain-index",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/rain-index.png",
+      "bytes": 6459
+    },
+    {
+      "id": "rain-monthly",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/rain-monthly.png",
+      "bytes": 6523
+    },
+    {
+      "id": "rain",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/rain.png",
+      "bytes": 4749
+    },
+    {
+      "id": "report-balance",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/report-balance.png",
+      "bytes": 5572
+    },
+    {
+      "id": "report-field",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/report-field.png",
+      "bytes": 7625
+    },
+    {
+      "id": "report-herd",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/report-herd.png",
+      "bytes": 7229
+    },
+    {
+      "id": "report-monthly",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/report-monthly.png",
+      "bytes": 5364
+    },
+    {
+      "id": "report-rain",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/report-rain.png",
+      "bytes": 6763
+    },
+    {
+      "id": "review-balance",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/review-balance.png",
+      "bytes": 5644
+    },
+    {
+      "id": "review-field",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/review-field.png",
+      "bytes": 7870
+    },
+    {
+      "id": "review-herd",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/review-herd.png",
+      "bytes": 6335
+    },
+    {
+      "id": "settings-animation",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-animation.png",
+      "bytes": 5024
+    },
+    {
+      "id": "settings-backup",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-backup.png",
+      "bytes": 7176
+    },
+    {
+      "id": "settings-demo",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-demo.png",
+      "bytes": 6856
+    },
+    {
+      "id": "settings-display",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-display.png",
+      "bytes": 5667
+    },
+    {
+      "id": "settings-general",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-general.png",
+      "bytes": 7793
+    },
+    {
+      "id": "settings-storage",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/settings-storage.png",
+      "bytes": 6699
+    },
+    {
+      "id": "survey-archive",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/survey-archive.png",
+      "bytes": 6982
+    },
+    {
+      "id": "survey-delete",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/survey-delete.png",
+      "bytes": 7190
+    },
+    {
+      "id": "survey-full",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/survey-full.png",
+      "bytes": 5384
+    },
+    {
+      "id": "survey-quick",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/survey-quick.png",
+      "bytes": 5140
+    },
+    {
+      "id": "survey-save",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/survey-save.png",
+      "bytes": 6060
+    },
+    {
+      "id": "young-steer",
+      "type": "ui-icon-v902",
+      "path": "assets/icons/v902/64/young-steer.png",
+      "bytes": 7055
     }
   ]
 }

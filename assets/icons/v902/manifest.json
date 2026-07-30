@@ -1,0 +1,789 @@
+{
+  "version": "9.02",
+  "source": "approved brochures",
+  "icons": [
+    {
+      "name": "alert-condition",
+      "path": "assets/icons/v902/160/alert-condition.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "alert-data",
+      "path": "assets/icons/v902/160/alert-data.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "alert-inventory",
+      "path": "assets/icons/v902/160/alert-inventory.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "alert-load",
+      "path": "assets/icons/v902/160/alert-load.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "alert-rain",
+      "path": "assets/icons/v902/160/alert-rain.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "backup-export",
+      "path": "assets/icons/v902/160/backup-export.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "backup-import",
+      "path": "assets/icons/v902/160/backup-import.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "balance",
+      "path": "assets/icons/v902/160/balance.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "bull",
+      "path": "assets/icons/v902/160/bull.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "calendar-commercial",
+      "path": "assets/icons/v902/160/calendar-commercial.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "calendar-pasture",
+      "path": "assets/icons/v902/160/calendar-pasture.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "calendar-vaccination",
+      "path": "assets/icons/v902/160/calendar-vaccination.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "calf",
+      "path": "assets/icons/v902/160/calf.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-flooded",
+      "path": "assets/icons/v902/160/condition-flooded.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-good",
+      "path": "assets/icons/v902/160/condition-good.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-no-info",
+      "path": "assets/icons/v902/160/condition-no-info.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-poor",
+      "path": "assets/icons/v902/160/condition-poor.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-regular",
+      "path": "assets/icons/v902/160/condition-regular.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "condition-very-good",
+      "path": "assets/icons/v902/160/condition-very-good.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "cow",
+      "path": "assets/icons/v902/160/cow.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "demo-delete",
+      "path": "assets/icons/v902/160/demo-delete.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "demo-load",
+      "path": "assets/icons/v902/160/demo-load.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "demo-open",
+      "path": "assets/icons/v902/160/demo-open.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "demo-reset",
+      "path": "assets/icons/v902/160/demo-reset.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "demo",
+      "path": "assets/icons/v902/160/demo.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-adjustment",
+      "path": "assets/icons/v902/160/event-adjustment.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-birth",
+      "path": "assets/icons/v902/160/event-birth.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-mortality",
+      "path": "assets/icons/v902/160/event-mortality.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-purchase",
+      "path": "assets/icons/v902/160/event-purchase.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-reclassification",
+      "path": "assets/icons/v902/160/event-reclassification.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "event-sale",
+      "path": "assets/icons/v902/160/event-sale.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "export-csv",
+      "path": "assets/icons/v902/160/export-csv.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "export-pdf",
+      "path": "assets/icons/v902/160/export-pdf.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "heifer",
+      "path": "assets/icons/v902/160/heifer.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "herd",
+      "path": "assets/icons/v902/160/herd.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-animals",
+      "path": "assets/icons/v902/160/kpi-animals.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-balance",
+      "path": "assets/icons/v902/160/kpi-balance.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-birth",
+      "path": "assets/icons/v902/160/kpi-birth.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-condition",
+      "path": "assets/icons/v902/160/kpi-condition.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-load",
+      "path": "assets/icons/v902/160/kpi-load.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-mortality",
+      "path": "assets/icons/v902/160/kpi-mortality.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-purchases",
+      "path": "assets/icons/v902/160/kpi-purchases.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-rain",
+      "path": "assets/icons/v902/160/kpi-rain.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-sales",
+      "path": "assets/icons/v902/160/kpi-sales.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "kpi-water-index",
+      "path": "assets/icons/v902/160/kpi-water-index.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "load-adequate",
+      "path": "assets/icons/v902/160/load-adequate.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "load-critical",
+      "path": "assets/icons/v902/160/load-critical.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "load-high",
+      "path": "assets/icons/v902/160/load-high.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "load-low",
+      "path": "assets/icons/v902/160/load-low.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "load-overload",
+      "path": "assets/icons/v902/160/load-overload.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-animation",
+      "path": "assets/icons/v902/160/map-animation.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-fit",
+      "path": "assets/icons/v902/160/map-fit.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-pause",
+      "path": "assets/icons/v902/160/map-pause.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-selected",
+      "path": "assets/icons/v902/160/map-selected.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-zoom-in",
+      "path": "assets/icons/v902/160/map-zoom-in.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "map-zoom-out",
+      "path": "assets/icons/v902/160/map-zoom-out.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-history",
+      "path": "assets/icons/v902/160/nav-history.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-home",
+      "path": "assets/icons/v902/160/nav-home.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-map",
+      "path": "assets/icons/v902/160/nav-map.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-more",
+      "path": "assets/icons/v902/160/nav-more.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-register",
+      "path": "assets/icons/v902/160/nav-register.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "nav-review",
+      "path": "assets/icons/v902/160/nav-review.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "rain-cumulative",
+      "path": "assets/icons/v902/160/rain-cumulative.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "rain-fortnight",
+      "path": "assets/icons/v902/160/rain-fortnight.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "rain-index",
+      "path": "assets/icons/v902/160/rain-index.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "rain-monthly",
+      "path": "assets/icons/v902/160/rain-monthly.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "rain",
+      "path": "assets/icons/v902/160/rain.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "report-balance",
+      "path": "assets/icons/v902/160/report-balance.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "report-field",
+      "path": "assets/icons/v902/160/report-field.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "report-herd",
+      "path": "assets/icons/v902/160/report-herd.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "report-monthly",
+      "path": "assets/icons/v902/160/report-monthly.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "report-rain",
+      "path": "assets/icons/v902/160/report-rain.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "review-balance",
+      "path": "assets/icons/v902/160/review-balance.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "review-field",
+      "path": "assets/icons/v902/160/review-field.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "review-herd",
+      "path": "assets/icons/v902/160/review-herd.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-animation",
+      "path": "assets/icons/v902/160/settings-animation.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-backup",
+      "path": "assets/icons/v902/160/settings-backup.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-demo",
+      "path": "assets/icons/v902/160/settings-demo.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-display",
+      "path": "assets/icons/v902/160/settings-display.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-general",
+      "path": "assets/icons/v902/160/settings-general.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "settings-storage",
+      "path": "assets/icons/v902/160/settings-storage.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "survey-archive",
+      "path": "assets/icons/v902/160/survey-archive.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "survey-delete",
+      "path": "assets/icons/v902/160/survey-delete.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "survey-full",
+      "path": "assets/icons/v902/160/survey-full.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "survey-quick",
+      "path": "assets/icons/v902/160/survey-quick.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "survey-save",
+      "path": "assets/icons/v902/160/survey-save.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    },
+    {
+      "name": "young-steer",
+      "path": "assets/icons/v902/160/young-steer.png",
+      "size": [
+        160,
+        160
+      ],
+      "alpha": true
+    }
+  ]
+}

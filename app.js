@@ -2,8 +2,8 @@ import { animalAnimator } from './animal-animation.js'
 import { resolveAnimalSprite, STANDARD_ANIMAL_SIZE } from './animal-sprite-library.js'
 
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 901
-const APP_VERSION_LABEL = '9.01'
+const APP_VERSION = 902
+const APP_VERSION_LABEL = '9.02'
 const RELEASE_DATE = '2026-07-30'
 const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'
 const ACTIVE_WORKSPACE_KEY = 'campo-el-rosario-active-workspace-v1'
@@ -289,11 +289,11 @@ const CATEGORY_MIGRATION = {
 }
 
 const EVENT_TYPES = [
-  { id: 'sale', label: 'Venta', group: 'commercial', sign: -1, icon: '↗' },
-  { id: 'purchase', label: 'Compra', group: 'commercial', sign: 1, icon: '↙' },
-  { id: 'death', label: 'Mortandad', group: 'herd', sign: -1, icon: '✚' },
-  { id: 'birth', label: 'Nacimiento', group: 'herd', sign: 1, icon: '●' },
-  { id: 'reclassification', label: 'Recategorización', group: 'herd', sign: 0, icon: '⇄' },
+  { id: 'sale', label: 'Venta', group: 'commercial', sign: -1, iconAsset: 'event-sale' },
+  { id: 'purchase', label: 'Compra', group: 'commercial', sign: 1, iconAsset: 'event-purchase' },
+  { id: 'death', label: 'Mortandad', group: 'herd', sign: -1, iconAsset: 'event-mortality' },
+  { id: 'birth', label: 'Nacimiento', group: 'herd', sign: 1, iconAsset: 'event-birth' },
+  { id: 'reclassification', label: 'Recategorización', group: 'herd', sign: 0, iconAsset: 'event-reclassification' },
 ]
 
 
@@ -415,18 +415,23 @@ const FIELD_STATES = [
   { id: 'no-observado', label: 'Sin información', short: 'Sin info.', tone: 'unknown', pattern: null, indicator: 'condition-indicator-unobserved.png' },
 ]
 
+const ICON_LIBRARY = window.CAMPO_ICON_LIBRARY || {
+  path: (name, size = 64) => `./assets/icons/v902/${size}/${name}.png`,
+  generic: {}, navigation: {}, survey: {}, event: {}, rain: {}, condition: {}, load: {}, kpi: {}, review: {}, demo: {}, backup: {}, map: {},
+}
+
 const KPI_ASSETS = {
-  animals: 'kpi/kpi-cow-red-angus.png',
-  load: 'kpi/kpi-pasture.png',
-  births: 'kpi/kpi-cow-calf-red-angus.png',
-  deaths: 'kpi/kpi-health.png',
-  trade: 'kpi/kpi-growth.png',
-  rain: 'kpi/kpi-weather-rain.png',
+  animals: 'icons/v902/64/kpi-animals.png',
+  load: 'icons/v902/64/kpi-load.png',
+  births: 'icons/v902/64/kpi-birth.png',
+  deaths: 'icons/v902/64/kpi-mortality.png',
+  trade: 'icons/v902/64/kpi-balance.png',
+  rain: 'icons/v902/64/kpi-rain.png',
 }
 
 const UI_ASSETS = {
-  home: 'icons/icon-home-house.png',
-  register: 'icons/icon-register-animals.png',
+  home: 'icons/v902/64/nav-home.png',
+  register: 'icons/v902/64/nav-register.png',
 }
 
 const SAMPLE_DATA_URL = './data/campo-muestra-16-meses-v8.json'
@@ -457,18 +462,22 @@ function normalizeFieldState(value) {
   return fieldStateLookup[value] ? value : 'no-observado'
 }
 
+function assetIcon(name, size = 24, className = '', alt = '') {
+  const sourceSize = size <= 64 ? 64 : 160
+  return `<img class="icon icon-asset ${className}" src="${ICON_LIBRARY.path(name, sourceSize)}" width="${size}" height="${size}" alt="${esc(alt)}">`
+}
+
 function fieldStateIcon(item, className = '') {
   const stateItem = item || fieldStateLookup['no-observado']
-  const statusAsset = ['muy-bueno','bueno','regular','malo','anegado'].includes(stateItem.id)
-    ? `./assets/icons/status/condition-${stateItem.id}.svg`
-    : `./assets/conditions/${stateItem.indicator}`
-  return `<img class="field-state-icon ${className}" src="${statusAsset}" alt="">`
+  const name = ICON_LIBRARY.condition?.[stateItem.id] || 'condition-no-info'
+  return `<img class="field-state-icon ${className}" src="${ICON_LIBRARY.path(name, 64)}" alt="">`
 }
 
 function loadStatusAsset(load) {
   const level = capacityClass(load)
   const map = { empty:'low', low:'low', ok:'adequate', high:'high', over:'overload', critical:'critical' }
-  return `./assets/icons/status/load-${map[level] || 'adequate'}.svg`
+  const name = ICON_LIBRARY.load?.[map[level] || 'adequate'] || `load-${map[level] || 'adequate'}`
+  return ICON_LIBRARY.path(name, 64)
 }
 
 function compactDateLabel(date) {
@@ -1212,6 +1221,8 @@ function loadAbbreviation(load) {
 }
 
 function icon(name, size = 20) {
+  const approved = ICON_LIBRARY.generic?.[name]
+  if (approved) return assetIcon(approved, size)
   const paths = {
     home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
     clipboard: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2"/><path d="M9 10h6M9 14h6M9 18h4"/>',
@@ -1412,7 +1423,7 @@ function renderAttentionGroup(item) {
 function renderRecentActivity(limit = 6) {
   const events = activeAnimalEvents().slice(0, limit).map((event) => ({
     date:event.date,
-    html:`<button class="v9-activity-item" data-edit-event="${event.id}"><span class="activity-icon ${event.type}">${eventTypeLookup[event.type]?.icon || '•'}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)} ${categoryLookup[event.categoryId]?.short || ''}</strong><p>${lotLookup[event.lotId]?.name || event.lotId} · ${compactDateLabel(event.date)}</p></div>${icon('chevron',17)}</button>`,
+    html:`<button class="v9-activity-item" data-edit-event="${event.id}"><span class="activity-icon ${event.type}">${assetIcon(eventTypeLookup[event.type]?.iconAsset || 'event-adjustment',30)}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)} ${categoryLookup[event.categoryId]?.short || ''}</strong><p>${lotLookup[event.lotId]?.name || event.lotId} · ${compactDateLabel(event.date)}</p></div>${icon('chevron',17)}</button>`,
   }))
   const surveys = sortedSurveys(false).slice(0, limit).map((survey) => ({
     date:survey.date,
@@ -1457,10 +1468,10 @@ function renderRegisterHub() {
   const projected = latest ? projectedHerdTotalAt(todayISO()) : 0
   const confirmation = ui.recordConfirmation ? `<article class="v9-record-confirmation"><span>${icon('check',22)}</span><div><small>Registro guardado</small><h3>${esc(ui.recordConfirmation.title)}</h3><p>${esc(ui.recordConfirmation.detail)}</p><strong>Stock proyectado: ${fmt(ui.recordConfirmation.projected)} animales</strong></div><button data-clear-record-confirmation>${icon('close',18)}</button></article>` : ''
   const draftCard = draft ? `<article class="v9-draft-resume"><div><span class="eyebrow">Borrador en curso</span><h2>${draft.mode==='edit'?'Edición de relevamiento':'Relevamiento sin terminar'}</h2><p>${compactDateLabel(draft.date)} · paso ${draft.step || 1} de 3 · ${(draft.lots || []).length} lotes incluidos</p></div><button class="btn primary" data-resume-survey>Continuar</button></article>` : ''
-  const eventActions = EVENT_TYPES.map((eventType) => `<button class="v9-record-action small" data-add-event="${eventType.id}"><span>${eventType.icon}</span><div><strong>${eventType.label}</strong><small>${eventType.group==='commercial'?'Movimiento comercial':'Cambio del rodeo'}</small></div></button>`).join('')
+  const eventActions = EVENT_TYPES.map((eventType) => `<button class="v9-record-action small" data-add-event="${eventType.id}"><span>${assetIcon(eventType.iconAsset || 'event-adjustment',34)}</span><div><strong>${eventType.label}</strong><small>${eventType.group==='commercial'?'Movimiento comercial':'Cambio del rodeo'}</small></div></button>`).join('')
   const content = `${confirmation}${draftCard}<section class="v9-register-hero"><div><span class="eyebrow">Carga rápida y guiada</span><h2>¿Qué querés registrar?</h2><p>Elegí la acción. Campo guarda localmente y muestra el impacto sobre el próximo relevamiento.</p></div><div class="v9-projected-stock"><small>Stock proyectado hoy</small><strong>${latest ? fmt(projected) : '—'}</strong><span>${latest ? `base ${compactDateLabel(latest.date)}` : 'Creá el primer relevamiento'}</span></div></section>
-    <section class="v9-survey-choice"><button class="v9-record-action featured" data-start-survey-mode="quick"><span>${icon('check',26)}</span><div><strong>Revisión rápida</strong><small>Partí del estado esperado y cambiá solo las excepciones.</small></div><em>Recomendado</em></button><button class="v9-record-action featured secondary" data-start-survey-mode="full"><span>${icon('clipboard',26)}</span><div><strong>Conteo completo</strong><small>Cargá una fotografía independiente desde cero.</small></div></button></section>
-    <section class="panel v9-record-panel"><div class="panel-head"><div><span class="eyebrow">Cambios entre fotografías</span><h3>Eventos del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver historial</button></div><div class="v9-event-action-grid">${eventActions}<button class="v9-record-action small rain" data-open-rain="${monthKey(todayISO())}"><span>${icon('rain',22)}</span><div><strong>Lluvia</strong><small>Total mensual o detalle por fecha</small></div></button></div></section>
+    <section class="v9-survey-choice"><button class="v9-record-action featured" data-start-survey-mode="quick"><span>${assetIcon('survey-quick',42)}</span><div><strong>Revisión rápida</strong><small>Partí del estado esperado y cambiá solo las excepciones.</small></div><em>Recomendado</em></button><button class="v9-record-action featured secondary" data-start-survey-mode="full"><span>${assetIcon('survey-full',42)}</span><div><strong>Conteo completo</strong><small>Cargá una fotografía independiente desde cero.</small></div></button></section>
+    <section class="panel v9-record-panel"><div class="panel-head"><div><span class="eyebrow">Cambios entre fotografías</span><h3>Eventos del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver historial</button></div><div class="v9-event-action-grid">${eventActions}<button class="v9-record-action small rain" data-open-rain="${monthKey(todayISO())}"><span>${assetIcon('rain',34)}</span><div><strong>Lluvia</strong><small>Total mensual o detalle por fecha</small></div></button></div></section>
     <section class="v9-register-bottom"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><span>${(state.animalEvents||[]).length} eventos</span></div>${renderRecentActivity(5)}</article><article class="panel v9-record-tips"><span class="eyebrow">Menos fricción</span><h3>Campo recuerda lo más usado</h3><p>Último lote: <strong>${lotLookup[recent.lotId]?.name || '—'}</strong><br>Última categoría: <strong>${categoryLookup[recent.categoryId]?.short || '—'}</strong></p><button class="btn secondary" data-nav="intro">Cómo usar Campo</button></article></section>`
   return renderShell(content,'Registrar','Relevamientos, eventos y lluvia en pocos pasos')
 }
@@ -1603,7 +1614,7 @@ function renderDashboard() {
   const kpis = `<section class="kpi-grid v9-kpis">${kpiCard('Stock observado',fmt(metrics.animals),`al ${compactDateLabel(survey.date)}`,KPI_ASSETS.animals,'brown')}${kpiCard('Carga promedio',`${decimal(metrics.load)} EV/ha`,`${field.overloaded} lotes sobre objetivo`,KPI_ASSETS.load,capacityClass(metrics.load))}${kpiCard('Balance',balance?`${balance.discrepancy>0?'+':''}${fmt(balance.discrepancy)}`:'—',balance?'esperado vs. observado':'requiere otro relevamiento',KPI_ASSETS.trade,balance?.discrepancy?'gold':'neutral','data-review-tab="balance" role="button" tabindex="0"')}${kpiCard('Lluvia',rain.current==null?'Sin dato':`${fmt(rain.current)} mm`,rain.index==null?rain.status:`${rain.status} · IH ${Math.round(rain.index)}%`,KPI_ASSETS.rain,'blue','data-nav="lluvias" role="button" tabindex="0"')}</section>`
   const content = `${renderSurveyNavigator()}${primary}${kpis}
     <section class="v9-attention-section"><div class="panel-head"><div><span class="eyebrow">Excepciones primero</span><h3>Requiere atención</h3></div><button class="text-link" data-review-tab="campo">Abrir revisión</button></div><div class="v9-attention-grid">${attention.length?attention.map(renderAttentionGroup).join(''):'<div class="empty-inline success">No hay excepciones pendientes para este relevamiento.</div>'}</div></section>
-    <section class="v9-home-review-grid"><button class="v9-performance-card field" data-review-tab="campo"><span>${icon('map',24)}</span><div><small>Campo</small><strong>${Math.round(field.goodPct)}% de ha en MB/B</strong><p>${field.overloaded} lotes sobre carga · ${field.improved} mejoraron · ${field.worsened} empeoraron</p></div>${icon('chevron',18)}</button><button class="v9-performance-card herd" data-review-tab="rodeo"><span>${icon('cow',24)}</span><div><small>Rodeo</small><strong>${herd.birthRate==null?'Sin tasa':`${decimal(herd.birthRate,1)}% nacimientos`}</strong><p>${herd.delta==null?'Primer registro':`${herd.delta>=0?'+':''}${fmt(herd.delta)} cabezas`} · mortandad ${herd.mortalityAnnualized==null?'—':`${decimal(herd.mortalityAnnualized,1)}%`}</p></div>${icon('chevron',18)}</button></section>
+    <section class="v9-home-review-grid"><button class="v9-performance-card field" data-review-tab="campo"><span>${assetIcon('review-field',36)}</span><div><small>Campo</small><strong>${Math.round(field.goodPct)}% de ha en MB/B</strong><p>${field.overloaded} lotes sobre carga · ${field.improved} mejoraron · ${field.worsened} empeoraron</p></div>${icon('chevron',18)}</button><button class="v9-performance-card herd" data-review-tab="rodeo"><span>${assetIcon('review-herd',36)}</span><div><small>Rodeo</small><strong>${herd.birthRate==null?'Sin tasa':`${decimal(herd.birthRate,1)}% nacimientos`}</strong><p>${herd.delta==null?'Primer registro':`${herd.delta>=0?'+':''}${fmt(herd.delta)} cabezas`} · mortandad ${herd.mortalityAnnualized==null?'—':`${decimal(herd.mortalityAnnualized,1)}%`}</p></div>${icon('chevron',18)}</button></section>
     <section class="dashboard-grid v9-dashboard-grid"><article class="panel map-panel"><div class="panel-head"><div><span class="eyebrow">Lectura visual</span><h3>El Rosario</h3></div><button class="btn ghost" data-nav="mapa">Abrir mapa</button></div>${renderMap(survey,true)}<p class="map-reading-note">Terreno = condición · borde = carga · sprites = composición y cantidad.</p></article><aside class="dashboard-side"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><button class="text-link" data-nav="registrar">Registrar</button></div>${renderRecentActivity(6)}</article><article class="panel"><div class="panel-head"><h3>Composición del rodeo</h3><button class="text-link" data-review-tab="rodeo">Analizar</button></div>${renderCategoryBars(metrics.categories,metrics.animals)}</article></aside></section>`
   return renderShell(content,'Inicio','Qué requiere atención y cómo está funcionando el campo')
 }
@@ -1953,7 +1964,7 @@ function renderLotHistoryChart(lotId, compact = false) {
 function renderLotEvents(lotId, untilDate = null) {
   const events = eventsForLot(lotId, untilDate)
   if (!events.length) return '<div class="empty-inline">No hay eventos registrados para este lote.</div>'
-  return `<div class="lot-event-list">${events.map((event)=>`<article><span class="event-type-icon type-${event.type}">${eventTypeLookup[event.type]?.icon||'•'}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)}</strong><p>${compactDateLabel(event.date)} · ${esc(categoryLookup[event.categoryId]?.name || '')}${event.toCategoryId?` → ${esc(categoryLookup[event.toCategoryId]?.name || '')}`:''}</p>${event.notes?`<small>${esc(event.notes)}</small>`:''}</div></article>`).join('')}</div>`
+  return `<div class="lot-event-list">${events.map((event)=>`<article><span class="event-type-icon type-${event.type}">${assetIcon(eventTypeLookup[event.type]?.iconAsset || 'event-adjustment',30)}</span><div><strong>${eventTypeLabel(event.type)} · ${fmt(event.quantity)}</strong><p>${compactDateLabel(event.date)} · ${esc(categoryLookup[event.categoryId]?.name || '')}${event.toCategoryId?` → ${esc(categoryLookup[event.toCategoryId]?.name || '')}`:''}</p>${event.notes?`<small>${esc(event.notes)}</small>`:''}</div></article>`).join('')}</div>`
 }
 
 function renderLotInspector(survey) {
@@ -2228,15 +2239,15 @@ function renderCumulativeTable(coverage) {
   return `<div class="rain-table-wrap"><table class="rain-data-table"><thead><tr><th>Mes (últimos 12)</th><th>Prom. acum.</th><th>P10</th><th>P90</th><th>Actual acum.</th><th>IH</th><th>Estado</th></tr></thead><tbody>${rows}</tbody></table></div>`
 }
 function renderUpcomingSection() {
-  return `<section class="upcoming-section"><div class="panel-head"><div><span class="eyebrow">Hoja de ruta</span><h3>Próximamente en Campo</h3></div><span>Ideas futuras, todavía sin funciones operativas.</span></div><div class="upcoming-grid"><article><span>💉</span><div><h4>Calendario sanitario</h4><p>Vacunaciones, desparasitaciones y tratamientos.</p><b>En desarrollo</b></div></article><article><span>🌱</span><div><h4>Calendario pastoril</h4><p>Siembras, descansos, rotaciones y objetivos de pastoreo.</p><b>En desarrollo</b></div></article><article><span>↗</span><div><h4>Calendario comercial</h4><p>Compras, ventas y momentos comerciales del rodeo.</p><b>En desarrollo</b></div></article></div></section>`
+  return `<section class="upcoming-section"><div class="panel-head"><div><span class="eyebrow">Hoja de ruta</span><h3>Próximamente en Campo</h3></div><span>Ideas futuras, todavía sin funciones operativas.</span></div><div class="upcoming-grid"><article><span>${assetIcon('calendar-vaccination',44)}</span><div><h4>Calendario sanitario</h4><p>Vacunaciones, desparasitaciones y tratamientos.</p><b>En desarrollo</b></div></article><article><span>${assetIcon('calendar-pasture',44)}</span><div><h4>Calendario pastoril</h4><p>Siembras, descansos, rotaciones y objetivos de pastoreo.</p><b>En desarrollo</b></div></article><article><span>${assetIcon('calendar-commercial',44)}</span><div><h4>Calendario comercial</h4><p>Compras, ventas y momentos comerciales del rodeo.</p><b>En desarrollo</b></div></article></div></section>`
 }
 
 function renderEventCard(event) {
-  const type = eventTypeLookup[event.type] || { label: event.type, icon: '•' }
+  const type = eventTypeLookup[event.type] || { label: event.type, iconAsset: 'event-adjustment' }
   const category = categoryLookup[event.categoryId]
   const destination = categoryLookup[event.toCategoryId]
   const lot = lotLookup[event.lotId]
-  return `<article class="event-card type-${event.type}"><span class="event-type-icon">${type.icon}</span><div class="event-card-main"><div><small>${eventGroupLabel(event.type)} · ${compactDateLabel(event.date)}</small><strong>${type.label} · ${fmt(event.quantity)} ${category?.short || ''}</strong><p>${lot?.name || 'Sin lote'}${destination?` · ${category?.short || ''} → ${destination.short}`:''}</p>${event.notes?`<em>${esc(event.notes)}</em>`:''}</div><div class="event-card-actions"><button data-edit-event="${event.id}" aria-label="Editar">${icon('edit',16)}</button><button data-delete-event="${event.id}" aria-label="Eliminar">${icon('trash',16)}</button></div></div></article>`
+  return `<article class="event-card type-${event.type}"><span class="event-type-icon">${assetIcon(type.iconAsset || 'event-adjustment',32)}</span><div class="event-card-main"><div><small>${eventGroupLabel(event.type)} · ${compactDateLabel(event.date)}</small><strong>${type.label} · ${fmt(event.quantity)} ${category?.short || ''}</strong><p>${lot?.name || 'Sin lote'}${destination?` · ${category?.short || ''} → ${destination.short}`:''}</p>${event.notes?`<em>${esc(event.notes)}</em>`:''}</div><div class="event-card-actions"><button data-edit-event="${event.id}" aria-label="Editar">${icon('edit',16)}</button><button data-delete-event="${event.id}" aria-label="Eliminar">${icon('trash',16)}</button></div></div></article>`
 }
 
 function renderEventsPage() {
@@ -2245,7 +2256,7 @@ function renderEventsPage() {
   const all = activeAnimalEvents()
   const filtered = ui.eventFilter === 'all' ? all : all.filter((event) => event.type === ui.eventFilter)
   const totals = eventTotals(eventsForSurveyInterval(survey))
-  const actionButtons = EVENT_TYPES.map((type)=>`<button class="event-action type-${type.id}" data-add-event="${type.id}"><span>${type.icon}</span><strong>${type.label}</strong><small>${type.group==='commercial'?'Comercial':'Cambio del rodeo'}</small></button>`).join('')
+  const actionButtons = EVENT_TYPES.map((type)=>`<button class="event-action type-${type.id}" data-add-event="${type.id}"><span>${assetIcon(type.iconAsset || 'event-adjustment',32)}</span><strong>${type.label}</strong><small>${type.group==='commercial'?'Comercial':'Cambio del rodeo'}</small></button>`).join('')
   const filters = `<div class="event-filters"><button class="${ui.eventFilter==='all'?'active':''}" data-event-filter="all">Todos</button>${EVENT_TYPES.map((type)=>`<button class="${ui.eventFilter===type.id?'active':''}" data-event-filter="${type.id}">${type.label}</button>`).join('')}</div>`
   const content = `${renderSurveyNavigator()}<section class="events-hero"><div><span class="eyebrow">Entre fotografías del campo</span><h2>Eventos del rodeo</h2><p>Los eventos preparan el stock esperado del siguiente relevamiento sin modificar una fotografía ya cerrada.</p></div><button class="btn primary" data-add-event="sale">${icon('plus',17)} Registrar evento</button></section><section class="event-summary-grid"><article><small>Nacimientos</small><strong>+${fmt(totals.birth)}</strong></article><article><small>Compras</small><strong>+${fmt(totals.purchase)}</strong></article><article><small>Ventas</small><strong>-${fmt(totals.sale)}</strong></article><article><small>Mortandad</small><strong>-${fmt(totals.death)}</strong></article><article><small>Recateg.</small><strong>${fmt(totals.reclassification)}</strong></article></section><section class="events-layout"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Acciones rápidas</span><h3>Registrar cambios</h3></div></div><div class="event-action-grid">${actionButtons}</div></article><article class="panel balance-main-panel"><div class="panel-head"><div><span class="eyebrow">Mes sobre mes</span><h3>Balance del rodeo</h3></div><span>${balance?`${compactDateLabel(balance.previous.date)} → ${compactDateLabel(balance.survey.date)}`:'Sin período anterior'}</span></div>${renderBalancePanel(balance,false)}</article></section><section class="panel event-log-panel"><div class="panel-head"><div><span class="eyebrow">Registro transaccional</span><h3>Historial de eventos</h3></div><span>${filtered.length} registros</span></div>${filters}<div class="event-list">${filtered.length?filtered.map(renderEventCard).join(''):'<div class="empty-inline">No hay eventos para este filtro.</div>'}</div></section>`
   return renderShell(content,'Eventos y balance','Ventas, compras, nacimientos, mortandad y recategorizaciones',`<button class="btn primary" data-start-survey>${icon('clipboard',17)} Siguiente relevamiento</button>`)
@@ -2266,7 +2277,7 @@ function renderEventModal() {
 
 function renderIntroductionPage() {
   const quickLinks = `<div class="intro-quick-links"><button data-nav="registrar">${icon('clipboard',18)} Registrar</button><button data-review-tab="campo">${icon('map',18)} Revisar campo</button><button data-review-tab="rodeo">${icon('cow',18)} Revisar rodeo</button><button data-review-tab="balance">${icon('balance',18)} Validar balance</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.01</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.02</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
   <section class="intro-steps"><article><i>1</i><div><h3>Registrá el cambio</h3><p>Cargá una venta, compra, nacimiento, mortandad, recategorización o lluvia desde un único menú.</p></div></article><article><i>2</i><div><h3>Elegí el tipo de relevamiento</h3><p>Usá Revisión rápida para confirmar el stock esperado o Conteo completo para empezar desde cero.</p></div></article><article><i>3</i><div><h3>Revisá excepciones</h3><p>Campo prioriza lotes con eventos, carga alta o condición faltante para reducir la carga de trabajo.</p></div></article><article><i>4</i><div><h3>Validá desempeño y balance</h3><p>Separá la revisión del campo, el rodeo y la conciliación entre stock esperado y observado.</p></div></article></section>
   <section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Revisión rápida</dt><dd>Estado anterior más eventos; editás solo las excepciones.</dd><dt>Conteo completo</dt><dd>Fotografía independiente cargada desde cero.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición y carga</dt><dd>Estado del terreno y equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v9.00</h3><ul><li>Navegación orientada a Inicio, Registrar, Revisar y Mapa.</li><li>Menú único para relevamientos, eventos y lluvia.</li><li>Revisión rápida y conteo completo.</li><li>Secuencia de lotes priorizada por excepciones.</li><li>Centro de revisión con Campo, Rodeo y Balance.</li><li>Matriz condición × carga y vigencia de observaciones.</li><li>Confirmación posterior a cada evento y stock proyectado.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario sanitario y vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos planificados entre lotes.</li><li>Reportes gerenciales automáticos.</li></ul></article></section>`
   return renderShell(content,'Cómo usar Campo','Flujo recomendado y conceptos principales')
@@ -2274,7 +2285,7 @@ function renderIntroductionPage() {
 
 function renderRainPage() {
   const survey=selectedSurvey();const selectedPeriod=ui.rainEndPeriod||monthKey(survey?.date||todayISO());const year=Number(ui.rainYear||selectedPeriod.slice(0,4));const coverage=rainCoverage(selectedPeriod);const last=allRainPeriods().sort().at(-1);const lastSummary=last?monthlyRainSummary(last):null
-  const top=`<section class="rain-kpi-grid"><article><span>☔</span><div><small>Acumulado informado</small><strong>${coverage.coverage?`${fmt(coverage.actual)} mm`:'Sin dato'}</strong><p>${coverage.coverage}/12 meses informados</p></div></article><article><span>◉</span><div><small>Índice hídrico</small><strong>${coverage.index==null?'—':`${Math.round(coverage.index)}%`}</strong><p>${hydricState(coverage.index)}</p></div></article><article><span>▣</span><div><small>Último registro</small><strong>${last?monthLabel(last):'Sin dato'}</strong><p>${lastSummary?.millimeters==null?'—':`${fmt(lastSummary.millimeters)} mm`}</p></div></article></section>`
+  const top=`<section class="rain-kpi-grid"><article><span>${assetIcon('rain-cumulative',40)}</span><div><small>Acumulado informado</small><strong>${coverage.coverage?`${fmt(coverage.actual)} mm`:'Sin dato'}</strong><p>${coverage.coverage}/12 meses informados</p></div></article><article><span>${assetIcon('rain-index',40)}</span><div><small>Índice hídrico</small><strong>${coverage.index==null?'—':`${Math.round(coverage.index)}%`}</strong><p>${hydricState(coverage.index)}</p></div></article><article><span>${assetIcon('rain-monthly',40)}</span><div><small>Último registro</small><strong>${last?monthLabel(last):'Sin dato'}</strong><p>${lastSummary?.millimeters==null?'—':`${fmt(lastSummary.millimeters)} mm`}</p></div></article></section>`
   const tabs=`<div class="rain-main-tabs"><button class="${ui.rainTab==='period'?'active':''}" data-rain-tab="period">Lluvia del período</button><button class="${ui.rainTab==='cumulative'?'active':''}" data-rain-tab="cumulative">Acumulado 12 meses</button></div>`
   const periodView=`<section class="rain-workspace"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Comparación histórica</span><h3>${ui.rainGranularity==='monthly'?'Registro mensual':'Detalle quincenal'} · ${year}</h3></div><div class="rain-controls"><select data-rain-year>${[year-2,year-1,year,year+1].map((item)=>`<option ${item===year?'selected':''}>${item}</option>`).join('')}</select><div class="mini-toggle"><button class="${ui.rainGranularity==='monthly'?'active':''}" data-rain-granularity="monthly">Mensual</button><button class="${ui.rainGranularity==='fortnight'?'active':''}" data-rain-granularity="fortnight">Quincenal</button></div><button class="btn primary small" data-open-rain="${periodFor(year,Number(selectedPeriod.slice(5,7)))}">Cargar / editar</button></div></div>${renderRainPeriodTable(year,ui.rainGranularity)}</article><article class="panel rain-chart-panel"><div class="panel-head"><div><h3>Banda histórica y registro actual</h3><p>P10–P90, promedio y lluvia actual en milímetros.</p></div></div>${renderRainColumns(year,ui.rainGranularity)}</article></section>`
   const cumulativeView=`<section class="rain-workspace"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Últimos doce meses</span><h3>Acumulado hasta ${monthLabel(selectedPeriod)}</h3></div><label class="inline-control">Finaliza en <input type="month" data-rain-end-period value="${selectedPeriod}"></label></div>${renderCumulativeTable(coverage)}</article><article class="panel rain-chart-panel"><div class="panel-head"><div><h3>Curva acumulada</h3><p>Actual frente al promedio y la banda histórica aproximada.</p></div></div>${renderCumulativeChart(coverage)}</article></section>`
@@ -2305,7 +2316,7 @@ function renderDataPage() {
   const demoControls = installed
     ? `<div class="stack-buttons"><button class="btn primary" data-switch-workspace="${isDemo ? WORKSPACES.REAL : WORKSPACES.DEMO}">${isDemo ? 'Volver a El Rosario' : 'Abrir Muestra'}</button><button class="btn secondary" data-reset-demo-workspace>Restablecer Muestra</button><button class="btn danger-outline" data-delete-demo-workspace>Eliminar Muestra</button></div>`
     : `<div class="stack-buttons"><button class="btn primary" data-install-demo-workspace>Cargar datos de muestra</button></div>`
-  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${icon('download',26)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial del espacio activo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest ${survey?'':'disabled'}>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${icon('clipboard',26)}</span><h2>Respaldo completo</h2><p class="backup-health">Último respaldo: <strong>${state.settings?.lastBackupAt?compactDateLabel(String(state.settings.lastBackupAt).slice(0,10)):'Nunca'}</strong></p><p>El JSON conserva relevamientos, eventos, lluvia y configuración de <strong>${esc(workspaceLabel())}</strong>.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Enfoque: registrar y revisar<br>Publicación: ${RELEASE_DATE}<br>Espacio activo: ${esc(workspaceLabel())}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>Animación ${animalAnimator.getModeLabel()} · todos los animales usan el mismo tamaño visual.</small></article><article class="panel data-card demo-data-card ${installed?'installed':''}"><span class="data-icon">${icon('info',26)}</span><h2>Datos de muestra</h2><p>${installed?'La muestra de 16 meses está instalada en un espacio separado. Podés abrirla, restaurarla o eliminarla sin modificar El Rosario.':'Instalá 16 meses de relevamientos, eventos y lluvia sin reemplazar tus datos actuales.'}</p>${demoControls}</article><article class="panel data-card animation-settings-card"><span class="data-icon">${icon('cow',26)}</span><h2>Movimiento de los animales</h2><p>Elegí cuánta actividad querés ver en el mapa. SimFarm es el modo recomendado.</p><div class="animation-mode-picker">${['paused','soft','simfarm'].map((mode)=>`<button class="${animalAnimator.getMode()===mode?'active':''}" data-set-animation-mode="${mode}"><b>${({paused:'Pausada',soft:'Suave',simfarm:'SimFarm'})[mode]}</b><small>${({paused:'Sin movimiento',soft:'Movimiento tranquilo',simfarm:'Más visible y dinámico'})[mode]}</small></button>`).join('')}</div></article></section>`
+  const content = `<section class="data-page-grid"><article class="panel data-card"><span class="data-icon">${assetIcon('backup-export',42)}</span><h2>Exportar datos</h2><p>Descargá relevamientos, eventos y el historial del espacio activo.</p><div class="stack-buttons"><button class="btn primary" data-export-latest ${survey?'':'disabled'}>Relevamiento seleccionado CSV</button><button class="btn secondary" data-export-all>Historial completo CSV</button><button class="btn secondary" data-export-events>Eventos CSV</button></div></article><article class="panel data-card"><span class="data-icon">${assetIcon('backup-import',42)}</span><h2>Respaldo completo</h2><p class="backup-health">Último respaldo: <strong>${state.settings?.lastBackupAt?compactDateLabel(String(state.settings.lastBackupAt).slice(0,10)):'Nunca'}</strong></p><p>El JSON conserva relevamientos, eventos, lluvia y configuración de <strong>${esc(workspaceLabel())}</strong>.</p><div class="stack-buttons"><button class="btn primary" data-export-backup>Descargar respaldo</button><label class="btn secondary file-button">Restaurar respaldo<input type="file" id="import-backup" accept="application/json"></label></div></article><article class="panel data-card version-card"><span class="data-icon"><img src="./assets/${UI_ASSETS.home}" alt=""></span><h2>Información de la app</h2><p><strong>Campo v${APP_VERSION_LABEL}</strong><br>Enfoque: registrar y revisar<br>Publicación: ${RELEASE_DATE}<br>Espacio activo: ${esc(workspaceLabel())}<br>Datos más recientes: ${latest?dateLabel(latest.date):'Sin datos'}<br>Eventos: ${(state.animalEvents||[]).length}</p><small>Animación ${animalAnimator.getModeLabel()} · todos los animales usan el mismo tamaño visual.</small></article><article class="panel data-card demo-data-card ${installed?'installed':''}"><span class="data-icon">${assetIcon('demo',42)}</span><h2>Datos de muestra</h2><p>${installed?'La muestra de 16 meses está instalada en un espacio separado. Podés abrirla, restaurarla o eliminarla sin modificar El Rosario.':'Instalá 16 meses de relevamientos, eventos y lluvia sin reemplazar tus datos actuales.'}</p>${demoControls}</article><article class="panel data-card animation-settings-card"><span class="data-icon">${assetIcon('settings-animation',42)}</span><h2>Movimiento de los animales</h2><p>Elegí cuánta actividad querés ver en el mapa. SimFarm es el modo recomendado.</p><div class="animation-mode-picker">${['paused','soft','simfarm'].map((mode)=>`<button class="${animalAnimator.getMode()===mode?'active':''}" data-set-animation-mode="${mode}"><b>${({paused:'Pausada',soft:'Suave',simfarm:'SimFarm'})[mode]}</b><small>${({paused:'Sin movimiento',soft:'Movimiento tranquilo',simfarm:'Más visible y dinámico'})[mode]}</small></button>`).join('')}</div></article></section>`
   return renderShell(content,'Exportar, muestra y configuración','Protegé datos y ajustá la experiencia del mapa')
 }
 
