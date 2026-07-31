@@ -2,8 +2,8 @@ import { animalAnimator } from './animal-animation.js'
 import { resolveAnimalSprite, STANDARD_ANIMAL_SIZE } from './animal-sprite-library.js'
 
 const STORAGE_KEY = 'campo-el-rosario-v2'
-const APP_VERSION = 902
-const APP_VERSION_LABEL = '9.02'
+const APP_VERSION = 1001
+const APP_VERSION_LABEL = '10.01'
 const RELEASE_DATE = '2026-07-30'
 const DEMO_STORAGE_KEY = 'campo-el-rosario-demo-v1'
 const ACTIVE_WORKSPACE_KEY = 'campo-el-rosario-active-workspace-v1'
@@ -298,6 +298,14 @@ const EVENT_TYPES = [
 
 
 const DEFAULT_CATEGORY_IDS = ['vacas-cria', 'ternero-sin-definir', 'toro-reproductor', 'vaquillonas-reposicion']
+
+const SIMPLE_FIELD_FAMILIES = Object.freeze([
+  { id:'vacas', label:'Vacas', defaultCategory:'vacas-cria' },
+  { id:'terneros', label:'Terneros/as', defaultCategory:'ternero-sin-definir' },
+  { id:'toros', label:'Toros', defaultCategory:'toro-reproductor' },
+  { id:'vaquillonas', label:'Vaquillonas', defaultCategory:'vaquillonas-reposicion' },
+  { id:'novillos', label:'Novillos', defaultCategory:'novillito' },
+])
 
 const SPRITE_VARIANTS = {
   "cow": {
@@ -681,6 +689,7 @@ let ui = {
   mapInspectorTab: 'actual',
   mapViewBox: null,
   summaryViewBox: null,
+  summaryMapInteractive: false,
   mapDragging: false,
   eventFilter: 'all',
   reviewTab: 'campo',
@@ -710,6 +719,7 @@ function resetWorkspaceUi() {
   ui.selectedLotId = null
   ui.mapViewBox = null
   ui.summaryViewBox = null
+  ui.summaryMapInteractive = false
   ui.mapInspectorTab = 'actual'
   ui.modal = null
   ui.wizardStep = state.draft ? state.draft.step || 1 : 1
@@ -1255,6 +1265,10 @@ function icon(name, size = 20) {
 
 function navigate(view) {
   ui.view = view
+  if (view === 'resumen') {
+    ui.summaryViewBox = fullMapViewBox()
+    ui.summaryMapInteractive = false
+  }
   location.hash = `/${view}`
   window.scrollTo({ top: 0, behavior: 'smooth' })
   render()
@@ -1407,6 +1421,7 @@ function reviewAttentionGroups(survey) {
   const highLots = field.lots.filter((item) => item.metric.load > TARGET_LOAD)
   const combined = highLots.filter((item) => ['malo','anegado'].includes(item.condition.stateId))
   const groups = []
+  if (survey.managementReviewStatus === 'pending') groups.push({ key:'quality', severity:'info', title:'Pendiente de revisión', value:'Campo', text:'La carga fue realizada en modo simple y espera validación de gestión.', action:'revisar', tab:'balance' })
   if (balance && balance.discrepancy !== 0) groups.push({ key:'inventory', severity:Math.abs(balance.discrepancyPct) > 1 ? 'danger':'warning', title:'Balance del rodeo', value:`${balance.discrepancy > 0 ? '+' : ''}${fmt(balance.discrepancy)}`, text:'diferencia entre stock esperado y observado', action:'revisar', tab:'balance' })
   if (highLots.length) groups.push({ key:'field', severity:combined.length ? 'danger':'warning', title:'Condición y carga', value:fmt(highLots.length), text:`lotes por encima de ${decimal(TARGET_LOAD)} EV/ha${combined.length ? ` · ${combined.length} con riesgo combinado` : ''}`, lotIds:highLots.map((item)=>item.lot.id), action:'revisar', tab:'campo' })
   const dataIssues = field.assumedLots + field.noInfoLots
@@ -1467,13 +1482,13 @@ function renderRegisterHub() {
   const draft = state.draft
   const projected = latest ? projectedHerdTotalAt(todayISO()) : 0
   const confirmation = ui.recordConfirmation ? `<article class="v9-record-confirmation"><span>${icon('check',22)}</span><div><small>Registro guardado</small><h3>${esc(ui.recordConfirmation.title)}</h3><p>${esc(ui.recordConfirmation.detail)}</p><strong>Stock proyectado: ${fmt(ui.recordConfirmation.projected)} animales</strong></div><button data-clear-record-confirmation>${icon('close',18)}</button></article>` : ''
-  const draftCard = draft ? `<article class="v9-draft-resume"><div><span class="eyebrow">Borrador en curso</span><h2>${draft.mode==='edit'?'Edición de relevamiento':'Relevamiento sin terminar'}</h2><p>${compactDateLabel(draft.date)} · paso ${draft.step || 1} de 3 · ${(draft.lots || []).length} lotes incluidos</p></div><button class="btn primary" data-resume-survey>Continuar</button></article>` : ''
+  const draftCard = draft ? `<article class="v9-draft-resume v10-draft-resume"><div><span class="eyebrow">Borrador guardado</span><h2>${draft.simpleMode?'Carga de campo':'Relevamiento sin terminar'}</h2><p>${compactDateLabel(draft.date)} · paso ${draft.step || 1} de 3 · ${Object.keys(draft.reviewedLots || {}).length} lotes revisados</p></div><button class="btn primary large" data-resume-survey>Continuar</button></article>` : ''
   const eventActions = EVENT_TYPES.map((eventType) => `<button class="v9-record-action small" data-add-event="${eventType.id}"><span>${assetIcon(eventType.iconAsset || 'event-adjustment',34)}</span><div><strong>${eventType.label}</strong><small>${eventType.group==='commercial'?'Movimiento comercial':'Cambio del rodeo'}</small></div></button>`).join('')
-  const content = `${confirmation}${draftCard}<section class="v9-register-hero"><div><span class="eyebrow">Carga rápida y guiada</span><h2>¿Qué querés registrar?</h2><p>Elegí la acción. Campo guarda localmente y muestra el impacto sobre el próximo relevamiento.</p></div><div class="v9-projected-stock"><small>Stock proyectado hoy</small><strong>${latest ? fmt(projected) : '—'}</strong><span>${latest ? `base ${compactDateLabel(latest.date)}` : 'Creá el primer relevamiento'}</span></div></section>
-    <section class="v9-survey-choice"><button class="v9-record-action featured" data-start-survey-mode="quick"><span>${assetIcon('survey-quick',42)}</span><div><strong>Revisión rápida</strong><small>Partí del estado esperado y cambiá solo las excepciones.</small></div><em>Recomendado</em></button><button class="v9-record-action featured secondary" data-start-survey-mode="full"><span>${assetIcon('survey-full',42)}</span><div><strong>Conteo completo</strong><small>Cargá una fotografía independiente desde cero.</small></div></button></section>
-    <section class="panel v9-record-panel"><div class="panel-head"><div><span class="eyebrow">Cambios entre fotografías</span><h3>Eventos del rodeo</h3></div><button class="text-link" data-nav="eventos">Ver historial</button></div><div class="v9-event-action-grid">${eventActions}<button class="v9-record-action small rain" data-open-rain="${monthKey(todayISO())}"><span>${assetIcon('rain',34)}</span><div><strong>Lluvia</strong><small>Total mensual o detalle por fecha</small></div></button></div></section>
-    <section class="v9-register-bottom"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><span>${(state.animalEvents||[]).length} eventos</span></div>${renderRecentActivity(5)}</article><article class="panel v9-record-tips"><span class="eyebrow">Menos fricción</span><h3>Campo recuerda lo más usado</h3><p>Último lote: <strong>${lotLookup[recent.lotId]?.name || '—'}</strong><br>Última categoría: <strong>${categoryLookup[recent.categoryId]?.short || '—'}</strong></p><button class="btn secondary" data-nav="intro">Cómo usar Campo</button></article></section>`
-  return renderShell(content,'Registrar','Relevamientos, eventos y lluvia en pocos pasos')
+  const content = `${confirmation}${draftCard}<section class="v10-field-hero"><div class="v10-field-copy"><span class="eyebrow">Modo Campo · recomendado</span><h2>Cargar animales lote por lote</h2><p>Una pantalla por lote, números grandes y guardado automático. No necesitás conocer carga EV/ha ni usar tablas.</p><ul><li>Valores esperados ya cargados</li><li>Botones “Sin cambios”, “Vacío” y “No observado”</li><li>Podés continuar más tarde sin perder el trabajo</li></ul><button class="btn primary xl" data-start-survey-mode="field">${assetIcon('survey-quick',28)} Comenzar carga simple</button></div><div class="v10-field-illustration">${assetIcon('register',96)}<strong>${latest ? fmt(projected) : '—'}</strong><span>animales esperados hoy</span></div></section>
+    <section class="v10-entry-modes"><article><span>${assetIcon('survey-full',42)}</span><div><h3>Carga detallada</h3><p>Para categorías, años de nacimiento y notas.</p></div><button class="btn secondary" data-start-survey-mode="quick">Abrir</button></article><article><span>${assetIcon('survey-full',42)}</span><div><h3>Conteo desde cero</h3><p>Fotografía independiente sin copiar el mes anterior.</p></div><button class="btn secondary" data-start-survey-mode="full">Abrir</button></article></section>
+    <section class="panel v9-record-panel"><div class="panel-head"><div><span class="eyebrow">Modo Gestión</span><h3>Ventas, compras y otros eventos</h3></div><button class="text-link" data-nav="eventos">Ver historial</button></div><p class="v10-management-note">Estas acciones pueden ser completadas por la persona responsable del análisis después de la carga de campo.</p><div class="v9-event-action-grid">${eventActions}<button class="v9-record-action small rain" data-open-rain="${monthKey(todayISO())}"><span>${assetIcon('rain',34)}</span><div><strong>Lluvia</strong><small>Total mensual o detalle por fecha</small></div></button></div></section>
+    <section class="v9-register-bottom"><article class="panel"><div class="panel-head"><h3>Actividad reciente</h3><span>${(state.animalEvents||[]).length} eventos</span></div>${renderRecentActivity(5)}</article><article class="panel v9-record-tips"><span class="eyebrow">Ayuda de campo</span><h3>La aplicación recuerda lo más usado</h3><p>Último lote: <strong>${lotLookup[recent.lotId]?.name || '—'}</strong><br>Última categoría: <strong>${categoryLookup[recent.categoryId]?.short || '—'}</strong></p><button class="btn secondary" data-nav="intro">Cómo usar Campo</button></article></section>`
+  return renderShell(content,'Registrar','Carga simple de campo y herramientas de gestión')
 }
 
 function renderConditionLoadMatrix(field) {
@@ -1553,7 +1568,7 @@ function renderHerdReview(survey) {
 function renderBalanceReview(survey) {
   const balance = herdBalanceForSurvey(survey)
   if (!balance) return `<section class="panel"><div class="empty-state compact"><h2>Se necesitan dos relevamientos</h2><p>El balance compara la fotografía anterior, los eventos y el stock observado actual.</p><button class="btn primary" data-start-survey-mode="quick">Crear relevamiento</button></div></section>`
-  return `<section class="v9-balance-layout"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Control principal</span><h3>Balance del rodeo</h3></div><span>${compactDateLabel(balance.previous.date)} → ${compactDateLabel(balance.survey.date)}</span></div>${renderBalancePanel(balance,false)}<div class="button-row"><button class="btn secondary" data-nav="eventos">Revisar eventos</button><button class="btn primary" data-edit-selected-survey>Revisar stock observado</button></div></article><article class="panel"><div class="panel-head"><h3>Diferencia por categoría</h3><span>esperado vs. observado</span></div><div class="v9-balance-table"><div class="head"><span>Categoría</span><span>Esperado</span><span>Observado</span><span>Dif.</span></div>${balance.categoryDifferences.map((item)=>`<div class="row ${item.difference?'has-difference':''}"><span>${esc(item.category.short)}</span><span>${fmt(item.expected)}</span><span>${fmt(item.observed)}</span><strong>${item.difference>0?'+':''}${fmt(item.difference)}</strong></div>`).join('')}</div></article></section>`
+  return `<section class="v9-balance-layout"><article class="panel"><div class="panel-head"><div><span class="eyebrow">Control principal</span><h3>Balance del rodeo</h3></div><span>${compactDateLabel(balance.previous.date)} → ${compactDateLabel(balance.survey.date)}</span></div>${renderBalancePanel(balance,false)}<div class="button-row"><button class="btn secondary" data-nav="eventos">Revisar eventos</button><button class="btn primary" data-edit-selected-survey>Revisar stock observado</button>${survey.managementReviewStatus==='pending'?'<button class="btn primary" data-mark-management-reviewed>Marcar como revisado</button>':''}</div></article><article class="panel"><div class="panel-head"><h3>Diferencia por categoría</h3><span>esperado vs. observado</span></div><div class="v9-balance-table"><div class="head"><span>Categoría</span><span>Esperado</span><span>Observado</span><span>Dif.</span></div>${balance.categoryDifferences.map((item)=>`<div class="row ${item.difference?'has-difference':''}"><span>${esc(item.category.short)}</span><span>${fmt(item.expected)}</span><span>${fmt(item.observed)}</span><strong>${item.difference>0?'+':''}${fmt(item.difference)}</strong></div>`).join('')}</div></article></section>`
 }
 
 function renderReviewHub() {
@@ -1609,8 +1624,8 @@ function renderDashboard() {
   const attention = reviewAttentionGroups(survey)
   const draft = state.draft
   const primary = draft
-    ? `<article class="v9-home-primary draft"><div><span class="eyebrow">Continuar donde quedaste</span><h2>Relevamiento del ${compactDateLabel(draft.date)}</h2><p>Paso ${draft.step || 1} de 3 · ${(draft.lots || []).length} lotes incluidos · guardado localmente</p></div><button class="btn primary large" data-resume-survey>Continuar</button></article>`
-    : `<article class="v9-home-primary"><div><span class="eyebrow">Acciones frecuentes</span><h2>¿Qué necesitás hacer hoy?</h2><p>Registrá un cambio en segundos o prepará la próxima fotografía del campo.</p></div><div class="v9-home-actions"><button class="btn primary" data-start-survey-mode="quick">${icon('check',17)} Revisión rápida</button><button class="btn secondary" data-add-event="sale">${icon('event',17)} Registrar evento</button><button class="btn secondary" data-open-rain="${monthKey(todayISO())}">${icon('rain',17)} Agregar lluvia</button></div></article>`
+    ? `<article class="v9-home-primary draft"><div><span class="eyebrow">Continuar donde quedaste</span><h2>Relevamiento del ${compactDateLabel(draft.date)}</h2><p>Paso ${draft.step || 1} de 3 · ${Object.keys(draft.reviewedLots || {}).length} lotes revisados · guardado localmente</p></div><button class="btn primary large" data-resume-survey>Continuar</button></article>`
+    : `<article class="v9-home-primary"><div><span class="eyebrow">Acciones frecuentes</span><h2>¿Qué necesitás hacer hoy?</h2><p>Registrá un cambio en segundos o prepará la próxima fotografía del campo.</p></div><div class="v9-home-actions"><button class="btn primary" data-start-survey-mode="field">${icon('check',17)} Cargar el campo</button><button class="btn secondary" data-add-event="sale">${icon('event',17)} Registrar evento</button><button class="btn secondary" data-open-rain="${monthKey(todayISO())}">${icon('rain',17)} Agregar lluvia</button></div></article>`
   const kpis = `<section class="kpi-grid v9-kpis">${kpiCard('Stock observado',fmt(metrics.animals),`al ${compactDateLabel(survey.date)}`,KPI_ASSETS.animals,'brown')}${kpiCard('Carga promedio',`${decimal(metrics.load)} EV/ha`,`${field.overloaded} lotes sobre objetivo`,KPI_ASSETS.load,capacityClass(metrics.load))}${kpiCard('Balance',balance?`${balance.discrepancy>0?'+':''}${fmt(balance.discrepancy)}`:'—',balance?'esperado vs. observado':'requiere otro relevamiento',KPI_ASSETS.trade,balance?.discrepancy?'gold':'neutral','data-review-tab="balance" role="button" tabindex="0"')}${kpiCard('Lluvia',rain.current==null?'Sin dato':`${fmt(rain.current)} mm`,rain.index==null?rain.status:`${rain.status} · IH ${Math.round(rain.index)}%`,KPI_ASSETS.rain,'blue','data-nav="lluvias" role="button" tabindex="0"')}</section>`
   const content = `${renderSurveyNavigator()}${primary}${kpis}
     <section class="v9-attention-section"><div class="panel-head"><div><span class="eyebrow">Excepciones primero</span><h3>Requiere atención</h3></div><button class="text-link" data-review-tab="campo">Abrir revisión</button></div><div class="v9-attention-grid">${attention.length?attention.map(renderAttentionGroup).join(''):'<div class="empty-inline success">No hay excepciones pendientes para este relevamiento.</div>'}</div></section>
@@ -1827,7 +1842,21 @@ function renderHerdSpritesHtml(lotEntry, lot, compact, metric, condition, survey
 
 
 function fullMapViewBox() {
-  return { x: 25, y: 22, width: 1085, height: 1305 }
+  const bounds = LOTS.map(lotBounds)
+  const minX = Math.min(...bounds.map((item) => item.x))
+  const minY = Math.min(...bounds.map((item) => item.y))
+  const maxX = Math.max(...bounds.map((item) => item.x + item.width))
+  const maxY = Math.max(...bounds.map((item) => item.y + item.height))
+  const width = maxX - minX
+  const height = maxY - minY
+  const marginX = Math.max(22, width * .055)
+  const marginY = Math.max(24, height * .045)
+  return {
+    x: Math.max(0, minX - marginX),
+    y: Math.max(0, minY - marginY),
+    width: Math.min(1154, width + marginX * 2),
+    height: Math.min(1363, height + marginY * 2),
+  }
 }
 
 function lotBounds(lot) {
@@ -1942,7 +1971,7 @@ function renderMap(survey, compact = false) {
   const animationLabel = `Animación: ${animalAnimator.getModeLabel()}`
   const animationGlyph = animalAnimator.getModeGlyph()
   const animationButton = `<button class="animation-toggle mode-${animationMode} ${animalAnimator.isEnabled()?'active':''}" data-animation-mode title="${animationLabel}. Tocá para cambiar" aria-label="${animationLabel}"><span>${animationGlyph}</span><small>${animalAnimator.getModeLabel()}</small></button>`
-  if (compact) return `<div class="map-zoom-shell summary-zoom-shell"><div class="ranch-map compact summary-map v802-summary-map">${svg}</div><div class="map-zoom-controls summary-map-controls"><button data-map-zoom-in="summary" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="summary" title="Alejar">${icon('zoomOut',18)}</button><button data-map-view-all="summary" title="Ver todo">Todo</button>${animationButton}</div></div>`
+  if (compact) return `<div class="map-zoom-shell summary-zoom-shell ${ui.summaryMapInteractive?'is-interactive':'is-locked'}"><div class="ranch-map compact summary-map v802-summary-map v10-summary-map">${svg}</div><div class="map-zoom-controls summary-map-controls"><button class="summary-interaction-toggle ${ui.summaryMapInteractive?'active':''}" data-summary-map-interaction title="${ui.summaryMapInteractive?'Desactivar interacción':'Interactuar con mapa'}">${ui.summaryMapInteractive?'Listo':'Interactuar'}</button>${ui.summaryMapInteractive?`<button data-map-zoom-in="summary" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="summary" title="Alejar">${icon('zoomOut',18)}</button>`:''}<button data-map-view-all="summary" title="Ver todo">Todo</button>${animationButton}</div><div class="summary-map-scroll-note">${ui.summaryMapInteractive?'Arrastrá o usá dos dedos · tocá “Listo” para volver a desplazar la página':'Deslizá la página normalmente · tocá “Interactuar” para mover el mapa'}</div></div>`
   return `<div class="map-zoom-shell"><div class="ranch-map full full-map v802-full-map">${svg}</div><div class="map-zoom-controls full-map-controls"><button data-map-zoom-in="full" title="Acercar">${icon('zoomIn',18)}</button><button data-map-zoom-out="full" title="Alejar">${icon('zoomOut',18)}</button><button data-map-focus-selected title="Volver al lote">${icon('target',18)}</button><button data-map-view-all="full" title="Ver todo">Todo</button>${animationButton}</div><div class="map-zoom-hint">Arrastrá para mover · zoom táctil · Animación ${animalAnimator.getModeLabel()}</div></div>`
 }
 
@@ -1998,7 +2027,8 @@ function renderMapPage() {
   return renderShell(content,'Mapa y lotes',`Relevamiento del ${dateLabel(survey.date)}`,`<button class="btn primary" data-start-survey>${icon('plus',17)} Nuevo</button>`)
 }
 
-function startSurvey(mode = 'quick') {
+function startSurvey(mode = 'field') {
+  const simpleMode = mode === 'field'
   const captureMode = mode === 'full' ? 'full' : 'quick'
   const date = todayISO()
   const projection = captureMode === 'quick'
@@ -2006,11 +2036,12 @@ function startSurvey(mode = 'quick') {
     : { base: latestSurvey(), events: [], lots: [] }
   state.draft = {
     id: uid(), nombre: state.nombre || 'Muestra', mode: 'new', editingSurveyId: null,
-    captureMode, date, rainPeriod: monthKey(date),
+    captureMode, simpleMode, date, rainPeriod: monthKey(date),
     basedOnSurveyId: projection.base?.id || null,
     projectionEventIds: projection.events.map((event) => event.id),
-    lots: projection.lots,
-    reviewedLots: {},
+    expectedLots: JSON.parse(JSON.stringify(projection.lots || [])),
+    lots: JSON.parse(JSON.stringify(projection.lots || [])),
+    reviewedLots: {}, fieldLotIndex: 0,
     events: { births: 0, deaths: 0, purchases: 0, sales: 0 }, note: '', step: 1,
     lastSavedAt: new Date().toISOString(),
   }
@@ -2026,6 +2057,7 @@ function editSurvey(surveyId) {
     id: survey.id,
     mode: 'edit',
     captureMode: 'edit',
+    simpleMode: false,
     editingSurveyId: survey.id,
     originalDate: survey.date,
     originalCreatedAt: survey.createdAt,
@@ -2052,15 +2084,18 @@ function renderSurveyWizard() {
   if (step === 1) body = renderSurveyStepOne(draft)
   if (step === 2) body = renderSurveyStepTwo(draft)
   if (step === 3) body = renderSurveyStepThree(draft)
-  return renderShell(`${stepper}<div class="draft-save-status">${icon('check',14)} Guardado localmente · ${new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date(draft.lastSavedAt || Date.now()))}</div>${body}`, isEditing ? 'Editar relevamiento' : (draft.captureMode==='full'?'Conteo completo':'Revisión rápida'), isEditing ? `Modificando ${dateLabel(draft.originalDate || draft.date)}` : 'Confirmá lo esperado y cambiá solo las excepciones', `<button class="btn ghost" data-cancel-survey>Cancelar</button>`)
+  const wizardTitle = isEditing ? 'Editar relevamiento' : draft.simpleMode ? 'Carga de campo' : (draft.captureMode==='full'?'Conteo completo':'Carga detallada')
+  const wizardSubtitle = isEditing ? `Modificando ${dateLabel(draft.originalDate || draft.date)}` : draft.simpleMode ? 'Un lote por pantalla · guardado automático' : 'Confirmá lo esperado y cambiá solo las excepciones'
+  return renderShell(`${stepper}<div class="draft-save-status">${icon('check',14)} Guardado localmente · ${new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date(draft.lastSavedAt || Date.now()))}</div>${body}`, wizardTitle, wizardSubtitle, `<button class="btn ghost" data-save-exit-survey>Guardar y salir</button><button class="btn ghost" data-cancel-survey>Cancelar</button>`)
 }
 
 function renderSurveyStepOne(draft) {
   const rain = rainAnalysis(draft.rainPeriod)
   const base = draft.basedOnSurveyId ? state.surveys.find((survey) => survey.id === draft.basedOnSurveyId) : null
   const quick = draft.captureMode !== 'full' && draft.mode !== 'edit'
+  const simple = Boolean(draft.simpleMode && draft.mode !== 'edit')
   return `<section class="wizard-card narrow v9-context-step"><div class="wizard-title"><span class="step-number">1</span><div><h2>Fecha y punto de partida</h2><p>${quick?'Campo prepara el stock esperado usando la fotografía anterior y los eventos.':'El conteo comienza vacío y no copia cantidades anteriores.'}</p></div></div>
-    <div class="v9-mode-banner ${quick?'quick':'full'}"><span>${icon(quick?'check':'clipboard',20)}</span><div><strong>${draft.mode==='edit'?'Edición histórica':quick?'Revisión rápida':'Conteo completo'}</strong><p>${draft.mode==='edit'?'Los cambios pueden recalcular comparaciones posteriores.':quick?'Ideal para confirmar lo que no cambió y revisar excepciones.':'Ideal para una fotografía completamente independiente.'}</p></div>${draft.mode==='new'?`<button data-switch-capture-mode="${quick?'full':'quick'}">Cambiar a ${quick?'conteo completo':'revisión rápida'}</button>`:''}</div>
+    <div class="v9-mode-banner ${quick?'quick':'full'}"><span>${icon(quick?'check':'clipboard',20)}</span><div><strong>${draft.mode==='edit'?'Edición histórica':simple?'Carga simple de campo':quick?'Carga detallada':'Conteo completo'}</strong><p>${draft.mode==='edit'?'Los cambios pueden recalcular comparaciones posteriores.':simple?'Una pantalla por lote con controles grandes y lenguaje directo.':quick?'Carga avanzada con todas las categorías y detalles.':'Fotografía completamente independiente.'}</p></div>${draft.mode==='new'&&!simple?`<button data-switch-capture-mode="${quick?'full':'quick'}">Cambiar a ${quick?'conteo completo':'carga detallada'}</button>`:''}</div>
     ${base ? `<div class="projection-banner">${icon('balance',18)} <span><strong>Base ${compactDateLabel(base.date)}</strong><small>${draft.projectionEventIds?.length || 0} eventos aplicados al stock esperado.</small></span></div>` : ''}
     <label class="field"><span>Fecha del relevamiento</span><div class="input-icon">${icon('calendar',18)}<input type="date" id="survey-date" value="${esc(draft.date)}"></div></label>
     <div class="soft-divider"></div>
@@ -2070,7 +2105,129 @@ function renderSurveyStepOne(draft) {
   </section>`
 }
 
+
+function draftExpectedEntry(draft, lotId) {
+  return (draft.expectedLots || []).find((item) => item.lotId === lotId) || null
+}
+
+function simpleEntryForLot(draft, lotId) {
+  return (draft.lots || []).find((item) => item.lotId === lotId) || null
+}
+
+function cloneSimpleEntry(draft, lotId) {
+  const existing = simpleEntryForLot(draft, lotId)
+  if (existing) return JSON.parse(JSON.stringify(existing))
+  const expected = draftExpectedEntry(draft, lotId)
+  if (expected) return JSON.parse(JSON.stringify(expected))
+  const baseSurvey = draft.basedOnSurveyId ? state.surveys.find((survey) => survey.id === draft.basedOnSurveyId) : null
+  const condition = baseSurvey ? resolveLotCondition(baseSurvey, lotId) : { stateId:'no-observado', source:'none' }
+  return { nombre:state.nombre || 'Muestra', lotId, fieldState:condition.source==='none'?'no-observado':condition.stateId, conditionSource:condition.source==='none'?'unobserved':'observed', groups:[] }
+}
+
+function simpleGroupsForEntry(entry) {
+  const positives = (entry?.groups || []).filter((group) => Number(group.quantity || 0) > 0)
+  if (positives.length) return positives
+  return suggestedCategoryGroups().slice(0, 4)
+}
+
+function normalizedEntrySignature(entry) {
+  if (!entry) return 'none'
+  const groups = (entry.groups || []).filter((group)=>Number(group.quantity||0)>0).map((group)=>[group.categoryId,Number(group.quantity||0)]).sort((a,b)=>a[0].localeCompare(b[0]))
+  return JSON.stringify({ fieldState:normalizeFieldState(entry.fieldState), groups })
+}
+
+function ensureSimpleDraftEntry(lotId) {
+  let entry = simpleEntryForLot(state.draft, lotId)
+  if (entry) return entry
+  entry = cloneSimpleEntry(state.draft, lotId)
+  state.draft.lots = [...(state.draft.lots || []), entry]
+  return entry
+}
+
+function simpleLotStatus(draft, lotId) {
+  return draft.reviewedLots?.[lotId] || 'pending'
+}
+
+function simpleStatusLabel(status) {
+  return ({ pending:'Pendiente', confirmed:'Sin cambios', modified:'Modificado', empty:'Lote vacío', unobserved:'No observado' })[status] || 'Pendiente'
+}
+
+function advanceSimpleLot(delta = 1) {
+  const current = Math.max(0, Number(state.draft.fieldLotIndex) || 0)
+  state.draft.fieldLotIndex = Math.max(0, Math.min(LOTS.length - 1, current + delta))
+  state.draft.lastSavedAt = new Date().toISOString()
+  saveState()
+  render()
+}
+
+function renderFieldLotMiniMap(lotId) {
+  const selectedLot = lotLookup[lotId]
+  const view = viewBoxForLot(lotId, .62)
+  const polygons = LOTS.map((lot)=>`<polygon class="${lot.id===lotId?'active':'muted'}" points="${lot.points}"/>`).join('')
+  return `<div class="v10-lot-mini-map"><svg viewBox="${view.x} ${view.y} ${view.width} ${view.height}" preserveAspectRatio="xMidYMid meet" aria-label="Ubicación de ${selectedLot.name}"><image href="./assets/map/el-rosario-map.png" x="0" y="0" width="1154" height="1363" preserveAspectRatio="none"/><g>${polygons}</g></svg><span>${selectedLot.name}</span></div>`
+}
+
+function simpleFamilyQuantity(entry, familyId) {
+  return (entry?.groups || []).reduce((sum, group) => categoryLookup[group.categoryId]?.parent === familyId ? sum + Math.max(0, Number(group.quantity) || 0) : sum, 0)
+}
+
+function setSimpleFamilyQuantity(entry, family, nextQuantity) {
+  const quantity = Math.max(0, Math.round(Number(nextQuantity) || 0))
+  const familyGroups = (entry.groups || []).filter((group) => categoryLookup[group.categoryId]?.parent === family.id)
+  const otherGroups = (entry.groups || []).filter((group) => categoryLookup[group.categoryId]?.parent !== family.id)
+  if (!familyGroups.length) {
+    entry.groups = quantity > 0 ? [...otherGroups, { id:uid(), nombre:state.nombre || 'Muestra', categoryId:family.defaultCategory, quantity, birthYear:'', notes:'Carga simple' }] : otherGroups
+    return
+  }
+  if (quantity === 0) {
+    entry.groups = otherGroups
+    return
+  }
+  const current = familyGroups.reduce((sum, group) => sum + Math.max(0, Number(group.quantity) || 0), 0)
+  if (current <= 0) {
+    familyGroups[0].quantity = quantity
+    entry.groups = [...otherGroups, ...familyGroups]
+    return
+  }
+  let allocated = 0
+  const scaled = familyGroups.map((group, index) => {
+    const value = index === familyGroups.length - 1 ? quantity - allocated : Math.max(0, Math.round(quantity * (Number(group.quantity || 0) / current)))
+    allocated += value
+    return { ...group, quantity:value }
+  }).filter((group) => group.quantity > 0)
+  if (!scaled.length) scaled.push({ id:uid(), nombre:state.nombre || 'Muestra', categoryId:family.defaultCategory, quantity, birthYear:'', notes:'Carga simple' })
+  entry.groups = [...otherGroups, ...scaled]
+}
+
+function renderSimpleQuantityRow(family, index, entry) {
+  const quantity = simpleFamilyQuantity(entry, family.id)
+  return `<div class="v10-quantity-row" data-simple-family-row="${family.id}"><div class="v10-quantity-label"><strong>${esc(family.label)}</strong><small>Ingresá el total de esta categoría</small></div><div class="v10-number-control"><button data-simple-adjust="-1" data-simple-family-index="${index}" aria-label="Restar uno">−</button><input type="number" inputmode="numeric" min="0" data-simple-family-quantity="${family.id}" value="${quantity}" aria-label="Cantidad de ${esc(family.label)}"><button data-simple-adjust="1" data-simple-family-index="${index}" aria-label="Sumar uno">+</button></div></div>`
+}
+
+function renderSimpleFieldStep(draft) {
+  draft.reviewedLots = draft.reviewedLots || {}
+  draft.fieldLotIndex = Math.max(0, Math.min(LOTS.length - 1, Number(draft.fieldLotIndex) || 0))
+  const lot = LOTS[draft.fieldLotIndex]
+  const entry = cloneSimpleEntry(draft, lot.id)
+  const families = SIMPLE_FIELD_FAMILIES
+  const conditionId = normalizeFieldState(entry.fieldState)
+  const status = simpleLotStatus(draft, lot.id)
+  const expected = draftExpectedEntry(draft, lot.id)
+  const expectedTotal = (expected?.groups || []).reduce((sum,group)=>sum+Math.max(0,Number(group.quantity)||0),0)
+  const currentTotal = (entry.groups || []).reduce((sum,group)=>sum+Math.max(0,Number(group.quantity)||0),0)
+  const reviewed = LOTS.filter((item)=>simpleLotStatus(draft,item.id)!=='pending').length
+  const difference = currentTotal - expectedTotal
+  return `<section class="wizard-card v10-simple-field"><div class="v10-simple-progress"><div><small>Lote ${draft.fieldLotIndex + 1} de ${LOTS.length}</small><strong>${reviewed} revisados</strong></div><progress max="${LOTS.length}" value="${reviewed}"></progress><button class="btn ghost" data-save-exit-survey>Continuar después</button></div>
+    <div class="v10-simple-lot-head">${renderFieldLotMiniMap(lot.id)}<div><span class="eyebrow">Carga simple</span><h2>${lot.name}</h2><p>${lot.hectares} hectáreas</p><span class="v10-simple-status ${status}">${simpleStatusLabel(status)}</span></div></div>
+    <div class="v10-fast-actions"><button class="confirm" data-field-confirm>${icon('check',24)}<strong>Igual que lo esperado</strong><small>No cambió la cantidad ni la condición</small></button><button class="empty" data-field-empty>${assetIcon('animals',28)}<strong>Lote vacío</strong><small>Lo observaste y no hay animales</small></button><button class="unobserved" data-field-unobserved>${icon('info',24)}<strong>No observado</strong><small>No pudiste revisar este lote</small></button></div>
+    <section class="v10-simple-section"><div class="v10-simple-section-head"><div><span class="eyebrow">Animales</span><h3>¿Cuántos hay en el lote?</h3></div><div class="v10-expected"><small>Esperado</small><strong>${fmt(expectedTotal)}</strong></div></div><div class="v10-quantity-list">${families.map((family,index)=>renderSimpleQuantityRow(family,index,entry)).join('')}</div><div class="v10-difference ${difference===0?'same':difference>0?'positive':'negative'}"><span>Contado: <b>${fmt(currentTotal)}</b></span><span>${difference===0?'Coincide con lo esperado':`${Math.abs(difference)} ${Math.abs(difference)===1?'animal':'animales'} ${difference>0?'más':'menos'} que lo esperado`}</span></div><div class="v10-simple-subactions"><button class="btn secondary" data-open-detailed-lot>${icon('plus',18)} Desglosar categorías</button><button class="btn ghost" data-open-detailed-lot>Más detalles</button></div></section>
+    <section class="v10-simple-section"><div class="v10-simple-section-head"><div><span class="eyebrow">Condición del lote</span><h3>Elegí la opción que mejor lo describe</h3></div></div><div class="v10-condition-grid">${FIELD_STATES.filter((item)=>item.id!=='no-observado').map((item)=>`<button class="${conditionId===item.id?'selected':''}" data-simple-condition="${item.id}">${fieldStateIcon(item)}<strong>${item.label}</strong></button>`).join('')}</div><button class="v10-same-condition" data-simple-same-condition>${icon('history',18)} Usar la misma condición anterior</button></section>
+    <div class="v10-simple-footer"><button class="btn ghost large" data-field-prev ${draft.fieldLotIndex===0?'disabled':''}>${icon('back',20)} Anterior</button><button class="btn primary xl" data-field-save-next>${draft.fieldLotIndex===LOTS.length-1?'Revisar y terminar':'Guardar y siguiente'} ${icon('chevron',20)}</button></div>
+  </section>`
+}
+
 function renderSurveyStepTwo(draft) {
+  if (draft.simpleMode && draft.mode !== 'edit') return renderSimpleFieldStep(draft)
   draft.reviewedLots = draft.reviewedLots || {}
   const infos = LOTS.map((lot)=>draftLotReviewInfo(draft,lot))
   const included = infos.filter((info)=>info.entry)
@@ -2081,6 +2238,7 @@ function renderSurveyStepTwo(draft) {
   const totalAnimals = included.reduce((sum,info)=>sum+info.animals,0)
   const pending = included.length-reviewed
   const quick = draft.captureMode !== 'full' && draft.mode !== 'edit'
+  const simple = Boolean(draft.simpleMode && draft.mode !== 'edit')
   return `<section class="wizard-card wide v9-lot-review-step"><div class="wizard-title"><span class="step-number">2</span><div><h2>${quick?'Revisá excepciones primero':'Cargá los lotes observados'}</h2><p>${quick?'Confirmá sin cambios o editá solo lo que no coincide con el campo.':'Agregá animales, condición o registrá un lote observado vacío.'}</p></div></div>
     <div class="v9-progress-summary"><div><small>Revisados</small><strong>${reviewed} / ${included.length}</strong><span>${pending} pendientes</span></div><div><small>Stock cargado</small><strong>${fmt(totalAnimals)}</strong><span>${included.length} lotes incluidos</span></div><button class="btn secondary" data-add-draft-lot>${icon('plus',17)} Agregar lote</button></div>
     ${priority.length?`<section class="v9-review-group"><div class="v9-review-group-head"><div><span class="eyebrow">Primero</span><h3>Requieren revisión</h3></div>${quick&&priority.some((info)=>info.status==='pending')?'<button class="text-link" data-confirm-all-priority>Confirmar todos sin cambios</button>':''}</div><div class="v9-lot-review-list">${priority.map(renderDraftReviewCard).join('')}</div></section>`:''}
@@ -2101,6 +2259,8 @@ function draftAsSurvey(draft) {
     basedOnSurveyId: draft.basedOnSurveyId || previous?.id || null,
     events: { nombre: state.nombre || 'Muestra', births: totals.birth, deaths: totals.death, purchases: totals.purchase, sales: totals.sale },
     note: draft.note,
+    captureExperience: draft.simpleMode ? 'field-simple' : 'detailed',
+    managementReviewStatus: draft.simpleMode && draft.mode !== 'edit' ? 'pending' : 'reviewed',
   }
 }
 
@@ -2116,7 +2276,7 @@ function renderSurveyStepThree(draft) {
   const noInfoConditions = conditionSummary.filter((item) => item.source === 'none').length
   const reviewedCount = Object.values(draft.reviewedLots || {}).filter((value)=>value !== 'pending').length
   const pendingCount = Math.max(0, draft.lots.length - reviewedCount)
-  return `<section class="wizard-card wide review-card"><div class="wizard-title"><span class="step-number">3</span><div><h2>Validá el balance y guardá</h2><p>Los eventos explican el stock esperado. La discrepancia no bloquea el relevamiento, pero queda visible.</p></div></div>
+  return `<section class="wizard-card wide review-card"><div class="wizard-title"><span class="step-number">3</span><div><h2>${draft.simpleMode?'Revisá y guardá el relevamiento':'Validá el balance y guardá'}</h2><p>${draft.simpleMode?'La carga de campo está completa. La persona de gestión podrá revisar el balance y las diferencias después.':'Los eventos explican el stock esperado. La discrepancia no bloquea el relevamiento, pero queda visible.'}</p></div></div>
     <div class="v9-final-review-note ${pendingCount?'warning':'success'}"><strong>${pendingCount ? `${pendingCount} lotes incluidos siguen pendientes de confirmación` : 'Todos los lotes incluidos fueron revisados'}</strong><span>Podés guardar igualmente; Campo conserva la diferencia para revisarla después.</span></div><div class="review-hero"><div><small>Fecha</small><strong>${dateLabel(draft.date)}</strong></div><div><small>Animales observados</small><strong>${fmt(metrics.animals)}</strong></div><div><small>Carga promedio</small><strong>${decimal(metrics.load)} EV/ha</strong></div><div><small>Lotes incluidos</small><strong>${draft.lots.length} / 18</strong></div></div>
     <div class="review-grid"><article class="review-section"><h3>Balance del rodeo</h3>${renderBalancePanel(balance,false)}</article><article class="review-section"><h3>Condición de los lotes</h3><div class="condition-origin-summary"><div><strong>${observedConditions}</strong><span>observadas</span></div><div><strong>${assumedConditions}</strong><span>estimadas</span></div><div><strong>${noInfoConditions}</strong><span>sin información</span></div></div>${renderFieldStateSummary(draft)}</article></div>
     <section class="review-alerts"><div class="panel-head"><h3>Alertas operativas</h3><span>${loadAlerts.length}</span></div>${loadAlerts.length?`<div class="alert-list">${loadAlerts.map(renderAlert).join('')}</div>`:'<div class="empty-inline success">No detectamos alertas de carga.</div>'}</section>
@@ -2277,7 +2437,7 @@ function renderEventModal() {
 
 function renderIntroductionPage() {
   const quickLinks = `<div class="intro-quick-links"><button data-nav="registrar">${icon('clipboard',18)} Registrar</button><button data-review-tab="campo">${icon('map',18)} Revisar campo</button><button data-review-tab="rodeo">${icon('cow',18)} Revisar rodeo</button><button data-review-tab="balance">${icon('balance',18)} Validar balance</button></div>`
-  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v9.02</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo organiza el trabajo en cuatro acciones: registrar lo ocurrido, preparar la próxima fotografía, revisar el desempeño y validar el balance del rodeo.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
+  const content = `<section class="intro-hero"><div><span class="eyebrow">Guía de Campo v10.01</span><h2>Registrar rápido. Revisar con claridad.</h2><p>Campo v10.01 prioriza una carga de campo sencilla: una pantalla por lote, guardado automático y revisión de gestión separada.</p>${state.sampleMode?'<span class="sample-badge large">MODO MUESTRA · 16 MESES</span>':''}</div><img src="./assets/${UI_ASSETS.home}" alt="El Rosario"></section>${quickLinks}
   <section class="intro-steps"><article><i>1</i><div><h3>Registrá el cambio</h3><p>Cargá una venta, compra, nacimiento, mortandad, recategorización o lluvia desde un único menú.</p></div></article><article><i>2</i><div><h3>Elegí el tipo de relevamiento</h3><p>Usá Revisión rápida para confirmar el stock esperado o Conteo completo para empezar desde cero.</p></div></article><article><i>3</i><div><h3>Revisá excepciones</h3><p>Campo prioriza lotes con eventos, carga alta o condición faltante para reducir la carga de trabajo.</p></div></article><article><i>4</i><div><h3>Validá desempeño y balance</h3><p>Separá la revisión del campo, el rodeo y la conciliación entre stock esperado y observado.</p></div></article></section>
   <section class="intro-grid"><article class="panel"><h3>Conceptos básicos</h3><dl><dt>Relevamiento</dt><dd>Fotografía observada del campo en una fecha.</dd><dt>Evento</dt><dd>Cambio ocurrido entre dos relevamientos.</dd><dt>Revisión rápida</dt><dd>Estado anterior más eventos; editás solo las excepciones.</dd><dt>Conteo completo</dt><dd>Fotografía independiente cargada desde cero.</dd><dt>Discrepancia</dt><dd>Diferencia entre stock esperado y observado.</dd><dt>Condición y carga</dt><dd>Estado del terreno y equivalentes animales por hectárea.</dd></dl></article><article class="panel"><h3>Novedades de v9.00</h3><ul><li>Navegación orientada a Inicio, Registrar, Revisar y Mapa.</li><li>Menú único para relevamientos, eventos y lluvia.</li><li>Revisión rápida y conteo completo.</li><li>Secuencia de lotes priorizada por excepciones.</li><li>Centro de revisión con Campo, Rodeo y Balance.</li><li>Matriz condición × carga y vigencia de observaciones.</li><li>Confirmación posterior a cada evento y stock proyectado.</li></ul></article><article class="panel"><h3>Próximamente</h3><ul><li>Calendario sanitario y vacunación.</li><li>Calendario de pasturas.</li><li>Calendario comercial.</li><li>Movimientos planificados entre lotes.</li><li>Reportes gerenciales automáticos.</li></ul></article></section>`
   return renderShell(content,'Cómo usar Campo','Flujo recomendado y conceptos principales')
@@ -2402,10 +2562,11 @@ function bindEvents() {
   document.querySelectorAll('[data-rain-granularity]').forEach((button) => button.addEventListener('click', () => { ui.rainGranularity=button.dataset.rainGranularity; render() }))
   document.querySelectorAll('[data-rain-year]').forEach((select) => select.addEventListener('change', () => { ui.rainYear=Number(select.value); render() }))
   document.querySelectorAll('[data-rain-end-period]').forEach((input) => input.addEventListener('change', () => { ui.rainEndPeriod=input.value; render() }))
-  document.querySelectorAll('[data-start-survey]').forEach((button) => button.addEventListener('click', () => startSurvey('quick')))
+  document.querySelectorAll('[data-start-survey]').forEach((button) => button.addEventListener('click', () => startSurvey('field')))
   document.querySelectorAll('[data-start-survey-mode]').forEach((button) => button.addEventListener('click', () => startSurvey(button.dataset.startSurveyMode)))
   document.querySelectorAll('[data-resume-survey]').forEach((button) => button.addEventListener('click', () => navigate('relevamiento')))
   document.querySelectorAll('[data-review-tab]').forEach((button) => button.addEventListener('click', () => { ui.reviewTab=button.dataset.reviewTab || 'campo'; navigate('revisar') }))
+  document.querySelectorAll('[data-mark-management-reviewed]').forEach((button) => button.addEventListener('click', () => { const survey=selectedSurvey(); if(!survey)return; survey.managementReviewStatus='reviewed'; survey.reviewedAt=new Date().toISOString(); saveState(); showToast('Relevamiento revisado'); render() }))
   document.querySelectorAll('[data-review-lot]').forEach((button) => button.addEventListener('click', () => { focusMapLot(button.dataset.reviewLot); ui.mapMode='map'; navigate('mapa') }))
   document.querySelectorAll('[data-clear-record-confirmation]').forEach((button) => button.addEventListener('click', () => { ui.recordConfirmation=null; render() }))
   document.querySelectorAll('[data-edit-selected-survey]').forEach((button) => button.addEventListener('click', () => editSurvey(selectedSurvey()?.id)))
@@ -2433,18 +2594,20 @@ function bindEvents() {
   if (dateInput) dateInput.addEventListener('change', (event) => {
     const nextDate=event.target.value
     state.draft.date=nextDate; state.draft.rainPeriod=monthKey(nextDate)
-    if(state.draft.mode==='new' && state.draft.captureMode!=='full') { const projection=projectedLotsForDate(nextDate); state.draft.basedOnSurveyId=projection.base?.id||null; state.draft.projectionEventIds=projection.events.map((item)=>item.id); state.draft.lots=projection.lots; state.draft.reviewedLots={} }
+    if(state.draft.mode==='new' && state.draft.captureMode!=='full') { const projection=projectedLotsForDate(nextDate); state.draft.basedOnSurveyId=projection.base?.id||null; state.draft.projectionEventIds=projection.events.map((item)=>item.id); state.draft.expectedLots=JSON.parse(JSON.stringify(projection.lots||[])); state.draft.lots=JSON.parse(JSON.stringify(projection.lots||[])); state.draft.reviewedLots={}; state.draft.fieldLotIndex=0 }
     state.draft.lastSavedAt=new Date().toISOString(); saveState(); render()
   })
   
   document.querySelectorAll('[data-switch-capture-mode]').forEach((button) => button.addEventListener('click', () => {
     const next = button.dataset.switchCaptureMode === 'full' ? 'full' : 'quick'
     state.draft.captureMode = next
+    state.draft.simpleMode = false
     if (next === 'quick') {
       const projection = projectedLotsForDate(state.draft.date)
       state.draft.basedOnSurveyId = projection.base?.id || null
       state.draft.projectionEventIds = projection.events.map((event)=>event.id)
-      state.draft.lots = projection.lots
+      state.draft.expectedLots = JSON.parse(JSON.stringify(projection.lots || []))
+      state.draft.lots = JSON.parse(JSON.stringify(projection.lots || []))
     } else {
       state.draft.projectionEventIds = []
       state.draft.lots = []
@@ -2453,6 +2616,20 @@ function bindEvents() {
     state.draft.lastSavedAt = new Date().toISOString()
     saveState(); render()
   }))
+  document.querySelectorAll('[data-save-exit-survey]').forEach((button) => button.addEventListener('click', () => { state.draft.lastSavedAt=new Date().toISOString(); saveState(); navigate('registrar') }))
+  document.querySelectorAll('[data-summary-map-interaction]').forEach((button) => button.addEventListener('click', () => { ui.summaryMapInteractive=!ui.summaryMapInteractive; if(!ui.summaryMapInteractive) ui.summaryViewBox=fullMapViewBox(); render() }))
+  document.querySelectorAll('[data-field-prev]').forEach((button) => button.addEventListener('click', () => advanceSimpleLot(-1)))
+  document.querySelectorAll('[data-field-confirm]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; state.draft.reviewedLots=state.draft.reviewedLots||{}; state.draft.reviewedLots[lot.id]='confirmed'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); if(state.draft.fieldLotIndex>=LOTS.length-1){state.draft.step=3;saveState();render()}else advanceSimpleLot(1) }))
+  document.querySelectorAll('[data-field-unobserved]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; state.draft.lots=(state.draft.lots||[]).filter((item)=>item.lotId!==lot.id); state.draft.reviewedLots=state.draft.reviewedLots||{}; state.draft.reviewedLots[lot.id]='unobserved'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); if(state.draft.fieldLotIndex>=LOTS.length-1){state.draft.step=3;saveState();render()}else advanceSimpleLot(1) }))
+  document.querySelectorAll('[data-field-empty]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; const entry=ensureSimpleDraftEntry(lot.id); const expected=draftExpectedEntry(state.draft,lot.id); entry.groups=[]; entry.fieldState=normalizeFieldState(expected?.fieldState||'no-observado'); entry.conditionSource='observed'; state.draft.reviewedLots=state.draft.reviewedLots||{}; state.draft.reviewedLots[lot.id]='empty'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); render() }))
+  document.querySelectorAll('[data-simple-family-quantity]').forEach((input) => input.addEventListener('input', (event) => { const lot=LOTS[state.draft.fieldLotIndex]; const entry=ensureSimpleDraftEntry(lot.id); const family=SIMPLE_FIELD_FAMILIES.find((item)=>item.id===event.target.dataset.simpleFamilyQuantity); if(!family)return; setSimpleFamilyQuantity(entry,family,event.target.value); entry.conditionSource=entry.conditionSource||'observed'; state.draft.reviewedLots=state.draft.reviewedLots||{}; state.draft.reviewedLots[lot.id]='modified'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); }))
+  document.querySelectorAll('[data-simple-family-quantity]').forEach((input) => input.addEventListener('change', () => render()))
+  document.querySelectorAll('[data-simple-adjust]').forEach((button) => button.addEventListener('click', () => { const family=SIMPLE_FIELD_FAMILIES[Number(button.dataset.simpleFamilyIndex)]; const input=document.querySelector(`[data-simple-family-quantity="${family?.id||''}"]`); if(!input)return; input.value=Math.max(0,(Number(input.value)||0)+Number(button.dataset.simpleAdjust||0)); input.dispatchEvent(new Event('input',{bubbles:true})); render() }))
+  document.querySelectorAll('[data-simple-condition]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; const entry=ensureSimpleDraftEntry(lot.id); entry.fieldState=button.dataset.simpleCondition; entry.conditionSource='observed'; state.draft.reviewedLots=state.draft.reviewedLots||{}; if(state.draft.reviewedLots[lot.id]!=='empty')state.draft.reviewedLots[lot.id]='modified'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); render() }))
+  document.querySelectorAll('[data-simple-same-condition]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; const expected=draftExpectedEntry(state.draft,lot.id); const entry=ensureSimpleDraftEntry(lot.id); entry.fieldState=normalizeFieldState(expected?.fieldState||'no-observado'); entry.conditionSource=entry.fieldState==='no-observado'?'unobserved':'observed'; state.draft.lastSavedAt=new Date().toISOString(); saveState(); render() }))
+  document.querySelectorAll('[data-open-detailed-lot]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; const entry=ensureSimpleDraftEntry(lot.id); ui.modal={type:'lot-form',context:'draft',isEdit:true,originalLotId:lot.id,lot:lotFormModel(entry,true)}; render() }))
+  document.querySelectorAll('[data-field-save-next]').forEach((button) => button.addEventListener('click', () => { const lot=LOTS[state.draft.fieldLotIndex]; const entry=simpleEntryForLot(state.draft,lot.id); if(!entry){state.draft.reviewedLots[lot.id]='unobserved'}else{entry.groups=(entry.groups||[]).filter((group)=>Number(group.quantity||0)>0); if(normalizeFieldState(entry.fieldState)==='no-observado'){ if(entry.groups.length)return alert('Elegí una condición del lote antes de continuar.'); state.draft.lots=(state.draft.lots||[]).filter((item)=>item.lotId!==lot.id); state.draft.reviewedLots[lot.id]='unobserved' } else { const expected=draftExpectedEntry(state.draft,lot.id); const status=state.draft.reviewedLots?.[lot.id]; if(!status||status==='pending')state.draft.reviewedLots[lot.id]=normalizedEntrySignature(entry)===normalizedEntrySignature(expected)?'confirmed':entry.groups.length?'modified':'empty' }} state.draft.lastSavedAt=new Date().toISOString(); if(state.draft.fieldLotIndex>=LOTS.length-1){state.draft.step=3;saveState();render()}else{saveState();advanceSimpleLot(1)} }))
+
   document.querySelectorAll('[data-confirm-draft-lot]').forEach((button) => button.addEventListener('click', () => {
     state.draft.reviewedLots = state.draft.reviewedLots || {}
     state.draft.reviewedLots[button.dataset.confirmDraftLot] = 'confirmed'
@@ -2601,6 +2778,7 @@ function bindMapPanAndZoom() {
     document.querySelectorAll(`[data-map-view-all="${type}"]`).forEach((button)=>button.addEventListener('click',()=>{writeBox(fullMapViewBox());render()}))
     if(type==='full') document.querySelectorAll('[data-map-focus-selected]').forEach((button)=>button.addEventListener('click',()=>{ui.mapViewBox=viewBoxForLot(ui.selectedLotId||'ER-08-09');render()}))
     svg.addEventListener('wheel',(event)=>{
+      if(type==='summary' && (!ui.summaryMapInteractive || !(event.ctrlKey || event.metaKey))) return
       event.preventDefault()
       const rect=svg.getBoundingClientRect(), ax=(event.clientX-rect.left)/rect.width, ay=(event.clientY-rect.top)/rect.height
       zoom(event.deltaY<0?.82:1.22,ax,ay); render()
@@ -2623,6 +2801,7 @@ function bindMapPanAndZoom() {
       return values.length<2?{x:0,y:0}:{x:(values[0].x+values[1].x)/2,y:(values[0].y+values[1].y)/2}
     }
     svg.addEventListener('pointerdown',(event)=>{
+      if(type==='summary' && !ui.summaryMapInteractive) return
       if(event.pointerType==='mouse'&&event.button!==0)return
       pointers.set(event.pointerId,{x:event.clientX,y:event.clientY})
       svg.setPointerCapture(event.pointerId)
@@ -2687,6 +2866,6 @@ function editRain(existingPeriod='') {
   render()
 }
 
-window.addEventListener('hashchange',()=>{ui.view=location.hash.replace('#/','')||'resumen';render()})
+window.addEventListener('hashchange',()=>{ui.view=location.hash.replace('#/','')||'resumen';if(ui.view==='resumen'){ui.summaryViewBox=fullMapViewBox();ui.summaryMapInteractive=false}render()})
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))
 render()

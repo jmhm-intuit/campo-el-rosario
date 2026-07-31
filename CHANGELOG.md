@@ -1,13 +1,13 @@
-# Campo v9.02
+# Campo v10.01 — Field First
 
-## Icon System Fix
+## Main improvements
 
-- Added a central icon registry (`icon-library.js`) so all screens use the same asset paths.
-- Replaced generic and legacy icons in navigation, Registrar, events, rainfall, review cards, demo data, backup and KPI.
-- Added 87 transparent master icons and responsive exports at 24, 32, 48, 64 and 160 px.
-- Added five final lot-condition icons: Muy bueno, Bueno, Regular, Malo and Anegado.
-- Added five final animal-load icons: Baja, Adecuada, Alta, Sobrecarga and Crítica.
-- Removed ambiguous duplicate load states from the active UI.
-- Added transparent-icon validation to preflight and rendered-icon checks to the smoke test.
-- Updated PWA cache to `campo-v902-assets-1`.
-- Preserved all v9.01 records, local storage keys, demo workspace, animation and map behavior.
+- New senior-friendly **Carga simple de campo** workflow: one lot per screen, large quantities, explicit condition choices, and automatic local draft saving.
+- Quick actions for **Sin cambios**, **Lote vacío**, and **No observado**.
+- Detailed capture remains available for advanced categories, birth years, and notes.
+- Main dashboard map now uses the same whole-establishment bounds as the dedicated map view.
+- Summary map no longer traps page scrolling; interaction must be activated explicitly.
+- The main map starts fitted to every paddock and resets with **Todo**.
+- Simple field surveys are marked pending management review so another user can validate herd balance and discrepancies.
+- Existing local data keys and demo workspace remain unchanged.
+- PWA cache updated to `campo-v1001-assets-1`.

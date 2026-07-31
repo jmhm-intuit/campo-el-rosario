@@ -30,17 +30,17 @@ const workflow = fs.readFileSync(path.join(root,'.github/workflows/deploy-pages.
 const geometry = JSON.parse(fs.readFileSync(path.join(root,'assets/geometry/polygons-reviewed-final.json'),'utf8'))
 const sample = JSON.parse(fs.readFileSync(path.join(root,'data/campo-muestra-16-meses-v8.json'),'utf8'))
 
-if (version.version !== '9.02' || version.build !== 902) fail('VERSION.json no identifica Campo v9.02 build 902')
+if (version.version !== '10.01' || version.build !== 1001) fail('VERSION.json no identifica Campo v10.01 build 1001')
 if (version.storageKey !== 'campo-el-rosario-v2') fail('Cambió la clave real de persistencia')
 if (version.demoStorageKey !== 'campo-el-rosario-demo-v1') fail('Falta clave separada de la muestra')
-if (version.cache !== 'campo-v902-assets-1') fail('Caché incorrecta')
-if (!html.includes('Campo v9.02') || !html.includes('data/sample-v8.js')) fail('index.html no carga v9.02 y la muestra')
-if (!js.includes("const APP_VERSION_LABEL = '9.02'")) fail('app.js no identifica v9.02')
+if (version.cache !== 'campo-v1001-assets-1') fail('Caché incorrecta')
+if (!html.includes('Campo v10.01') || !html.includes('data/sample-v8.js')) fail('index.html no carga v10.01 y la muestra')
+if (!js.includes("const APP_VERSION_LABEL = '10.01'")) fail('app.js no identifica v10.01')
 if (!js.includes("const STORAGE_KEY = 'campo-el-rosario-v2'")) fail('app.js no conserva storage key')
-if (!sw.includes('campo-v902-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js')) fail('Service worker incompleto')
+if (!sw.includes('campo-v1001-assets-1') || !sw.includes('./animal-animation.js') || !sw.includes('./animal-sprite-library.js')) fail('Service worker incompleto')
 if (!workflow.includes('node-version: 24')) fail('Workflow no usa Node 24')
 if (!workflow.includes('animation-smoke.mjs')) fail('Workflow no ejecuta la prueba de animación')
-if (!css.includes('Campo v9.02') || !css.includes('v9-review-tabs')) fail('CSS v9.02 ausente')
+if (!css.includes('Campo v10.01') || !css.includes('v9-review-tabs')) fail('CSS v10.01 ausente')
 if (!failed) pass('Versión, persistencia, caché y workflow validados')
 
 function pngInfo(file) {
@@ -63,12 +63,12 @@ if (!failed) pass(`Muestra disponible: ${sample.surveys.length} relevamientos y 
 
 for (const token of [
   'renderRegisterHub','renderReviewHub','renderFieldReview','renderHerdReview','renderBalanceReview',
-  "captureMode",'data-start-survey-mode="quick"','data-start-survey-mode="full"',
+  "captureMode",'data-start-survey-mode="field"','data-start-survey-mode="quick"','data-start-survey-mode="full"','renderSimpleFieldStep',
   'renderConditionLoadMatrix','reviewAttentionGroups','v9-review-lot','renderMorePage',
   "navItemAsset('registrar'","navItem('revisar'","mobile-nav-v9",
-]) if (!js.includes(token)) fail(`Falta integración v9.02: ${token}`)
-for (const token of ['v9-home-primary','v9-record-action','v9-review-stat-grid','v9-matrix','v9-lot-review-list','v9-more-grid']) if (!css.includes(token)) fail(`Falta estilo v9.02: ${token}`)
-if (!failed) pass('Registrar, revisión, balance y navegación v9.02 presentes')
+]) if (!js.includes(token)) fail(`Falta integración v10.01: ${token}`)
+for (const token of ['v9-home-primary','v9-record-action','v9-review-stat-grid','v9-matrix','v9-lot-review-list','v9-more-grid','v10-field-hero','v10-simple-field','v10-summary-map']) if (!css.includes(token)) fail(`Falta estilo v10.01: ${token}`)
+if (!failed) pass('Field First, revisión, balance y navegación v10.01 presentes')
 
 
 const iconRoot = path.join(root,'assets/icons/v902/64')
@@ -82,16 +82,16 @@ const requiredIcons = [
 for (const name of requiredIcons) {
   const file = path.join(iconRoot,`${name}.png`)
   const info = fs.existsSync(file) ? pngInfo(file) : null
-  if (!info || info.width !== 64 || info.height !== 64 || info.colorType !== 6) fail(`Icono v9.02 inválido: ${name}`)
+  if (!info || info.width !== 64 || info.height !== 64 || info.colorType !== 6) fail(`Icono compatible inválido: ${name}`)
 }
 if (!html.includes('icon-library.js') || !js.includes('CAMPO_ICON_LIBRARY') || !sw.includes('./icon-library.js')) fail('Registro central de iconos no está conectado')
-if (!failed) pass(`Sistema de iconos v9.02: ${requiredIcons.length} assets transparentes validados`)
+if (!failed) pass(`Sistema de iconos aprobado: ${requiredIcons.length} assets transparentes validados`)
 
 for (const token of ['class AnimalAnimationManager','requestAnimationFrame','chooseTarget','validPosition','simfarm']) if (!animation.includes(token)) fail(`Falta motor de animación: ${token}`)
 for (const token of ['ANIMAL_SPRITE_LIBRARY','STANDARD_ANIMAL_SIZE','resolveAnimalSprite']) if (!library.includes(token)) fail(`Falta biblioteca de sprites: ${token}`)
 const spriteManifest = JSON.parse(fs.readFileSync(path.join(root,'assets/animals/v601/manifest.json'),'utf8'))
 if (spriteManifest.count !== 64 || !Array.isArray(spriteManifest.sprites) || spriteManifest.sprites.length !== 64) fail('La biblioteca actual no contiene 64 sprites')
-else pass('Animación Living Herds preservada en v9.02 con 64 sprites')
+else pass('Animación Living Herds preservada en v10.01 con 64 sprites')
 
 if (failed) process.exit(1)
-console.log('Campo v9.02 preflight complete')
+console.log('Campo v10.01 preflight complete')

@@ -1,24 +1,14 @@
-# Campo v9.02 deployment status
-
-## Result
-
-Ready for deployment.
-
-## Verified
+# Campo v10.01 deployment status
 
 - JavaScript syntax: PASS
-- App version/build/cache: PASS
-- Local storage compatibility: PASS
-- Map geometry: 18 lots / 1,735 ha: PASS
-- Demo data: 16 surveys / 52 events: PASS
-- Central icon registry loaded: PASS
-- Required transparent icons: 31/31 core assets validated as RGBA PNG: PASS
-- Full v9.02 library: 87 icons in five export sizes: PASS
-- Navigation and KPI icon rendering in smoke test: PASS
-- Registrar survey/event icon rendering in smoke test: PASS
+- Product preflight: PASS
+- Application smoke test: PASS
 - Living Herds animation smoke test: PASS
-- Visual QA: Registrar and Data/Settings screenshots rendered successfully
-
-## Note
-
-The automated browser environment blocked direct local URL navigation for the full map screenshot. The map and app behavior were therefore validated through syntax, preflight, smoke tests and the existing geometry/animation tests; the icon-heavy Registrar and Settings screens were rendered as visual confirmation.
+- Existing local data keys preserved: PASS
+- 18-lot geometry and 1,735 ha total preserved: PASS
+- 16-month demo workspace preserved: PASS
+- Whole-ranch summary fit implemented: PASS
+- Summary scroll-lock prevention implemented: PASS
+- Simple one-lot-at-a-time field capture implemented: PASS
+- Detailed capture preserved: PASS
+- Management-review status implemented: PASS

@@ -1,6 +1,6 @@
-/* Campo v9.02 icon registry. All operational icons use a single approved library. */
+/* Campo v10.01 icon registry. All operational icons use a single approved library. */
 window.CAMPO_ICON_LIBRARY = Object.freeze({
-  version: '9.02',
+  version: '10.01',
   base: './assets/icons/v902',
   path(name, size = 64) {
     const normalized = [24,32,48,64,160].includes(Number(size)) ? Number(size) : 64

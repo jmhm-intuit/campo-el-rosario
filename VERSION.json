@@ -1,12 +1,12 @@
 {
   "name": "Campo El Rosario",
-  "version": "9.02",
-  "build": 902,
+  "version": "10.01",
+  "build": 1001,
   "releaseDate": "2026-07-30",
   "storageKey": "campo-el-rosario-v2",
   "demoStorageKey": "campo-el-rosario-demo-v1",
-  "cache": "campo-v902-assets-1",
+  "cache": "campo-v1001-assets-1",
   "sample": "optional separate workspace / 16 months",
-  "releaseTheme": "approved-transparent-icon-system",
+  "releaseTheme": "field-first-simple-capture-and-whole-map-fit",
   "animationEngine": "simfarm-persistent-agents-v2"
 }

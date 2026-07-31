@@ -1,7 +1,7 @@
 {
-  "version": "9.02",
-  "build": 902,
-  "description": "Assets activos de Campo El Rosario v9.02 — sistema aprobado de iconos transparentes, mapa, texturas y sprites direccionales",
+  "version": "10.01",
+  "build": 1001,
+  "description": "Assets activos de Campo El Rosario v10.01 — Field First, iconos transparentes, mapa, texturas y sprites direccionales",
   "counts": {
     "total": 202,
     "aerialAnimalSprites": 64,

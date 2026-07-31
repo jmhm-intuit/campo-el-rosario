@@ -785,5 +785,6 @@
       ],
       "alpha": true
     }
-  ]
+  ],
+  "compatibleRelease": "10.01"
 }

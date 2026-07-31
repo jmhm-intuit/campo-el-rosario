@@ -1,7 +1,7 @@
 {
-  "name": "Campo El Rosario v9.02",
-  "short_name": "Campo 9.00",
-  "description": "Registro rápido y revisión integrada del campo, rodeo, balance, mapa y lluvias de Laprida.",
+  "name": "Campo El Rosario v10.01",
+  "short_name": "Campo 10.01",
+  "description": "Carga simple de campo, revisión integrada del rodeo, balance, mapa y lluvias de Laprida.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
